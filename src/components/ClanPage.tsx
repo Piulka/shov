@@ -633,6 +633,7 @@ function RaidBuilder({
     });
   return (
     <div className="raid-builder">
+      <p className="mechanic-note">Сначала выполняется первое подходящее правило с готовым умением. Затем герой проверяет готовые умения без правил в порядке ячеек 1–4; иначе наносит обычный удар.</p>
       <div className="clan-field">
         <label htmlFor="raid-family">Оружие экспедиции</label>
         <select
@@ -660,7 +661,7 @@ function RaidBuilder({
       <div className="raid-skill-grid">
         {loadout.skills.map((id, index) => (
           <label key={index}>
-            <span>Навык {index + 1}</span>
+            <span>Ячейка {index + 1}</span>
             <select
               aria-label={`Навык рейда ${index + 1}`}
               disabled={busy}
@@ -702,13 +703,14 @@ function RaidBuilder({
         ))}
       </div>
       <div className="section-title">
-        <h3>Приоритеты тактики</h3>
-        <span className="muted">{loadout.rules.length} / 3</span>
+        <h3>Правила: сверху вниз</h3>
+        <span className="muted">{loadout.rules.length} из 3 правил</span>
       </div>
+      <p className="mechanic-note">Правило 1 имеет наивысший приоритет. Умение с правилом используется только по его условиям. Стрелки меняют порядок проверки.</p>
       <div className="raid-rules">
         {loadout.rules.map((rule, index) => (
           <div className="raid-rule" key={index}>
-            <span className="rule-index">{index + 1}</span>
+            <span className="rule-index" aria-label={`Приоритет ${index + 1}`}>{index + 1}</span>
             <div className="raid-rule-fields">
               <div>
                 <select
@@ -1274,7 +1276,8 @@ export default function ClanPage({ view: game }: { view: GameView }) {
         >
           <UserRound size={17} />
           <span>
-            {data.profile.name}
+            <small className="clan-profile-label">Ваше публичное имя</small>
+            <strong>{data.profile.name}</strong>
             <small>{fmt(data.profile.reputation)} репутации</small>
           </span>
           <Pencil size={14} />

@@ -1149,6 +1149,56 @@ main {
   grid-template-columns: minmax(290px, 0.83fr) minmax(380px, 1.17fr);
   gap: 35px;
 }
+.section-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: -8px 0 24px;
+}
+.section-links button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  color: var(--green);
+  font-size: 12px;
+}
+.section-fold {
+  min-width: 0;
+  align-self: start;
+  scroll-margin-top: 88px;
+}
+.section-fold > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  min-height: 44px;
+  padding: 8px 0;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.section-fold > summary::-webkit-details-marker { display: none; }
+.section-fold > summary h2 {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.section-fold > summary > svg { flex-shrink: 0; color: var(--green); }
+.section-fold[open] > summary > svg { transform: rotate(180deg); }
+.section-fold:not([open]) > summary { margin-bottom: 0; }
+.section-fold-meta { max-width: 36%; color: var(--muted); font-size: 11px; line-height: 1.5; text-align: right; }
+.section-fold-tools { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+.hero-equipment > .section-fold + .section-fold { margin-top: 25px; }
+.hero-equipment #presets > summary h2 { font-size: 14px; }
+.mechanic-note { color: #62796d; font-size: 12px; line-height: 1.7; margin: 0 0 18px; }
+#routes, #target { scroll-margin-top: 88px; }
+.skill-queue-label { font-size: 11px; color: #617761; }
+.skill-queue-actions { display: flex; gap: 3px; }
+.skill-queue-actions .icon-button { min-width: 30px; width: 30px; height: 30px; }
 .hero-equipment {
   border-right: 1px solid var(--line);
   padding-right: 30px;
@@ -1539,7 +1589,7 @@ main {
   grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.85fr);
   gap: 40px;
 }
-.workshop-layout > section:first-child {
+.workshop-layout > .section-fold:first-child {
   border-right: 1px solid var(--line);
   padding-right: 35px;
 }
@@ -2432,7 +2482,7 @@ main {
     gap: 25px;
     grid-template-columns: 1.15fr 0.85fr;
   }
-  .workshop-layout > section:first-child {
+  .workshop-layout > .section-fold:first-child {
     padding-right: 25px;
   }
   .upgrade-slots > button > span {
@@ -3001,7 +3051,7 @@ main {
     grid-template-columns: 1fr;
     gap: 30px;
   }
-  .workshop-layout > section:first-child {
+  .workshop-layout > .section-fold:first-child {
     border-right: 0;
     padding-right: 0;
     border-bottom: 1px solid var(--line);
@@ -3508,6 +3558,8 @@ main {
 .clan-profile { display: flex; align-items: center; gap: 10px; padding: 8px 0; text-align: left; font-size: 13px; min-width: 0; }
 .clan-profile > span { display: grid; gap: 4px; overflow-wrap: anywhere; }
 .clan-profile small { color: var(--muted); font-size: 11px; }
+.clan-profile strong { font-weight: 500; }
+.clan-profile .clan-profile-label { color: #49675b; }
 .clan-overview { padding: 0 0 22px; }
 .clan-overview-main { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .clan-identity { display: flex; align-items: center; gap: 13px; min-width: 0; }

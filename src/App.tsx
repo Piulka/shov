@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowDown,
   ArrowLeft,
@@ -65,12 +65,13 @@ import { chapterTasks } from "../shared/chapter";
 import { canCraftResonant, craftingCost, gearLevelCap, reforgeCost } from "../shared/equipment";
 import BattleScene from "./components/BattleScene";
 import ChapterProgress from "./components/ChapterProgress";
+import CollapsibleSection from "./components/CollapsibleSection";
+import { revealAnchor, type Navigate, type Page, type PageAnchor } from "./navigation";
 import ClanPage from "./components/ClanPage";
 import { useGame } from "./api";
 import AudioSettings from './components/AudioSettings';
 import { useGameAudio } from './audio/useGameAudio';
 
-type Page = "journey" | "hero" | "workshop" | "map" | "clan";
 type Command = (command: GameCommand) => Promise<boolean>;
 const fmt = (n: number) =>
   new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(n);
@@ -359,7 +360,7 @@ function Journey({
   view: GameView;
   now: number;
   paused: boolean;
-  go: (p: Page) => void;
+  go: Navigate;
   inspect: (i: Item) => void;
   showReport: () => void;
 }) {
@@ -399,7 +400,7 @@ function Journey({
           <h1>Путь продолжается</h1>
           <p className="subtitle">За каждой трещиной начинается новый мир.</p>
         </div>
-        <button className="button secondary" onClick={() => go("map")}>
+        <button className="button secondary" onClick={() => go("map", "routes")}>
           <Map size={16} /> Выбрать маршрут
         </button>
       </div>
@@ -544,7 +545,7 @@ function Journey({
       <section className="finds">
         <SectionTitle
           action={
-            <button className="text-button" onClick={() => go("hero")}>
+            <button className="text-button" onClick={() => go("hero", "inventory")}>
               Весь рюкзак <ArrowRight size={15} />
             </button>
           }
@@ -616,9 +617,14 @@ function BuildEditor({
     setRules(next);
     setDirty(true);
   };
+  const moveSkill = (index: number, delta: number) => {
+    const next = [...skills];
+    [next[index], next[index + delta]] = [next[index + delta], next[index]];
+    setSkills(next);
+    setDirty(true);
+  };
   return (
-    <section className="build-editor">
-      <SectionTitle
+    <CollapsibleSection id="build" title="Умения и тактика" className="build-editor" meta={dirty ? "Не сохранено" : "4 умения"}
         action={
           <button
             className="text-button"
@@ -629,22 +635,22 @@ function BuildEditor({
           </button>
         }
       >
-        Умения и тактика
-      </SectionTitle>
+      <p className="mechanic-note">Сначала герой проверяет правила ниже. Если подходящего правила нет, использует готовое умение без правил в порядке 1–4. Если ни одно не готово, наносит обычный удар.</p>
       <div className="skill-grid">
         {skills.map((id, index) => {
           const skill = view.catalog.skills.find((s) => s.id === id);
           const Icon =
             skill?.family === "common" ? Shield : familyIcons[family];
           return (
-            <label className="skill-control" key={index}>
+            <div className="skill-control" key={index}>
               <span className="skill-symbol">
                 <Icon size={22} />
-                <small>{index + 1}</small>
               </span>
               <span>
+                <span className="skill-queue-label">Ячейка {index + 1}</span>
                 <select
                   aria-label={`Умение ${index + 1}`}
+                  data-anchor-focus={index === 0 ? "true" : undefined}
                   value={id}
                   onChange={(e) => {
                     const next = [...skills];
@@ -671,22 +677,27 @@ function BuildEditor({
                   ))}
                 </select>
                 <small>
-                  {skill?.cooldown} с · {skill?.description}
+                  Перезарядка: {skill?.cooldown} с · {skill?.description}
                 </small>
+                <span className="skill-queue-actions">
+                  <IconButton icon={ArrowLeft} label={`Умение ${index + 1}: раньше в очереди`} disabled={index === 0 || busy} onClick={() => moveSkill(index, -1)} />
+                  <IconButton icon={ArrowRight} label={`Умение ${index + 1}: позже в очереди`} disabled={index === skills.length - 1 || busy} onClick={() => moveSkill(index, 1)} />
+                </span>
               </span>
-            </label>
+            </div>
           );
         })}
       </div>
       {Number.isFinite(nextUnlock) && <p className="skill-unlock"><LockKeyhole size={14} /> Уровень {nextUnlock}: {available.filter(skill => skill.unlockLevel === nextUnlock).map(skill => skill.name).join(', ')}</p>}
       <div className="rule-heading">
-        <h3>Приоритет действий</h3>
-        <span>{rules.length} / 3</span>
+        <h3>Правила: сверху вниз</h3>
+        <span>{rules.length} из 3 правил</span>
       </div>
+      <p className="mechanic-note">Приоритет 1 выше остальных: сработает первое подходящее правило с готовым умением. Умение с правилом используется только по его условиям; стрелки меняют приоритет.</p>
       <div className="rules">
         {rules.map((rule, index) => (
           <div className="rule-row" key={index}>
-            <span className="rule-index">{index + 1}</span>
+            <span className="rule-index" title={`Приоритет ${index + 1}${index === 0 ? ": самый высокий" : ""}`} aria-label={`Приоритет ${index + 1}`}>{index + 1}</span>
             <select
               aria-label={`Условие ${index + 1}`}
               value={rule.condition}
@@ -716,7 +727,7 @@ function BuildEditor({
                 }
               >
                 {[25, 40, 55, 70].map((v) => (
-                  <option key={v}>{v}</option>
+                  <option key={v} value={v}>{v}%</option>
                 ))}
               </select>
             )}
@@ -735,19 +746,19 @@ function BuildEditor({
             <div className="rule-actions">
               <IconButton
                 icon={ArrowUp}
-                label="Повысить приоритет"
-                disabled={index === 0}
+                label={`Повысить приоритет правила ${index + 1}`}
+                disabled={index === 0 || busy}
                 onClick={() => moveRule(index, -1)}
               />
               <IconButton
                 icon={ArrowDown}
-                label="Понизить приоритет"
-                disabled={index === rules.length - 1}
+                label={`Понизить приоритет правила ${index + 1}`}
+                disabled={index === rules.length - 1 || busy}
                 onClick={() => moveRule(index, 1)}
               />
               <IconButton
                 icon={X}
-                label="Удалить правило"
+                label={`Удалить правило ${index + 1}`}
                 onClick={() => {
                   setRules(rules.filter((_, i) => i !== index));
                   setDirty(true);
@@ -800,7 +811,7 @@ function BuildEditor({
           </>
         )}
       </div>
-    </section>
+    </CollapsibleSection>
   );
 }
 
@@ -810,12 +821,14 @@ function Hero({
   busy,
   inspect,
   onTrain,
+  go,
 }: {
   view: GameView;
   command: Command;
   busy: boolean;
   inspect: (i: Item) => void;
   onTrain: () => void;
+  go: Navigate;
 }) {
   const [filter, setFilter] = useState<Slot | "all">("all");
   const [buildDirty, setBuildDirty] = useState(false);
@@ -853,8 +866,15 @@ function Hero({
           <FlaskConical size={16} /> Проверить сборку
         </button>
       </div>
+      <nav className="section-links" aria-label="Разделы героя">
+        <button onClick={() => go("hero", "equipment")}><Shield size={15} /> Снаряжение</button>
+        <button onClick={() => go("hero", "inventory")}><Backpack size={15} /> Рюкзак</button>
+        <button onClick={() => go("hero", "build")}><Swords size={15} /> Умения</button>
+        <button onClick={() => go("hero", "presets")}><Save size={15} /> Сборки</button>
+      </nav>
       <div className="hero-layout">
-        <section className="hero-equipment">
+        <div className="hero-equipment">
+          <CollapsibleSection id="equipment" title="Снаряжение" meta="8 слотов">
           <div className="equipment-stage">
             <div className="equipment-column">
               {view.catalog.slots.slice(0, 4).map((slot) => (
@@ -916,10 +936,8 @@ function Hero({
               }}
             />
           </div>
-          <div className="preset-heading">
-            <h3>Сохранённые сборки</h3>
-            <span>3 / 3</span>
-          </div>
+          </CollapsibleSection>
+          <CollapsibleSection id="presets" title="Сохранённые сборки" meta="3 ячейки">
           <div className="presets">
             {view.state.presets.map((preset, i) => (
               <div className="preset-row" key={i}>
@@ -948,17 +966,9 @@ function Hero({
               </div>
             ))}
           </div>
-        </section>
-        <section className="inventory">
-          <SectionTitle
-            action={
-              <span className="micro-label">
-                {view.state.inventory.length} ПРЕДМЕТОВ
-              </span>
-            }
-          >
-            Рюкзак
-          </SectionTitle>
+          </CollapsibleSection>
+        </div>
+        <CollapsibleSection id="inventory" title="Рюкзак" className="inventory" meta={`${view.state.inventory.length} предметов`}>
           <div className="inventory-filters">
             <label className="search">
               <Search size={15} />
@@ -1029,7 +1039,7 @@ function Hero({
               </button>
             </div>
           )}
-        </section>
+        </CollapsibleSection>
       </div>
       <BuildEditor
         view={view}
@@ -1107,8 +1117,7 @@ function Workshop({
         <Hammer className="heading-art" size={42} strokeWidth={1.2} />
       </div>
       <div className="workshop-layout">
-        <section>
-          <SectionTitle>Усиление снаряжения</SectionTitle>
+        <CollapsibleSection id="upgrade" title="Усиление снаряжения">
           <div className="upgrade-slots">
             {view.catalog.slots.map((s) => {
               const Icon = slotIcons[s];
@@ -1178,13 +1187,8 @@ function Workshop({
               Недостающие материалы можно добыть в путешествии.
             </p>
           )}
-        </section>
-        <section className="crafting">
-          <SectionTitle
-            action={<span className="micro-label">ТОЧНЫЙ РЕЦЕПТ</span>}
-          >
-            Создание вещи
-          </SectionTitle>
+        </CollapsibleSection>
+        <CollapsibleSection id="craft" title="Создание вещи" className="crafting" meta="Точный рецепт">
           <div className="craft-visual">
             <ItemImage item={{ slot: craftSlot, family }} />
             <span className={`rarity-label rarity-${rarity}`}>{view.catalog.rarityNames[rarity]} · ур. {craftLevel}</span>
@@ -1263,7 +1267,7 @@ function Workshop({
               <Sparkles size={16} /> Создать
             </button>
           </div>
-        </section>
+        </CollapsibleSection>
       </div>
       {confirmCraft && (
         <Dialog title="Создать предмет" close={() => setConfirmCraft(false)}>
@@ -1318,7 +1322,7 @@ function WorldMap({
   view: GameView;
   command: Command;
   busy: boolean;
-  go: (p: Page) => void;
+  go: Navigate;
   onTrain: (routeId: string) => void;
 }) {
   const mode = view.state.pendingRoute?.mode ?? view.state.mode;
@@ -1374,7 +1378,7 @@ function WorldMap({
         </div>
       </div>
       <div className="region-summary"><p>{region.description}</p><span>{unlockedCount} / {routes.length} участков открыто</span></div>
-      <div className="route-options">
+      <div className="route-options" id="routes" tabIndex={-1}>
         <h2>Маршруты</h2>
         <div className="segmented" role="group" aria-label="Режим путешествия">
           <button
@@ -1506,14 +1510,16 @@ function WorldMap({
         })}
       </div>
       </section>
-      <section className="target-selection">
+      <section className="target-selection" id="target" tabIndex={-1}>
         <Target size={22} />
         <div>
           <h3>Цель добычи</h3>
-          <p>Предметы выбранного слота будут встречаться чаще.</p>
+          <p>{view.state.targetSlot ? `${view.catalog.slotNames[view.state.targetSlot]}: 50% находок. Остальные 50% делятся между другими слотами.` : "Любой предмет: каждый из 8 слотов имеет равный шанс 12,5%."}</p>
+          <p>Выбор слота меняет только тип предмета. Частота находок, редкость и уровень остаются прежними.</p>
         </div>
         <select
           aria-label="Целевой слот добычи"
+          data-anchor-focus="true"
           disabled={busy}
           value={view.state.targetSlot || "all"}
           onChange={(e) =>
@@ -1799,6 +1805,26 @@ function ReportDialog({
 export default function App() {
   const game = useGame();
   const [page, setPage] = useState<Page>("journey");
+  const [navigationTarget, setNavigationTarget] = useState<{ anchor?: PageAnchor; visit: number } | null>(null);
+  const go = useCallback<Navigate>((next, anchor) => {
+    setPage(next);
+    setNavigationTarget(current => ({ anchor, visit: (current?.visit ?? 0) + 1 }));
+  }, []);
+  useEffect(() => {
+    if (!navigationTarget) return;
+    let frame = requestAnimationFrame(() => {
+      const target = navigationTarget.anchor ? revealAnchor(navigationTarget.anchor) : null;
+      if (!target) {
+        window.scrollTo({ top: 0, behavior: "instant" });
+        return;
+      }
+      frame = requestAnimationFrame(() => {
+        target.scrollIntoView({ block: "start", behavior: "instant" });
+        (target.querySelector<HTMLElement>('[data-anchor-focus="true"]') ?? target).focus({ preventScroll: true });
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [page, navigationTarget]);
   const [clock, setClock] = useState(Date.now());
   useGameAudio(game.view?.state.battle, clock, page === 'journey');
   const [paused, setPaused] = useState(
@@ -1850,7 +1876,7 @@ export default function App() {
     const back = window.Telegram?.WebApp?.BackButton;
     if (!back) return;
     const action = () => {
-      setPage("journey");
+      go("journey");
       setItem(null);
       setSettings(false);
       setReportOpen(false);
@@ -1870,10 +1896,6 @@ export default function App() {
     back.onClick(action);
     return () => back.offClick(action);
   }, [page, item, settings, reportOpen, training, game.returnReport]);
-  const go = (next: Page) => {
-    setPage(next);
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
   if (!game.view)
     return (
       <div className="loading-screen">
@@ -1943,7 +1965,7 @@ export default function App() {
           <p>{activeRegionRoutes.filter((route) => view.state.unlockedRoutes.includes(route.id)).length} из {activeRegionRoutes.length} участков открыто</p>
         </button>
         <div className="sidebar-bottom">
-          <button className="profile" onClick={() => go("hero")}>
+          <button className="profile" onClick={() => go("hero", "equipment")}>
             <span className="profile-picture">
               <img src={`/art/hero-${activeFamily}.png`} alt="" />
             </span>
@@ -2013,6 +2035,7 @@ export default function App() {
               busy={game.busy || !game.online}
               inspect={setItem}
               onTrain={() => void train()}
+              go={go}
             />
           )}
           {page === "workshop" && (

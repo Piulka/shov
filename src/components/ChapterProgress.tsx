@@ -1,10 +1,11 @@
 import { ArrowRight, Check, ChevronDown, Coins, Layers3, ScrollText } from 'lucide-react';
 import { chapterTasks } from '../../shared/chapter';
 import type { GameView } from '../../shared/types';
+import { chapterAnchors, type Navigate } from '../navigation';
 
 export default function ChapterProgress({ view, go }: {
   view: GameView;
-  go: (page: 'journey' | 'hero' | 'workshop' | 'map') => void;
+  go: Navigate;
 }) {
   const completed = view.state.chapter.completed;
   const next = chapterTasks.find(task => !completed.includes(task.id));
@@ -26,13 +27,13 @@ export default function ChapterProgress({ view, go }: {
             </div>
           </div>
           {next.destination !== 'journey' && (
-            <button className="text-button" onClick={() => go(next.destination)}>
+            <button className="text-button" onClick={() => go(next.destination, chapterAnchors[next.id])}>
               {next.action} <ArrowRight size={15} />
             </button>
           )}
         </div>
       ) : (
-        <div className="chapter-current"><Check size={25} /><div><h3>Проводник Белых террас</h3><p>Первые стежки завершены.</p></div><button className="text-button" onClick={() => go('map')}>К маршрутам <ArrowRight size={15} /></button></div>
+        <div className="chapter-current"><Check size={25} /><div><h3>Проводник Белых террас</h3><p>Первые стежки завершены.</p></div><button className="text-button" onClick={() => go('map', 'routes')}>К маршрутам <ArrowRight size={15} /></button></div>
       )}
       <div className="thin-progress" role="progressbar" aria-label="Поручения пролога" aria-valuenow={completed.length} aria-valuemin={0} aria-valuemax={chapterTasks.length}>
         <span style={{ width: `${completed.length / chapterTasks.length * 100}%` }} />
@@ -46,7 +47,7 @@ export default function ChapterProgress({ view, go }: {
               <li key={task.id} className={done ? 'completed' : ''}>
                 <span className="chapter-check" aria-label={done ? 'Завершено' : 'Не завершено'}>{done ? <Check size={15} /> : index + 1}</span>
                 <div><b>{task.title}</b><p>{task.objective}</p></div>
-                {done ? <span className="chapter-receipt">Награда получена</span> : <button className="icon-button" title={task.action} aria-label={`${task.action}: ${task.title}`} onClick={() => go(task.destination)}><ArrowRight size={16} /></button>}
+                {done ? <span className="chapter-receipt">Награда получена</span> : <button className="icon-button" title={task.action} aria-label={`${task.action}: ${task.title}`} onClick={() => go(task.destination, chapterAnchors[task.id])}><ArrowRight size={16} /></button>}
               </li>
             );
           })}

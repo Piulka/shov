@@ -252,7 +252,7 @@ export function simulate(state: GameState, build: Build, enemy: Enemy, startedAt
   return { startedAt, endsAt: startedAt + combatMs + 3000, combatMs, enemy: structuredClone(enemy), stats, events, outcome, reason, damageDealt, damageTaken, healing, shielding, family };
 }
 
-function startBattle(state: GameState, at: number): BattleRun {
+export function startBattle(state: GameState, at: number): BattleRun {
   const route = routeFor(state.routeId);
   const enemyId = route.enemyIds[(state.routeWins[route.id] ?? 0) % route.enemyIds.length];
   const enemy = catalog.enemies.find((entry) => entry.id === enemyId)!;

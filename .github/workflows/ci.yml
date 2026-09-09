@@ -40,24 +40,34 @@ jobs:
           ACME_EMAIL: ops@example.invalid
           SHOV_IMAGE_TAG: ci
           BETA_ACCESS: open
+          ADMIN_ORIGIN: https://admin.example.invalid
+          ADMIN_PASSWORD_HASH: ci-compose-validation-only
         run: |
           docker compose --file deploy/compose.yaml config --quiet
+          docker compose --file deploy/compose.yaml --file deploy/compose.admin.yaml config --quiet
           docker run --rm --read-only --tmpfs /tmp:size=32m,mode=1777 \
             --env APP_ORIGIN --env ACME_EMAIL shov-caddy:ci \
             caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+          docker run --rm --read-only --tmpfs /tmp:size=32m,mode=1777 \
+            --env APP_ORIGIN --env ACME_EMAIL --env ADMIN_ORIGIN shov-caddy:ci \
+            caddy validate --config /etc/caddy/Caddyfile.admin --adapter caddyfile
 
       - name: Start production application with persistent test volumes
         run: |
+          node tools/admin-credentials.mjs https://admin.example.invalid .local/ci-admin.json
           docker run --detach --name shov-ci --init --read-only \
             --cap-drop ALL --security-opt no-new-privileges \
             --tmpfs /tmp:size=64m,mode=1777 \
             --mount source=shov-ci-data,target=/data \
             --mount source=shov-ci-backups,target=/backups \
             --publish 127.0.0.1:3101:3001 \
+            --publish 127.0.0.1:3102:3002 \
             --env APP_MODE=telegram --env SERVER_HOST=0.0.0.0 --env SERVER_PORT=3001 \
             --env DATABASE_PATH=/data/shov.sqlite \
             --env BOT_TOKEN=123456789:ci-fixture-not-a-real-token \
             --env BETA_ACCESS=open --env APP_ORIGIN=https://game.example.invalid \
+            --env ADMIN_ORIGIN=https://admin.example.invalid \
+            --env "ADMIN_PASSWORD_HASH=$(node -pe 'JSON.parse(require("node:fs").readFileSync(".local/ci-admin.json", "utf8")).passwordHash')" \
             --env LOG_LEVEL=warn shov:ci
           for attempt in $(seq 1 30); do
             if curl --silent --fail http://127.0.0.1:3101/api/ready > /dev/null; then
@@ -96,6 +106,31 @@ jobs:
           assert.ok((await scene.arrayBuffer()).byteLength > 0);
           assert.equal((await get('/api/state')).status, 401);
           console.log('Container health, database, frontend assets and anonymous rejection passed.');
+          JS
+
+      - name: Verify isolated administration listener
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFile } from 'node:fs/promises';
+          const credentials = JSON.parse(await readFile('.local/ci-admin.json', 'utf8'));
+          const origin = 'http://127.0.0.1:3102';
+          const request = (path, options = {}) => fetch(new URL(path, origin), { signal: AbortSignal.timeout(5000), ...options });
+          assert.equal((await request('/')).status, 200);
+          assert.equal((await request('/api/admin/overview')).status, 401);
+          const forged = await request('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://game.example.invalid' }, body: JSON.stringify({ password: credentials.password }) });
+          assert.equal(forged.status, 403);
+          const login = await request('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: credentials.url }, body: JSON.stringify({ password: credentials.password }) });
+          assert.equal(login.status, 200);
+          const cookie = login.headers.get('set-cookie').split(';')[0];
+          const overview = await request('/api/admin/overview', { headers: { Cookie: cookie } });
+          assert.equal(overview.status, 200);
+          assert.equal((await overview.json()).totalPlayers, 0);
+          assert.equal((await fetch('http://127.0.0.1:3101/api/admin/overview', { headers: { Cookie: cookie } })).status, 404);
+          const logout = await request('/api/admin/logout', { method: 'POST', headers: { Cookie: cookie, Origin: credentials.url } });
+          assert.equal(logout.status, 200);
+          assert.equal((await request('/api/admin/overview', { headers: { Cookie: cookie } })).status, 401);
+          console.log('Admin authentication, CSRF, logout and game listener isolation passed.');
           JS
 
       - name: Exercise backup, restore and moderation in the production image

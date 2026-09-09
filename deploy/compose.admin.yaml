@@ -1,0 +1,10 @@
+services:
+  app:
+    environment:
+      ADMIN_ORIGIN: ${ADMIN_ORIGIN:?Set the separate HTTPS admin origin}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?Set the scrypt admin password hash}
+      ADMIN_PORT: "3002"
+  caddy:
+    environment:
+      ADMIN_ORIGIN: ${ADMIN_ORIGIN:?Set the separate HTTPS admin origin}
+    command: [caddy, run, --config, /etc/caddy/Caddyfile.admin, --adapter, caddyfile]
