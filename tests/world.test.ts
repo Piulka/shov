@@ -93,7 +93,7 @@ describe('regions and route progression', () => {
     const withoutCleanse = train(glass, 'weft');
     expect(prepared.wins).toBe(12);
     expect(withoutCleanse.wins).toBeLessThan(prepared.wins);
-    expect(withoutCleanse.blockedEnemyNames).toContain('Узловой ткач');
+    expect(withoutCleanse.blockedEnemyNames).toContain(catalog.enemies.find(enemy => enemy.id === 'knotweaver')!.name);
     const needle = hero('floodgate', 35, 33, 'needle');
     expect(train(needle, 'floodgate').wins).toBe(12);
     Object.assign(needle.build, tactics('needle', 'glasswood'));
@@ -132,14 +132,13 @@ describe('regional production and resonant loot', () => {
   it('settles a day in the later regions identically in one request or hourly, including rare drops', () => {
     const once = hero('carmine', 25);
     const often = structuredClone(once);
-    const initialWallet = { ...once.wallet };
     settle(once, START + 24 * HOUR);
     for (let hour = 1; hour <= 24; hour++) settle(often, START + hour * HOUR);
     expect(often).toEqual(once);
     expect(once.totals.items).toBeGreaterThanOrEqual(47);
     expect(once.totals.items).toBeLessThanOrEqual(48);
-    expect(once.wallet.coins - initialWallet.coins).toBeGreaterThanOrEqual(7990);
-    expect(once.wallet.coins - initialWallet.coins).toBeLessThanOrEqual(8000);
+    expect(once.totals.coins).toBeGreaterThanOrEqual(7990);
+    expect(once.totals.coins).toBeLessThanOrEqual(8000);
     const drops = once.inventory.slice(10);
     expect(drops.some((item) => item.rarity === 'resonant')).toBe(true);
     for (const item of drops) {
@@ -232,7 +231,8 @@ describe('deterministic crafting and reforging', () => {
     expect(state.nextItemId).toBe(before.nextItemId);
     expect(state.totals).toEqual(before.totals);
     const cost = reforgeCost(12, 36);
-    expect(state.wallet).toEqual({ coins: before.wallet.coins - cost.coins, thread: before.wallet.thread - cost.thread, catalyst: before.wallet.catalyst });
+    expect(state.wallet).toEqual({ coins: before.wallet.coins - cost.coins + 500, thread: before.wallet.thread - cost.thread + 10, catalyst: before.wallet.catalyst });
+    expect(state.chapter.completed).toContain('reforge');
     expect(computeStats(state).hp).toBeGreaterThan(stats.hp);
     finish(state);
     expect(state.lastBattle).toEqual(before.battle);

@@ -111,7 +111,14 @@
     "baseSelection": "uniform_matching_route_slot_catalog",
     "namedRecipeSelection": "uniform_known_matching_route_slot_recipes",
     "affixSelection": "uniform_valid_combinations_without_duplicates",
-    "affixValuesRolled": false,
+    "affixValuesRolled": true,
+    "affixRolls": {
+      "valuesPercent": [80, 90, 100, 110, 120],
+      "distribution": "uniform_independent_per_affix",
+      "legacyAndCraftPercent": 100,
+      "reforgePreservesRolls": true,
+      "totalBonusCapsUnchanged": true
+    },
     "desiredItemGuarantee": "deterministic_crafting_only",
     "equipmentSalvageIncludedInReferenceIncome": false,
     "tutorialEquipmentUsesSeparateOneTimeEvents": true

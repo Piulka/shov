@@ -1,77 +1,66 @@
 {
   "schema": "shov.audio.v1",
-  "revision": 1,
+  "revision": 2,
+  "style": "colorful-fantasy",
   "assets": [
     {
-      "assetId": "ambience.terraces",
-      "bus": "ambience",
+      "assetId": "music.terraces",
+      "bus": "music",
       "sources": [
         {
-          "src": "ambience/terraces.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "ambience/terraces.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/music/music-terraces.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 2,
-      "duration": 64.0,
+      "duration": 32,
       "gainDb": 0,
-      "measuredLufsI": "-26.01",
-      "measuredTruePeakDbtp": "-12.17",
+      "placeholder": true,
+      "title": "Greenwood Adventure",
       "loop": {
         "startSample": 0,
-        "endSample": 3072000
+        "endSample": 768000
       }
     },
     {
-      "assetId": "ambience.glassgarden",
-      "bus": "ambience",
+      "assetId": "music.glassgarden",
+      "bus": "music",
       "sources": [
         {
-          "src": "ambience/glassgarden.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "ambience/glassgarden.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/music/music-glassgarden.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 2,
-      "duration": 64.0,
+      "duration": 35.55554166666667,
       "gainDb": 0,
-      "measuredLufsI": "-26.01",
-      "measuredTruePeakDbtp": "-12.54",
+      "placeholder": true,
+      "title": "Crystal Mountain Trail",
       "loop": {
         "startSample": 0,
-        "endSample": 3072000
+        "endSample": 853333
       }
     },
     {
-      "assetId": "ambience.carmine",
-      "bus": "ambience",
+      "assetId": "music.carmine",
+      "bus": "music",
       "sources": [
         {
-          "src": "ambience/carmine.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "ambience/carmine.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/music/music-carmine.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 2,
-      "duration": 64.0,
+      "duration": 34.28570833333333,
       "gainDb": 0,
-      "measuredLufsI": "-25.98",
-      "measuredTruePeakDbtp": "-12.49",
+      "placeholder": true,
+      "title": "Ashland Expedition",
       "loop": {
         "startSample": 0,
-        "endSample": 3072000
+        "endSample": 822857
       }
     },
     {
@@ -79,980 +68,735 @@
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-blade-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-blade-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-blade-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.26,
+      "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-8.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.blade.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-blade-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-blade-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-blade-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.26,
+      "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-8.98"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.blade.03",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-blade-03.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-blade-03.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-blade-03.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.26,
+      "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-8.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.glass.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-glass-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-glass-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-glass-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-11.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.glass.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-glass-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-glass-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-glass-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-10.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.glass.03",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-glass-03.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-glass-03.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-glass-03.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-11.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.needle.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-needle-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-needle-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-needle-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.23,
+      "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-12.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.needle.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-needle-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-needle-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-needle-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.23,
+      "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-11.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.attack.needle.03",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/attack-needle-03.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/attack-needle-03.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-attack-needle-03.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.23,
+      "duration": 0.34,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-12.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.ceramic.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-ceramic-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-ceramic-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-ceramic-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-9.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.ceramic.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-ceramic-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-ceramic-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-ceramic-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-10.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.ceramic.03",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-ceramic-03.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-ceramic-03.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-ceramic-03.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-9.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.glass.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-glass-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-glass-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-glass-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.24,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-10.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.glass.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-glass-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-glass-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-glass-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.24,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-11.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.glass.03",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-glass-03.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-glass-03.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-glass-03.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.24,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-11.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.fabric.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-fabric-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-fabric-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-fabric-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.19,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-12.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.fabric.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-fabric-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-fabric-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-fabric-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.19,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-12.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.hit.fabric.03",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/hit-fabric-03.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/hit-fabric-03.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-hit-fabric-03.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.19,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-11.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.heavy.impact.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/heavy-impact-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/heavy-impact-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-heavy-impact-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.45,
       "gainDb": 0,
-      "measuredLufsI": "-20.85",
-      "measuredTruePeakDbtp": "-5.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.heavy.impact.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/heavy-impact-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/heavy-impact-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-heavy-impact-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.45,
       "gainDb": 0,
-      "measuredLufsI": "-20.85",
-      "measuredTruePeakDbtp": "-6.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.shield.absorb.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/shield-absorb-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/shield-absorb-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-shield-absorb-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-13.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.shield.absorb.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/shield-absorb-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/shield-absorb-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-shield-absorb-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-12.53"
+      "placeholder": true
     },
     {
       "assetId": "sfx.dot.01",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/dot-01.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/dot-01.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-dot-01.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.13,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-22.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.dot.02",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/dot-02.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/dot-02.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-dot-02.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.13,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-23.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.heavy.windup",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/heavy-windup.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/heavy-windup.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-heavy-windup.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 2.0,
+      "duration": 2,
       "gainDb": 0,
-      "measuredLufsI": "-25.25",
-      "measuredTruePeakDbtp": "-16.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.shield.raise",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/shield-raise.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/shield-raise.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-shield-raise.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.38,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-14.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.heal",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/heal.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/heal.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-heal.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.55,
       "gainDb": 0,
-      "measuredLufsI": "-28.67",
-      "measuredTruePeakDbtp": "-15.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.cleanse",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/cleanse.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/cleanse.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-cleanse.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.38,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-16.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.critical",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/critical.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/critical.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-critical.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-14.98"
+      "placeholder": true
     },
     {
       "assetId": "sfx.defeat.ceramic",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/defeat-ceramic.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/defeat-ceramic.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-defeat-ceramic.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.7,
       "gainDb": 0,
-      "measuredLufsI": "-38.94",
-      "measuredTruePeakDbtp": "-14.98"
+      "placeholder": true
     },
     {
       "assetId": "sfx.defeat.glass",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/defeat-glass.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/defeat-glass.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-defeat-glass.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.7,
       "gainDb": 0,
-      "measuredLufsI": "-33.92",
-      "measuredTruePeakDbtp": "-15.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.defeat.fabric",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/defeat-fabric.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/defeat-fabric.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-defeat-fabric.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.65,
       "gainDb": 0,
-      "measuredLufsI": "-39.11",
-      "measuredTruePeakDbtp": "-16.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.victory",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/victory.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/victory.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-victory.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.6,
       "gainDb": 0,
-      "measuredLufsI": "-34.20",
-      "measuredTruePeakDbtp": "-18.73"
+      "placeholder": true
     },
     {
       "assetId": "sfx.retreat",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/retreat.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/retreat.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-retreat.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.5,
       "gainDb": 0,
-      "measuredLufsI": "-34.90",
-      "measuredTruePeakDbtp": "-19.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.click",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-click.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-click.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-click.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 0.065,
+      "duration": 0.08,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-27.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.back",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-back.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-back.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-back.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.08,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-26.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.confirm",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-confirm.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-confirm.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-confirm.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-23.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.reject",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-reject.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-reject.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-reject.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.2,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-22.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.equip",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-equip.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-equip.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-equip.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.23,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-21.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.lock",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-lock.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-lock.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-lock.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.18,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-23.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.salvage",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-salvage.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-salvage.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-salvage.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.42,
       "gainDb": 0,
-      "measuredLufsI": "-40.35",
-      "measuredTruePeakDbtp": "-21.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.drop.common",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-drop-common.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-drop-common.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-drop-common.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.2,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-25.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.drop.fine",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-drop-fine.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-drop-fine.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-drop-fine.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.35,
       "gainDb": 0,
-      "measuredLufsI": "-inf",
-      "measuredTruePeakDbtp": "-23.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.drop.resonant",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-drop-resonant.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-drop-resonant.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-drop-resonant.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.5,
       "gainDb": 0,
-      "measuredLufsI": "-34.44",
-      "measuredTruePeakDbtp": "-21.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.craft",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-craft.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-craft.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-craft.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.6,
       "gainDb": 0,
-      "measuredLufsI": "-35.14",
-      "measuredTruePeakDbtp": "-19.99"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.reforge",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-reforge.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-reforge.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-reforge.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.55,
       "gainDb": 0,
-      "measuredLufsI": "-34.64",
-      "measuredTruePeakDbtp": "-21.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.item.upgrade",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/item-upgrade.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/item-upgrade.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-item-upgrade.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.7,
       "gainDb": 0,
-      "measuredLufsI": "-35.16",
-      "measuredTruePeakDbtp": "-20.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.levelup",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-levelup.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-levelup.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-levelup.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
       "duration": 0.9,
       "gainDb": 0,
-      "measuredLufsI": "-35.11",
-      "measuredTruePeakDbtp": "-20.00"
+      "placeholder": true
     },
     {
       "assetId": "sfx.ui.routeunlock",
       "bus": "sfx",
       "sources": [
         {
-          "src": "sfx/ui-routeunlock.ogg",
-          "type": "audio/ogg; codecs=vorbis"
-        },
-        {
-          "src": "sfx/ui-routeunlock.m4a",
-          "type": "audio/mp4"
+          "src": "fantasy/sfx/sfx-ui-routeunlock.wav",
+          "type": "audio/wav"
         }
       ],
-      "sampleRate": 48000,
+      "sampleRate": 24000,
       "channels": 1,
-      "duration": 1.0,
+      "duration": 1,
       "gainDb": 0,
-      "measuredLufsI": "-38.75",
-      "measuredTruePeakDbtp": "-21.00"
+      "placeholder": true
     }
   ]
 }

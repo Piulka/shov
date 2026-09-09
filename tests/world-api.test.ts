@@ -35,7 +35,8 @@ describe('regional progression HTTP contract', () => {
     const view = first.json<GameView>();
     const beforeItem = save.state.inventory[0];
     expect(view.state.inventory[0]).toEqual({ ...beforeItem, level: 33 });
-    expect(view.state.wallet).toEqual({ coins: 89_740, thread: 1794, catalyst: 60 });
+    expect(view.state.wallet).toEqual({ coins: 90_240, thread: 1804, catalyst: 60 });
+    expect(view.state.chapter.completed.filter(task => task === 'reforge')).toHaveLength(1);
     expect(view.state.battle).toEqual(save.state.battle);
     expect(view.state.build).toEqual(save.state.build);
     expect(view.state.presets).toEqual(save.state.presets);

@@ -1,8 +1,21 @@
 import balance from '../model/balance.json' with { type: 'json' };
 import { catalog } from './content';
-import type { GameState, Wallet } from './types';
+import type { GameState, Item, Wallet } from './types';
 
 type EquipmentProgress = Pick<GameState, 'level' | 'unlockedRoutes'>;
+
+export function itemProtection(state: Pick<GameState, 'build' | 'pendingBuild' | 'presets'>, item: Item): string | null {
+  if (item.locked) return 'Закреплён';
+  if (Object.values(state.build.equipment).includes(item.id)) return 'Надет на герое';
+  if (state.pendingBuild && Object.values(state.pendingBuild.equipment).includes(item.id)) return 'Выбран для следующего боя';
+  const presets = state.presets.filter(build => Object.values(build.equipment).includes(item.id));
+  if (presets.length) return `В сборке: ${presets.map(build => build.name).join(', ')}`;
+  return null;
+}
+
+export function salvageValue(item: Pick<Item, 'level' | 'rarity'>): number {
+  return Math.ceil(item.level / 10) * balance.salvage.rarityMultipliers[item.rarity];
+}
 
 export function gearLevelCap(state: EquipmentProgress): number {
   return Math.max(1, ...catalog.routes.filter((route) => state.unlockedRoutes.includes(route.id)).map((route) => route.itemLevel));

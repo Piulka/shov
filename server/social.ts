@@ -269,6 +269,10 @@ export class SocialService {
   private execute(accountId: string, profile: ProfileRow, command: SocialCommand, now: number): void {
     if (command.type === 'profile') {
       this.db.prepare('UPDATE social_profiles SET name = ? WHERE account_id = ?').run(command.name, accountId);
+      const saved = this.store.getGame(accountId)!;
+      const state = JSON.parse(saved.snapshot) as GameState;
+      state.name = command.name;
+      this.store.saveGame(saved, state, now);
       return;
     }
     if (command.type === 'create') {

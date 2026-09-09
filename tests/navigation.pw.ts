@@ -3,6 +3,7 @@ import { mkdir } from 'node:fs/promises';
 import { createApp } from '../server/app';
 import { GameStore } from '../server/store';
 import type { GameView } from '../shared/types';
+import { chapterTasks } from '../shared/chapter';
 import { worldEpoch, worldFixture } from './fixtures/world';
 
 const test = base.extend<{ world: string }>({
@@ -91,15 +92,16 @@ test('chapter links and the full backpack open the requested section and move fo
     for (const id of ['inventory', 'build', 'upgrade', 'craft']) localStorage.setItem(`shov-section:${id}`, 'closed');
   });
   await page.goto(world);
-  for (const [button, anchor] of [
-    ['К сборке: Собственный ритм', 'build'],
-    ['К маршрутам: Нужная находка', 'target'],
-    ['В мастерскую: Крепкая основа', 'upgrade'],
-    ['В мастерскую: Работа по мерке', 'craft'],
+  for (const [taskId, anchor] of [
+    ['tactics', 'build'],
+    ['target', 'target'],
+    ['upgrade', 'upgrade'],
+    ['craft', 'craft'],
   ]) {
+    const task = chapterTasks.find(task => task.id === taskId)!;
     await go(page, 'Путешествие', 'Путь');
     await page.locator('.chapter-list summary').click();
-    await page.getByRole('button', { name: button, exact: true }).click();
+    await page.getByRole('button', { name: `${task.action}: ${task.title}`, exact: true }).click();
     await focused(page, anchor);
     if (anchor !== 'target') await expect(page.locator(`#${anchor}`)).toHaveJSProperty('open', true);
     await noOverflow(page);

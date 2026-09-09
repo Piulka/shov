@@ -4,12 +4,15 @@ import { BattleAudioCursor, battleSounds } from './events';
 export type AudioSettings = { muted: boolean; sfx: number; ambience: number; music: number };
 type Bus = 'sfx' | 'ambience' | 'music';
 type Asset = { assetId: string; bus: Bus; sources: { src: string; type: string }[]; loop?: { startSample: number; endSample: number }; sampleRate: number };
-const defaults: AudioSettings = { muted: true, sfx: 0.38, ambience: 0.28, music: 0 };
+const defaults: AudioSettings = { muted: true, sfx: 0.38, ambience: 0, music: 0.3 };
 export function readAudioSettings(): AudioSettings {
   try {
-    const saved = JSON.parse(localStorage.getItem('shov-audio-v1') || '{}');
+    const current = localStorage.getItem('shov-audio-v2');
+    const saved = JSON.parse(current || localStorage.getItem('shov-audio-v1') || '{}');
     const level = (key: Bus) => typeof saved[key] === 'number' && Number.isFinite(saved[key]) ? Math.max(0, Math.min(1, saved[key])) : defaults[key];
-    return { muted: typeof saved.muted === 'boolean' ? saved.muted : true, sfx: level('sfx'), ambience: level('ambience'), music: level('music') };
+    // v1 wrote music=0 before a music control or assets existed. Keep explicit
+    // v2 silence and the user's master mute when introducing the music channel.
+    return { muted: typeof saved.muted === 'boolean' ? saved.muted : true, sfx: level('sfx'), ambience: level('ambience'), music: !current && saved.music === 0 ? defaults.music : level('music') };
   } catch { return { ...defaults }; }
 }
 
@@ -34,10 +37,11 @@ class GameAudio {
 
   configure(settings: AudioSettings) {
     this.settings = settings;
-    try { localStorage.setItem('shov-audio-v1', JSON.stringify(settings)); } catch { /* Private browsing can disable storage. */ }
+    try { localStorage.setItem('shov-audio-v2', JSON.stringify(settings)); } catch { /* Private browsing can disable storage. */ }
     this.applyGains();
     if (settings.muted) this.stop();
-    else if (this.unlocked) void this.startAmbience();
+    else if (settings.music === 0) this.stopMusic();
+    else if (this.unlocked) void this.startMusic();
   }
 
   // Must be called directly by a trusted pointer/key handler, before any await.
@@ -60,9 +64,9 @@ class GameAudio {
       this.unlocked = this.context.state === 'running';
       if (!this.unlocked) return;
       await this.loadManifest();
-      // Warm short clips only; regional beds are loaded on demand.
+      // Warm short clips only; regional music is loaded on demand.
       for (const asset of this.assets.values()) if (asset.bus === 'sfx') void this.load(asset);
-      await this.startAmbience();
+      await this.startMusic();
     } catch { this.unlocked = false; /* A later gesture can retry a rejected resume. */ }
   }
 
@@ -144,24 +148,24 @@ class GameAudio {
   update(battle: BattleRun, now: number, journey: boolean) {
     if ((battle.regionId || 'terraces') !== this.region) {
       this.region = battle.regionId || 'terraces';
-      void this.startAmbience();
+      void this.startMusic();
     }
     for (const event of this.cursor.take(battle, now, !!this.audible && journey)) {
       for (const id of battleSounds(event, battle)) this.play(id);
     }
   }
 
-  private async startAmbience() {
-    if (!this.audible || !this.context || !this.buses) return;
-    const id = `ambience.${this.region}`;
+  private async startMusic() {
+    if (!this.audible || !this.context || !this.buses || this.settings.music === 0) return;
+    const id = `music.${this.region}`;
     if (this.loop?.id === id) return;
     const asset = this.assets.get(id);
     if (!asset) return;
     const version = ++this.generation;
     const buffer = await this.load(asset);
-    if (!buffer || version !== this.generation || id !== `ambience.${this.region}` || !this.audible) return;
+    if (!buffer || version !== this.generation || id !== `music.${this.region}` || !this.audible || this.settings.music === 0) return;
     const at = this.context.currentTime;
-    // At most a current and an outgoing bed, including rapid route changes.
+    // At most a current and an outgoing track, including rapid route changes.
     for (const source of this.loops) if (source !== this.loop?.source) { try { source.stop(); } catch {} this.loops.delete(source); }
     if (this.loop) {
       this.loop.gain.gain.cancelScheduledValues(at);
@@ -172,12 +176,18 @@ class GameAudio {
     source.buffer = buffer; source.loop = true;
     source.loopStart = (asset.loop?.startSample || 0) / asset.sampleRate;
     source.loopEnd = Math.min(buffer.duration, (asset.loop?.endSample || buffer.length) / asset.sampleRate);
-    source.connect(gain); gain.connect(this.buses.ambience);
+    source.connect(gain); gain.connect(this.buses.music);
     gain.gain.setValueAtTime(0, at); gain.gain.linearRampToValueAtTime(1, at + 1.5);
     this.loops.add(source);
     source.onended = () => { this.loops.delete(source); source.disconnect(); gain.disconnect(); };
     source.start(); this.loop = { id, source, gain };
-    for (const key of this.buffers.keys()) if (key.startsWith('ambience.') && key !== id) this.buffers.delete(key);
+    for (const key of this.buffers.keys()) if (key.startsWith('music.') && key !== id) this.buffers.delete(key);
+  }
+
+  private stopMusic() {
+    ++this.generation;
+    for (const source of this.loops) { try { source.stop(); } catch {} }
+    this.loops.clear(); this.loop = undefined;
   }
 
   private stop() {

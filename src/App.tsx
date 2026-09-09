@@ -25,6 +25,8 @@ import {
   LockKeyhole,
   Map,
   Mountain,
+  Moon,
+  Monitor,
   Plus,
   RotateCcw,
   Route as RouteIcon,
@@ -34,6 +36,7 @@ import {
   Settings2,
   Shield,
   Sparkles,
+  Sun,
   Swords,
   Target,
   Trash2,
@@ -61,8 +64,18 @@ import type {
   Wallet,
 } from "../shared/types";
 import { allowedAffixes, upgradeCap } from "../shared/content";
+import { computeStats, routeEnemy } from '../shared/engine';
 import { chapterTasks } from "../shared/chapter";
-import { canCraftResonant, craftingCost, gearLevelCap, reforgeCost } from "../shared/equipment";
+import { canCraftResonant, craftingCost, gearLevelCap, reforgeCost, itemProtection, salvageValue } from "../shared/equipment";
+import { formatItemAffix } from "../shared/item-affixes";
+import Dialog from './components/GameDialog';
+import ItemTile, { ItemImage } from './components/ItemCard';
+import InventoryPanel from './components/InventoryPanel';
+import SkillIcon from './components/SkillIcon';
+import BattleSkills from './components/BattleSkills';
+import Introduction from './components/Introduction';
+import ProfileSettings from './components/ProfileSettings';
+import { useTheme, type Theme } from './theme';
 import BattleScene from "./components/BattleScene";
 import ChapterProgress from "./components/ChapterProgress";
 import CollapsibleSection from "./components/CollapsibleSection";
@@ -110,8 +123,8 @@ const conditions: Record<Condition, string> = {
   has_debuff: "Есть вредный эффект",
   vulnerable: "Враг уязвим",
   no_vulnerable: "Нет уязвимости",
-  three_marks: "Три следа на враге",
-  under_three_marks: "Меньше трёх следов",
+  three_marks: "Три дозы яда на враге",
+  under_three_marks: "Меньше трёх доз яда",
 };
 const navigation: { id: Page; label: string; icon: LucideIcon }[] = [
   { id: "journey", label: "Путешествие", icon: Compass },
@@ -153,7 +166,7 @@ function Money({ wallet, small = false }: { wallet: Wallet; small?: boolean }) {
         <Coins size={16} />
         <b>{compact(wallet.coins)}</b>
       </span>
-      <span title="Нить">
+      <span title="Материалы">
         <Layers3 size={16} />
         <b>{compact(wallet.thread)}</b>
       </span>
@@ -162,132 +175,6 @@ function Money({ wallet, small = false }: { wallet: Wallet; small?: boolean }) {
         <b>{compact(wallet.catalyst)}</b>
       </span>
     </div>
-  );
-}
-function Dialog({
-  title,
-  children,
-  close,
-  wide = false,
-}: {
-  title: string;
-  children: ReactNode;
-  close: () => void;
-  wide?: boolean;
-}) {
-  const dialog = useRef<HTMLDivElement>(null);
-  const closeRef = useRef(close);
-  closeRef.current = close;
-  useEffect(() => {
-    const previous = document.activeElement as HTMLElement;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    dialog.current
-      ?.querySelector<HTMLElement>("button, input, select")
-      ?.focus();
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeRef.current();
-      if (event.key !== "Tab") return;
-      const nodes = Array.from(
-        dialog.current?.querySelectorAll<HTMLElement>(
-          'button:not(:disabled), input, select, [tabindex="0"]',
-        ) || [],
-      );
-      const first = nodes[0],
-        last = nodes.at(-1);
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last?.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = overflow;
-      window.removeEventListener("keydown", onKey);
-      previous?.focus();
-    };
-  }, []);
-  return (
-    <div
-      className="modal-backdrop"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) close();
-      }}
-    >
-      <div
-        ref={dialog}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dialog-title"
-        className={`dialog ${wide ? "wide" : ""}`}
-      >
-        <header>
-          <h2 id="dialog-title">{title}</h2>
-          <IconButton icon={X} label="Закрыть" onClick={close} />
-        </header>
-        {children}
-      </div>
-    </div>
-  );
-}
-function ItemImage({
-  item,
-  className = "",
-}: {
-  item: Pick<Item, "slot" | "family">;
-  className?: string;
-}) {
-  return (
-    <img
-      className={`item-image ${className}`}
-      src={`/art/item-${item.slot}${item.slot === "weapon" && item.family ? `-${item.family}` : ""}.png`}
-      alt=""
-      loading="lazy"
-    />
-  );
-}
-function ItemTile({
-  item,
-  catalog,
-  selected,
-  equipped,
-  onClick,
-}: {
-  item: Item;
-  catalog: Catalog;
-  selected?: boolean;
-  equipped?: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      className={`item-tile rarity-${item.rarity} ${selected ? "selected" : ""}`}
-      onClick={onClick}
-    >
-      <div className="item-art">
-        <ItemImage item={item} />
-        {equipped && (
-          <span className="equipped-marker" title="Надето">
-            <Check size={12} />
-          </span>
-        )}
-        {item.locked && <LockKeyhole className="locked-marker" size={12} />}
-      </div>
-      <div className="item-tile-copy">
-        <span className="item-level">
-          {catalog.slotNames[item.slot]} · ур. {item.level}
-        </span>
-        <strong>{item.name}</strong>
-        <span className="item-affix">
-          {item.affixes.length
-            ? catalog.affixNames[item.affixes[0]]
-            : "Без дополнительных свойств"}
-        </span>
-      </div>
-    </button>
   );
 }
 function Health({
@@ -398,7 +285,7 @@ function Journey({
             <span className="chapter-mark">{String(region.order).padStart(2, "0")}</span> {region.name.toLocaleUpperCase("ru")}
           </p>
           <h1>Путь продолжается</h1>
-          <p className="subtitle">За каждой трещиной начинается новый мир.</p>
+          <p className="subtitle">Новые земли, редкая добыча и сильные противники.</p>
         </div>
         <button className="button secondary" onClick={() => go("map", "routes")}>
           <Map size={16} /> Выбрать маршрут
@@ -442,6 +329,7 @@ function Journey({
           />
         </div>
       </section>
+      <BattleSkills battle={state.battle} skills={state.build.skills.map(id => catalog.skills.find(skill => skill.id === id)!).filter(Boolean)} now={now} />
       <div className="journey-strip">
         <span>
           <i className="live-dot" />
@@ -465,7 +353,7 @@ function Journey({
       </div>
       <div className="journey-lower">
         <section className="next-goal">
-          {state.chapter && !state.chapter.legacy && state.chapter.completed.length < chapterTasks.length ? <ChapterProgress view={view} go={go} /> : <>
+          {state.chapter && state.chapter.completed.length < chapterTasks.length ? <ChapterProgress view={view} go={go} /> : <>
           <SectionTitle
             action={<span className="micro-label">ТЕКУЩАЯ ЦЕЛЬ</span>}
           >
@@ -537,7 +425,7 @@ function Journey({
               </div>
             ))}
             {recent.length === 0 && (
-              <p className="muted">Проводник выходит на тропу.</p>
+              <p className="muted">Герой выходит на тропу.</p>
             )}
           </div>
         </section>
@@ -639,12 +527,11 @@ function BuildEditor({
       <div className="skill-grid">
         {skills.map((id, index) => {
           const skill = view.catalog.skills.find((s) => s.id === id);
-          const Icon =
-            skill?.family === "common" ? Shield : familyIcons[family];
           return (
             <div className="skill-control" key={index}>
-              <span className="skill-symbol">
-                <Icon size={22} />
+              <span className={`skill-symbol family-${skill?.family}`}>
+                <SkillIcon id={id} />
+                <b className="skill-order">{index + 1}</b>
               </span>
               <span>
                 <span className="skill-queue-label">Ячейка {index + 1}</span>
@@ -830,29 +717,16 @@ function Hero({
   onTrain: () => void;
   go: Navigate;
 }) {
-  const [filter, setFilter] = useState<Slot | "all">("all");
   const [buildDirty, setBuildDirty] = useState(false);
-  const [rarity, setRarity] = useState("all");
-  const [search, setSearch] = useState("");
-  const [visibleItems, setVisibleItems] = useState(60);
-  useEffect(() => setVisibleItems(60), [filter, rarity, search]);
   const build = view.state.pendingBuild || view.state.build;
   const family =
     view.state.inventory.find((i) => i.id === build.equipment.weapon)?.family ||
     "blade";
-  const items = [...view.state.inventory]
-    .reverse()
-    .filter(
-      (i) =>
-        (filter === "all" || i.slot === filter) &&
-        (rarity === "all" || i.rarity === rarity) &&
-        i.name.toLocaleLowerCase("ru").includes(search.toLocaleLowerCase("ru")),
-    );
   return (
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">ПРОВОДНИК</p>
+          <p className="eyebrow">ГЕРОЙ</p>
           <h1>{view.state.name}</h1>
           <p className="subtitle">
             {view.catalog.familyNames[family]} · Уровень {view.state.level}
@@ -889,8 +763,8 @@ function Hero({
             <div className="character-portrait">
               <div className="portrait-ring" />
               <img
-                src={`/art/hero-${family}.png`}
-                alt={`Проводник, ${view.catalog.familyNames[family]}`}
+                src={`/art/fantasy/hero-${family}.png`}
+                alt={`Герой, ${view.catalog.familyNames[family]}`}
               />
               <span className="character-level">{view.state.level}</span>
             </div>
@@ -968,78 +842,7 @@ function Hero({
           </div>
           </CollapsibleSection>
         </div>
-        <CollapsibleSection id="inventory" title="Рюкзак" className="inventory" meta={`${view.state.inventory.length} предметов`}>
-          <div className="inventory-filters">
-            <label className="search">
-              <Search size={15} />
-              <input
-                aria-label="Поиск предмета"
-                placeholder="Найти предмет"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </label>
-            <select
-              aria-label="Фильтр по слоту"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as Slot | "all")}
-            >
-              <option value="all">Все слоты</option>
-              {view.catalog.slots.map((slot) => (
-                <option value={slot} key={slot}>
-                  {view.catalog.slotNames[slot]}
-                </option>
-              ))}
-            </select>
-            <select
-              aria-label="Фильтр по редкости"
-              value={rarity}
-              onChange={(e) => setRarity(e.target.value)}
-            >
-              <option value="all">Все редкости</option>
-              {Object.entries(view.catalog.rarityNames).map(([id, name]) => (
-                <option value={id} key={id}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="inventory-grid">
-            {items.slice(0, visibleItems).map((item) => (
-              <ItemTile
-                item={item}
-                catalog={view.catalog}
-                key={item.id}
-                equipped={Object.values(build.equipment).includes(item.id)}
-                onClick={() => inspect(item)}
-              />
-            ))}
-          </div>
-          {items.length > visibleItems && (
-            <button
-              className="text-button"
-              onClick={() => setVisibleItems(visibleItems + 60)}
-            >
-              Показать ещё <ChevronDown size={15} />
-            </button>
-          )}
-          {items.length === 0 && (
-            <div className="empty-state">
-              <Backpack size={28} />
-              <p>Таких предметов пока нет</p>
-              <button
-                className="text-button"
-                onClick={() => {
-                  setFilter("all");
-                  setRarity("all");
-                  setSearch("");
-                }}
-              >
-                Сбросить фильтры
-              </button>
-            </div>
-          )}
-        </CollapsibleSection>
+        <InventoryPanel view={view} command={command} busy={busy} inspect={inspect} />
       </div>
       <BuildEditor
         view={view}
@@ -1093,6 +896,8 @@ function Workshop({
   const [secondAffix, setSecondAffix] = useState<Affix>(allowedAffixes("weapon")[1]);
   const [rarity, setRarity] = useState<"fine" | "resonant">("fine");
   const [confirmCraft, setConfirmCraft] = useState(false);
+  const [reforgeId, setReforgeId] = useState(view.state.build.equipment.weapon);
+  const reforgeItem = view.state.inventory.find(item => item.id === reforgeId) ?? view.state.inventory[0];
   const level = view.state.upgrades[slot];
   const cost = view.catalog.upgradeCosts[level];
   const cap = upgradeCap(view.state.level);
@@ -1110,14 +915,15 @@ function Workshop({
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">РЕМЕСЛО ПРОВОДНИКА</p>
+          <p className="eyebrow">КУЗНИЦА ГИЛЬДИИ</p>
           <h1>Мастерская</h1>
           <p className="subtitle">Вещи меняются. Мастерство остаётся.</p>
         </div>
         <Hammer className="heading-art" size={42} strokeWidth={1.2} />
       </div>
       <div className="workshop-layout">
-        <CollapsibleSection id="upgrade" title="Усиление снаряжения">
+        <CollapsibleSection id="upgrade" title="Усиление слота">
+          <p className="mechanic-note">Каждый ранг даёт +1,5% к базовым характеристикам вещи в этом слоте. Бонус остаётся при любой замене снаряжения; уровень самой вещи не меняется.</p>
           <div className="upgrade-slots">
             {view.catalog.slots.map((s) => {
               const Icon = slotIcons[s];
@@ -1194,10 +1000,10 @@ function Workshop({
             <span className={`rarity-label rarity-${rarity}`}>{view.catalog.rarityNames[rarity]} · ур. {craftLevel}</span>
           </div>
           <div className="segmented craft-rarity" role="group" aria-label="Качество создаваемой вещи">
-            <button className={rarity === "fine" ? "active" : ""} aria-pressed={rarity === "fine"} onClick={() => setRarity("fine")}><Sparkles size={15} /> Тонкое</button>
-            <button className={rarity === "resonant" ? "active" : ""} aria-pressed={rarity === "resonant"} disabled={!resonantUnlocked} onClick={() => setRarity("resonant")}><Gem size={15} /> Резонансное</button>
+            <button className={rarity === "fine" ? "active" : ""} aria-pressed={rarity === "fine"} onClick={() => setRarity("fine")}><Sparkles size={15} /> Редкое</button>
+            <button className={rarity === "resonant" ? "active" : ""} aria-pressed={rarity === "resonant"} disabled={!resonantUnlocked} onClick={() => setRarity("resonant")}><Gem size={15} /> Эпическое</button>
           </div>
-          {!resonantUnlocked && <p className="craft-unlock"><LockKeyhole size={13} /> Резонанс: уровень 25 и открытый Карминный разлив.</p>}
+          {!resonantUnlocked && <p className="craft-unlock"><LockKeyhole size={13} /> Эпические рецепты: уровень 25 и открытые Пепельные земли.</p>}
           <label className="field">
             Предмет
             <select
@@ -1269,6 +1075,10 @@ function Workshop({
           </div>
         </CollapsibleSection>
       </div>
+      <CollapsibleSection id="reforge" title="Перековка вещи" className="workshop-reforge" meta="Сохранить удачные свойства">
+        <label className="field">Предмет для перековки<select aria-label="Предмет для перековки" value={reforgeItem?.id} onChange={event => setReforgeId(event.target.value)}>{view.state.inventory.map(item => <option key={item.id} value={item.id}>{item.name} · ур. {item.level}</option>)}</select></label>
+        {reforgeItem && <ReforgeItem key={reforgeItem.id} item={reforgeItem} view={view} command={command} busy={busy} notify={notify} />}
+      </CollapsibleSection>
       {confirmCraft && (
         <Dialog title="Создать предмет" close={() => setConfirmCraft(false)}>
           <div className="confirm-craft">
@@ -1338,9 +1148,9 @@ function WorldMap({
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">АТЛАС ПРОВОДНИКА</p>
-          <h1>Земли за разломом</h1>
-          <p className="subtitle">{view.catalog.regions.length} земли, связанные одной нитью.</p>
+          <p className="eyebrow">АТЛАС ПРИКЛЮЧЕНИЙ</p>
+          <h1>Карта королевства</h1>
+          <p className="subtitle">{view.catalog.regions.length} региона · от лесных троп до логова дракона.</p>
         </div>
         <span className="map-discovery">
           <Compass size={16} /> {view.state.unlockedRoutes.length} / {view.catalog.routes.length} участка
@@ -1450,7 +1260,7 @@ function WorldMap({
                   )}
                   {pending && <span className="status-tag"><Clock3 size={12} /> Следующий путь</span>}
                   {route.boss && <span className="boss-label">Хранитель</span>}
-                  {route.resonant && <span className="resonant-route"><Gem size={12} /> Резонанс</span>}
+                  {route.resonant && <span className="resonant-route"><Gem size={12} /> Эпическая добыча</span>}
                 </div>
                 <p>{route.description}</p>
                 <div className="route-reward">
@@ -1471,9 +1281,9 @@ function WorldMap({
                 <details className="route-enemies">
                   <summary>Противники · {route.enemyIds.length}</summary>
                   <div>{route.enemyIds.map((id) => {
-                    const enemy = view.catalog.enemies.find((entry) => entry.id === id)!;
+                    const enemy = routeEnemy(view.state, route, id);
                     return <div className="route-enemy" key={id}>
-                      <img src={`/art/enemy-${enemy.kind}.png`} alt="" loading="lazy" />
+                      <img src={`/art/fantasy/enemies/${enemy.id}.png`} alt="" loading="lazy" />
                       <div><strong>{enemy.name} <small>Ур. {enemy.level}</small></strong><p>{enemy.description}</p><span><Heart size={11} /> {fmt(enemy.hp)} <Swords size={11} /> {fmt(enemy.power)} <Shield size={11} /> {fmt(enemy.armor)}</span></div>
                     </div>;
                   })}</div>
@@ -1563,8 +1373,8 @@ function ReforgeItem({ item, view, command, busy, notify }: {
       <span>Ур. <b>{quote?.from ?? item.level}</b></span><ArrowRight size={18} />
       {quote ? <span>Ур. <b>{quote.to}</b></span> : <label><span className="sr-only">Новый уровень предмета</span><select value={level} disabled={busy} onChange={(event) => setTarget(Number(event.target.value))}>{Array.from({ length: cap - item.level }, (_, index) => item.level + 1 + index).map((value) => <option value={value} key={value}>Уровень {value}</option>)}</select></label>}
     </div>
-    <p>Свойства, редкость и сохранённые сборки сохраняются.</p>
-    {(item.rarity === "common" || item.rarity === "fine") && cost.coins > craftCost.coins && cost.thread >= craftCost.thread && <p className="reforge-alternative">Новая тонкая вещь этого уровня в мастерской: {fmt(craftCost.coins)} монет и {fmt(craftCost.thread)} нити.</p>}
+    <p>Повышает уровень только этой вещи. Бонусы, их величины и редкость сохраняются. Усиление слота оплачивается отдельно и действует на любую надетую в него вещь.</p>
+    {(item.rarity === "common" || item.rarity === "fine") && cost.coins > craftCost.coins && cost.thread >= craftCost.thread && <p className="reforge-alternative">Новая редкая вещь этого уровня в мастерской: {fmt(craftCost.coins)} монет и {fmt(craftCost.thread)} материалов. Перековка выгодна, когда важно сохранить удачные свойства.</p>}
     <div className="craft-footer"><Money wallet={cost} small />{!quote && <button className="button secondary" disabled={busy || !affordable} onClick={() => setQuote({ from: item.level, to: level, cost })}><Hammer size={15} /> Перековать</button>}</div>
     {!affordable && <p className="resource-note">Недостаточно материалов для перековки.</p>}
     {quote && <div className="reforge-confirm">
@@ -1605,14 +1415,23 @@ function ItemDialog({
       (view.state.pendingBuild || view.state.build).equipment[item.slot],
   );
   const equipped = current?.id === item.id;
-  const protectedItem =
-    Object.values(view.state.build.equipment).includes(item.id) ||
-    Object.values(view.state.pendingBuild?.equipment || {}).includes(item.id) ||
-    view.state.presets.some((p) =>
-      Object.values(p.equipment).includes(item.id),
-    );
+  const protection = itemProtection(view.state, item);
+  const activeBuild = view.state.pendingBuild ?? view.state.build;
+  const preview = computeStats({ ...view.state, rng: 0, nextItemId: 0 }, { ...activeBuild, equipment: { ...activeBuild.equipment, [item.slot]: item.id } });
+  const footer = <>
+    {protection && <p className="item-protection"><LockKeyhole size={14} />{protection}. Разбор недоступен.</p>}
+    {confirmDelete ? <div className="delete-confirm">
+      <p>Разобрать «{item.name}»? Материалы: +{salvageValue(item)}.</p>
+      <div><button className="button secondary" disabled={busy} onClick={() => setConfirmDelete(false)}>Отмена</button><button className="button danger" disabled={busy || !!protection} onClick={async () => {
+        if (await command({ type: 'dismantle', itemIds: [item.id] })) { close(); notify(`Предмет разобран. Материалы: +${salvageValue(item)}.`); }
+      }}><Trash2 size={15} />Подтвердить разбор</button></div>
+    </div> : <div className="dialog-actions">
+      <button className="button secondary" disabled={busy || !!protection} onClick={() => setConfirmDelete(true)}><Trash2 size={15} />Разобрать</button>
+      <button className="button primary" disabled={busy || equipped} onClick={async () => { if (await command({ type: 'equip', itemId: item.id })) { close(); notify('Предмет будет надет со следующего боя'); } }}><Check size={16} />{equipped ? 'Надето' : 'Надеть'}</button>
+    </div>}
+  </>;
   return (
-    <Dialog title={view.catalog.slotNames[item.slot]} close={close}>
+    <Dialog title={view.catalog.slotNames[item.slot]} close={close} footer={footer} busy={busy}>
       <div className={`item-detail rarity-${item.rarity}`}>
         <div className="detail-art">
           <ItemImage item={item} />
@@ -1626,7 +1445,7 @@ function ItemDialog({
           {item.affixes.map((a) => (
             <span key={a}>
               <Plus size={12} />
-              {view.catalog.affixNames[a]}
+              {formatItemAffix(item, a)}
             </span>
           ))}
           {!item.affixes.length && <span>Базовое снаряжение</span>}
@@ -1634,7 +1453,7 @@ function ItemDialog({
             <span>
               <Sparkles size={13} />
               {item.special === "long_thread"
-                ? "Следы сохраняются дольше"
+                ? "Яд действует дольше"
                 : "Усиленные щиты, ослабленное лечение"}
             </span>
           )}
@@ -1657,6 +1476,9 @@ function ItemDialog({
           </small>
         </div>
       )}
+      {!equipped && <div className="item-stat-comparison" aria-label="Изменение характеристик героя">{([
+        ['power', 'Сила'], ['hp', 'Здоровье'], ['armor', 'Защита'], ['crit', 'Крит. шанс'], ['haste', 'Скорость'], ['direct', 'Прямой урон'], ['dot', 'Яд'], ['support', 'Лечение и щиты'],
+      ] as const).map(([key, label], index) => { const difference = preview[key] - view.stats[key]; return Math.abs(difference) > 0.00001 ? <div key={key}><span>{label}</span><b className={difference > 0 ? 'positive' : 'negative'}>{difference > 0 ? '+' : ''}{decimal(difference * (index > 2 ? 100 : 1))}{index > 2 ? '%' : ''}</b></div> : null; })}</div>}
       <div className="item-detail-meta">
         <span>Усиление слота +{view.state.upgrades[item.slot]}</span>
         <button
@@ -1675,55 +1497,6 @@ function ItemDialog({
         </button>
       </div>
       <ReforgeItem item={item} view={view} command={command} busy={busy} notify={notify} />
-      {confirmDelete ? (
-        <div className="delete-confirm">
-          <p>Разобрать «{item.name}»? Предмет будет утрачен.</p>
-          <div>
-            <button
-              className="button secondary"
-              onClick={() => setConfirmDelete(false)}
-            >
-              Отмена
-            </button>
-            <button
-              className="button danger"
-              disabled={busy}
-              onClick={async () => {
-                if (await command({ type: "dismantle", itemIds: [item.id] })) {
-                  close();
-                  notify("Предмет разобран. Нить получена.");
-                }
-              }}
-            >
-              <Trash2 size={15} /> Разобрать
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="dialog-actions">
-          <button
-            className="button secondary"
-            title={protectedItem ? "Используется в сборке" : undefined}
-            disabled={busy || protectedItem || liveItem.locked}
-            onClick={() => setConfirmDelete(true)}
-          >
-            <Trash2 size={15} /> Разобрать
-          </button>
-          <button
-            className="button primary"
-            disabled={busy || equipped}
-            onClick={async () => {
-              if (await command({ type: "equip", itemId: item.id })) {
-                close();
-                notify("Предмет будет надет со следующего боя");
-              }
-            }}
-          >
-            <Check size={16} />
-            {equipped ? "Надето" : "Надеть"}
-          </button>
-        </div>
-      )}
     </Dialog>
   );
 }
@@ -1747,11 +1520,11 @@ function ReportDialog({
         <h3>
           {report
             ? `${duration(report.seconds)} в пути`
-            : "Следы за разломом"}
+            : "Дневник приключений"}
         </h3>
         <p>
           {report?.stopped
-            ? "Проводник отдохнул и снова отправился в путь."
+            ? "Герой отдохнул и снова отправился в путь."
             : "Всё найденное уже в дорожной сумке."}
         </p>
       </div>
@@ -1804,6 +1577,19 @@ function ReportDialog({
 
 export default function App() {
   const game = useGame();
+  const { theme, setTheme } = useTheme();
+  const introduction = useRef<{ account: string; required: boolean } | null>(null);
+  const [introDismissed, setIntroDismissed] = useState(false);
+  if (game.view && introduction.current?.account !== game.view.state.id) {
+    let status: string | null = null;
+    try { status = localStorage.getItem(`shov-introduction:${game.view.state.id}`); } catch { /* The session still remembers completion. */ }
+    const required = status === 'pending' || (status !== 'done' && game.view.state.level === 1 && game.view.state.totals.wins === 0);
+    introduction.current = { account: game.view.state.id, required };
+    if (required) {
+      try { localStorage.setItem(`shov-introduction:${game.view.state.id}`, 'pending'); } catch { /* Keep the introduction open in memory. */ }
+    }
+  }
+  const introOpen = !!introduction.current?.required && !introDismissed;
   const [page, setPage] = useState<Page>("journey");
   const [navigationTarget, setNavigationTarget] = useState<{ anchor?: PageAnchor; visit: number } | null>(null);
   const go = useCallback<Navigate>((next, anchor) => {
@@ -1826,7 +1612,7 @@ export default function App() {
     return () => cancelAnimationFrame(frame);
   }, [page, navigationTarget]);
   const [clock, setClock] = useState(Date.now());
-  useGameAudio(game.view?.state.battle, clock, page === 'journey');
+  useGameAudio(game.view?.state.battle, clock, page === 'journey' && !introOpen);
   const [paused, setPaused] = useState(
     () =>
       localStorage.getItem("shov-reduced-motion") === "true" ||
@@ -1846,12 +1632,12 @@ export default function App() {
     if (!state?.chapter) return;
     const previous = chapterSeen.current;
     chapterSeen.current = { account: state.id, completed: state.chapter.completed };
-    if (!previous || previous.account !== state.id || state.chapter.legacy) return;
+    if (!previous || previous.account !== state.id) return;
     const earned = chapterTasks.filter(task => state.chapter.completed.includes(task.id) && !previous.completed.includes(task.id));
     if (earned.length) {
       const coins = earned.reduce((sum, task) => sum + task.reward.coins, 0);
       const thread = earned.reduce((sum, task) => sum + task.reward.thread, 0);
-      setToast(`${earned.map(task => task.title).join(', ')}: +${coins} монет, +${thread} нити`);
+      setToast(`${earned.map(task => task.title).join(', ')}: +${coins} монет, +${thread} материалов`);
     }
   }, [game.view?.state]);
   useEffect(() => {
@@ -1899,9 +1685,9 @@ export default function App() {
   if (!game.view)
     return (
       <div className="loading-screen">
-        <img src="/art/emblem.png" alt="" />
+        <img src="/art/fantasy/emblem.png" alt="" />
         <h1>ШОВЬ</h1>
-        <p>{game.error || "Открываем путь к Белым террасам"}</p>
+        <p>{game.error || "Открываем дорогу приключений"}</p>
         {game.error ? (
           <button
             className="button primary"
@@ -1915,6 +1701,10 @@ export default function App() {
       </div>
     );
   const view = game.view;
+  if (introOpen) return <Introduction command={game.command} busy={game.busy || !game.online} error={game.error} onContinue={() => {
+    try { localStorage.setItem(`shov-introduction:${view.state.id}`, 'done'); } catch { /* Completion is kept in memory for this visit. */ }
+    setIntroDismissed(true); game.closeReport(); go('journey');
+  }} />;
   const activeRoute = view.catalog.routes.find((route) => route.id === view.state.routeId)!;
   const activeRegion = view.catalog.regions.find((region) => region.id === activeRoute.regionId)!;
   const activeRegionRoutes = view.catalog.routes.filter((route) => route.regionId === activeRegion.id);
@@ -1939,9 +1729,9 @@ export default function App() {
           onClick={() => go("journey")}
           aria-label="ШОВЬ, путешествие"
         >
-          <img src="/art/emblem.png" alt="" />
+          <img src="/art/fantasy/emblem.png" alt="" />
           <span>
-            ШОВЬ<small>Земли за разломом</small>
+            ШОВЬ<small>Дорога приключений</small>
           </span>
         </button>
         <div className="sidebar-label">ТВОЙ ПУТЬ</div>
@@ -1967,11 +1757,11 @@ export default function App() {
         <div className="sidebar-bottom">
           <button className="profile" onClick={() => go("hero", "equipment")}>
             <span className="profile-picture">
-              <img src={`/art/hero-${activeFamily}.png`} alt="" />
+              <img src={`/art/fantasy/hero-${activeFamily}.png`} alt="" />
             </span>
             <span>
               <b>{view.state.name}</b>
-              <small>Проводник · Ур. {view.state.level}</small>
+              <small>Герой · Ур. {view.state.level}</small>
             </span>
             <ChevronRight size={14} />
           </button>
@@ -2055,10 +1845,10 @@ export default function App() {
               onTrain={(routeId) => void train(routeId)}
             />
           )}
-          {page === "clan" && <ClanPage view={view} />}
+          {page === "clan" && <ClanPage view={view} onProfile={() => setSettings(true)} />}
         </main>
         <footer className="world-footer">
-          <img src="/art/emblem.png" alt="" />
+          <img src="/art/fantasy/emblem.png" alt="" />
           <span>Мир помнит каждый твой шаг.</span>
           <span>{activeRegion.name} · Глава {chapterNumber}</span>
         </footer>
@@ -2078,7 +1868,7 @@ export default function App() {
           </button>
         ))}
       </nav>
-      {item && (
+      {item && view.state.inventory.some(entry => entry.id === item.id) && (
         <ItemDialog
           item={item}
           view={view}
@@ -2143,7 +1933,7 @@ export default function App() {
             {training.blockedEnemyNames.length > 0 && <p className="negative">В испытании не пройдены: {training.blockedEnemyNames.join(', ')}. После трёх поражений герой отступит на предыдущий маршрут.</p>}
             <dl>
               <div><dt>Монеты / час</dt><dd>{decimal(training.expectedHourlyRewards.coins)}</dd></div>
-              <div><dt>Нить / час</dt><dd>{decimal(training.expectedHourlyRewards.thread)}</dd></div>
+              <div><dt>Материалы / час</dt><dd>{decimal(training.expectedHourlyRewards.thread)}</dd></div>
               <div><dt>Опыт / час</dt><dd>{decimal(training.expectedHourlyRewards.xp)}</dd></div>
               <div><dt>Катализаторы / сутки</dt><dd>{decimal(training.expectedHourlyRewards.catalyst * 24)}</dd></div>
               <div><dt>Предметы / сутки</dt><dd>{decimal(training.expectedItemsPerDay)}</dd></div>
@@ -2160,6 +1950,10 @@ export default function App() {
       )}
       {settings && (
         <Dialog title="Настройки" close={() => setSettings(false)}>
+          <ProfileSettings onSaved={() => void game.connect()} />
+          <section className="theme-settings"><h3>Оформление</h3><div className="theme-switch" role="group" aria-label="Тема оформления">
+            {([{ id: 'light', label: 'Светлая', Icon: Sun }, { id: 'dark', label: 'Тёмная', Icon: Moon }, { id: 'system', label: 'Системная', Icon: Monitor }] as const).map(({ id, label, Icon }) => <button key={id} aria-pressed={theme === id} onClick={() => setTheme(id as Theme)}><Icon size={17} />{label}</button>)}
+          </div></section>
           <AudioSettings />
           <label className="setting-row">
             <span>

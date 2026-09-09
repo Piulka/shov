@@ -16,6 +16,7 @@ import type {
   Slot,
 } from "../../shared/types";
 import { allowedAffixes, upgradeCap } from "../../shared/content";
+import { affixRollValues, formatItemAffix } from "../../shared/item-affixes";
 import { conditionNames, modeName, walletNames } from "./changes";
 import { date, Empty, Field, Modal, number, Section } from "./ui";
 
@@ -369,7 +370,7 @@ export function InventoryEditor({ player, catalog, prepare }: EditorProps) {
                 <td className="admin-optional">
                   <span className="admin-item-affixes">
                     {item.affixes
-                      .map((affix) => catalog.affixNames[affix])
+                      .map((affix) => formatItemAffix(item, affix))
                       .join(", ") || "Без свойств"}
                   </span>
                 </td>
@@ -490,6 +491,7 @@ function ItemEditor({
     while (affixes.length < count)
       affixes.push(compatible.find((affix) => !affixes.includes(affix))!);
     next.affixes = affixes;
+    if (next.affixRolls !== undefined) next.affixRolls = Object.fromEntries(affixes.filter(affix => next.affixRolls?.[affix] !== undefined).map(affix => [affix, next.affixRolls![affix]]));
     if (next.rarity !== "named") delete next.special;
     else next.special = next.slot === "weapon" ? "long_thread" : "mirror";
     setDraft(next);
@@ -600,6 +602,20 @@ function ItemEditor({
               </select>
             </Field>
           ))}
+          {draft.affixes.map((affix, index) => (
+            <Field key={`roll-${affix}`} label={`Значение свойства ${index + 1}`}>
+              <select
+                value={draft.affixRolls?.[affix] ?? 100}
+                onChange={(event) => changeItem({ affixRolls: { ...draft.affixRolls, [affix]: Number(event.target.value) } })}
+              >
+                {affixRollValues.map(roll => (
+                  <option key={roll} value={roll}>
+                    {formatItemAffix({ affixRolls: { [affix]: roll } }, affix)} ({roll}%)
+                  </option>
+                ))}
+              </select>
+            </Field>
+          ))}
           {draft.rarity === "named" && (
             <Field label="Особое свойство">
               <select
@@ -611,7 +627,7 @@ function ItemEditor({
                 }
               >
                 {draft.slot === "weapon" ? (
-                  <option value="long_thread">Длинная нить</option>
+                  <option value="long_thread">Стойкий яд</option>
                 ) : (
                   <option value="mirror">Зеркало</option>
                 )}

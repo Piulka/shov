@@ -36,6 +36,7 @@ export interface Item {
   rarity: Rarity;
   family?: Family;
   affixes: Affix[];
+  affixRolls?: Partial<Record<Affix, number>>;
   special?: "long_thread" | "mirror";
   locked?: boolean;
 }

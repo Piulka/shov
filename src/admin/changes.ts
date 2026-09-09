@@ -4,6 +4,8 @@ import type {
   AdminItemInput,
 } from "../../shared/admin";
 import type { Build, Catalog, Item } from "../../shared/types";
+import { withPreservedAffixRolls } from "../../shared/admin";
+import { formatItemAffix } from "../../shared/item-affixes";
 import { number } from "./ui";
 
 export interface ChangeRow {
@@ -53,6 +55,7 @@ export function describeChanges(
       rows.push({ label, before: text(before), after: text(after) });
   };
   const describeItem = (before: Item | undefined, after: AdminItemInput) => {
+    after = withPreservedAffixRolls(after, before);
     row("Название предмета", before?.name, after.name);
     row(
       "Слот",
@@ -72,12 +75,12 @@ export function describeChanges(
     );
     row(
       "Свойства",
-      before?.affixes.map((affix) => catalog.affixNames[affix]).join(", "),
-      after.affixes.map((affix) => catalog.affixNames[affix]).join(", "),
+      before?.affixes.map((affix) => formatItemAffix(before, affix)).join(", "),
+      after.affixes.map((affix) => formatItemAffix(after, affix)).join(", "),
     );
     const special = (value: string | undefined) =>
       value === "long_thread"
-        ? "Длинная нить"
+        ? "Стойкий яд"
         : value === "mirror"
           ? "Зеркало"
           : "Нет";
@@ -205,7 +208,7 @@ export function describeChanges(
 
 export const walletNames = {
   coins: "Монеты",
-  thread: "Нить",
+  thread: "Материалы",
   catalyst: "Катализаторы",
 };
 export const conditionNames = {
@@ -216,8 +219,8 @@ export const conditionNames = {
   has_debuff: "Есть отрицательный эффект",
   vulnerable: "Цель надломлена",
   no_vulnerable: "Нет надлома",
-  three_marks: "На цели три следа",
-  under_three_marks: "На цели меньше трёх следов",
+  three_marks: "На цели три заряда яда",
+  under_three_marks: "На цели меньше трёх зарядов яда",
 };
 
 export function auditSummary(operation: AdminOperation, catalog: Catalog | null): string {
@@ -230,7 +233,7 @@ export function auditSummary(operation: AdminOperation, catalog: Catalog | null)
     case 'mode': return modeName(operation.mode);
     case 'target': return `Целевая добыча: ${operation.slot ? slot(operation.slot) : 'Любой слот'}`;
     case 'item_add':
-    case 'item_update': return `${operation.item.name} · ${slot(operation.item.slot)} · ур. ${operation.item.level} · ${catalog?.rarityNames[operation.item.rarity] ?? operation.item.rarity}${operation.item.affixes.length ? ` · ${operation.item.affixes.map(affix => catalog?.affixNames[affix] ?? affix).join(', ')}` : ''}`;
+    case 'item_update': return `${operation.item.name} · ${slot(operation.item.slot)} · ур. ${operation.item.level} · ${catalog?.rarityNames[operation.item.rarity] ?? operation.item.rarity}${operation.item.affixes.length ? ` · ${operation.item.affixes.map(affix => formatItemAffix(operation.item, affix)).join(', ')}` : ''}`;
     case 'item_delete': return `Удалён предмет ${operation.itemId}`;
     case 'equip': return `Надет предмет ${operation.itemId}`;
     case 'build':

@@ -1,6 +1,15 @@
 import { expect, test, type Page } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 import type { GameView } from "../shared/types";
+import { catalog } from '../shared/content';
+import { chapterTasks } from '../shared/chapter';
+
+async function enterJourney(page: Page) {
+  const begin = page.getByRole('button', { name: 'В путь', exact: true });
+  await expect(page.locator('canvas.battle-canvas').or(begin)).toBeVisible();
+  if (await begin.isVisible()) await begin.click();
+  await expect(page.locator('canvas.battle-canvas')).toBeVisible();
+}
 
 async function state(page: Page): Promise<GameView> {
   return page.evaluate(async () => (await fetch("/api/state")).json());
@@ -40,6 +49,7 @@ test("desktop: rendered moving scene, equipment, tactics, upgrade, crafting, per
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
+  await enterJourney(page);
   await expect(
     page.getByRole("heading", { name: "Путь продолжается" }),
   ).toBeVisible();
@@ -154,7 +164,7 @@ test("desktop: rendered moving scene, equipment, tactics, upgrade, crafting, per
     .locator(".sidebar")
     .getByRole("button", { name: "Герой", exact: true })
     .click();
-  await page.locator(".inventory-grid .item-tile").first().click();
+  await page.locator(".inventory-grid .item-tile").filter({ hasText: craftedItem.name }).first().click();
   await commandResponse(page, () =>
     page
       .getByRole("dialog")
@@ -179,7 +189,7 @@ test("desktop: rendered moving scene, equipment, tactics, upgrade, crafting, per
   const dismantled = await commandResponse(page, () =>
     page
       .getByRole("dialog")
-      .getByRole("button", { name: "Разобрать", exact: true })
+      .getByRole("button", { name: "Подтвердить разбор", exact: true })
       .click(),
   );
   expect(
@@ -216,6 +226,7 @@ test("mobile: all views fit and loaded artwork remains visible", async ({
   await mkdir(".local/screenshots", { recursive: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
+  await enterJourney(page);
   await expect(
     page.getByRole("heading", { name: "Путь продолжается" }),
   ).toBeVisible();
@@ -274,6 +285,7 @@ test("mobile: all views fit and loaded artwork remains visible", async ({
 test('a command waits for an in-flight state poll instead of disappearing', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/');
+  await enterJourney(page);
   await expect(page.getByRole('heading', { name: 'Путь продолжается' })).toBeVisible();
   await firstVictory(page);
   await page.locator('.sidebar').getByRole('button', { name: 'Мастерская', exact: true }).click();
@@ -292,14 +304,17 @@ test('a command waits for an in-flight state poll instead of disappearing', asyn
 test('mobile chapter objectives navigate to real actions and higher-level skills stay locked', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Первые стежки' })).toBeVisible();
+  await enterJourney(page);
+  await expect(page.getByRole('heading', { name: 'Первые шаги' })).toBeVisible();
   await page.locator('.chapter-list summary').click();
   await expect(page.locator('.chapter-list li')).toHaveCount(7);
   await noOverflow(page);
   await page.screenshot({ path: '.local/screenshots/mobile-chapter.png', fullPage: true });
-  await page.getByRole('button', { name: 'К сборке: Собственный ритм', exact: true }).click();
-  await expect(page.getByLabel('Умение 1', { exact: true }).getByRole('option', { name: 'Ответный такт · ур. 5', exact: true })).toHaveJSProperty('disabled', true);
-  await expect(page.locator('.skill-unlock')).toContainText('Уровень 5: Ответный такт');
+  const tactics = chapterTasks.find(task => task.id === 'tactics')!;
+  const counter = catalog.skills.find(skill => skill.id === 'counter')!;
+  await page.getByRole('button', { name: `${tactics.action}: ${tactics.title}`, exact: true }).click();
+  await expect(page.getByLabel('Умение 1', { exact: true }).getByRole('option', { name: `${counter.name} · ур. ${counter.unlockLevel}`, exact: true })).toHaveJSProperty('disabled', true);
+  await expect(page.locator('.skill-unlock')).toContainText(`Уровень ${counter.unlockLevel}: ${counter.name}`);
   await noOverflow(page);
   await page.locator('.mobile-nav').getByRole('button', { name: 'Путь', exact: true }).click();
   await expect(page.getByRole('progressbar', { name: 'Опыт героя' })).toBeVisible();

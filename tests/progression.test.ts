@@ -122,7 +122,7 @@ describe('production accounting and migration', () => {
     expect(result.wins).toBe(0);
     expect(result.expectedHourlyRewards).toEqual({ coins: 0, thread: 0, catalyst: 0, xp: 0 });
     expect(result.expectedItemsPerDay).toBe(0);
-    expect(result.blockedEnemyNames).toEqual(['Певчий раскола']);
+    expect(result.blockedEnemyNames).toEqual([catalog.enemies.find(enemy => enemy.id === 'cantor')!.name]);
     state.routeId = 'tower';
     state.battle = { ...result.sample, startedAt: START, endsAt: START + result.sample.endsAt };
     const report = finish(state);
@@ -140,7 +140,7 @@ describe('production accounting and migration', () => {
     const result = train(state, 'glass');
     expect(state).toEqual(before);
     expect(result.wins).toBe(8);
-    expect(result.blockedEnemyNames).toEqual(['Хранитель уступа']);
+    expect(result.blockedEnemyNames).toEqual([catalog.enemies.find(enemy => enemy.id === 'keeper')!.name]);
     expect(result.expectedHourlyRewards).toEqual({ coins: 0, thread: 0, catalyst: 0, xp: 0 });
     expect(result.expectedItemsPerDay).toBe(0);
   });
@@ -177,7 +177,7 @@ describe('production accounting and migration', () => {
     expect(migrateGame(legacy)).toBe(false);
     expect(legacy).toEqual(migrated);
     finish(legacy);
-    expect(legacy.chapter.completed).toEqual([]);
+    expect(legacy.chapter.completed).toEqual(['level15', 'level25']);
   });
 
   it('does not count a rest gap as production when an interrupted battle resumes', () => {

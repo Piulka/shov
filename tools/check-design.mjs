@@ -135,6 +135,9 @@ close(weights.reduce((sum, value) => sum + value, 0), 100, 'Rarity weights sum t
 close(loot.slotTargeting.targetSlotProbability + loot.slotTargeting.remainingProbability, 1, 'Targeted slot probabilities sum to one');
 check(loot.slotTargeting.targetSlotProbability >= 0 && loot.slotTargeting.targetSlotProbability <= 1, 'Valid targeted slot probability');
 check(loot.rarityEligibility.named.allowedSlots.every(slot => loot.slots.includes(slot)), 'Named slots exist');
+check(loot.affixValuesRolled && JSON.stringify(loot.affixRolls.valuesPercent) === '[80,90,100,110,120]', 'Dropped affix rolls use the bounded 80-120% range');
+close(loot.affixRolls.valuesPercent.reduce((sum, value) => sum + value, 0) / loot.affixRolls.valuesPercent.length, loot.affixRolls.legacyAndCraftPercent, 'Mean drop roll equals legacy and crafted bonuses');
+check(loot.affixRolls.reforgePreservesRolls && loot.affixRolls.totalBonusCapsUnchanged, 'Reforging preserves rolls and total bonus limits');
 for (let enabled = 0; enabled < 8; enabled += 1) {
   let commonWeight = loot.rarityWeights.common;
   let availableWeight = 0;

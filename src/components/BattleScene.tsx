@@ -70,7 +70,7 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
   const animate = !reducedMotion && !props.paused;
   const time = animate ? clock / 1000 : 0;
   context.clearRect(0, 0, width, height);
-  context.imageSmoothingEnabled = false;
+  context.imageSmoothingEnabled = true;
   const region = catalog.regions.find((entry) => entry.id === battle.regionId) || catalog.regions[0];
   const stage = art.get(`region-${region.id}`);
   if (stage) {
@@ -93,7 +93,7 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
   const heroStrike = recent.findLast((event) => event.actor === 'hero' && (event.kind === 'attack' || event.kind === 'skill'));
   const enemyStrike = recent.findLast((event) => event.actor === 'enemy' && (event.kind === 'attack' || event.kind === 'skill'));
   const lunge = (event: BattleEvent | undefined) => event && animate ? Math.sin(clamp((elapsed - event.at) / 350) * Math.PI) : 0;
-  heroX += lunge(heroStrike) * Math.min(figureHeight * 0.19, width * 0.055);
+  if (battle.family === 'blade') heroX += lunge(heroStrike) * Math.min(figureHeight * 0.19, width * 0.055);
   enemyX -= lunge(enemyStrike) * Math.min(figureHeight * 0.16, width * 0.05);
   const flashing = (event: BattleEvent | undefined) => event && animate ? Math.max(0, 1 - (elapsed - event.at) / 210) : 0;
   const heroFlash = flashing(heroHit);
@@ -158,13 +158,17 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
       context.lineWidth = event.critical ? 5 : 3;
       context.beginPath();
       if (event.actor === 'hero' && battle.family === 'glass') {
-        context.strokeStyle = '#b6e7dc';
-        context.moveTo(heroX + figureHeight * 0.20, y);
-        context.lineTo(targetX - figureHeight * 0.12, y - 6);
-        context.lineTo(targetX + figureHeight * 0.11, y + 8);
+        const x = heroX + (targetX - heroX) * Math.min(1, p * 1.6);
+        context.fillStyle = event.skillId === 'lens' ? '#8ceaff' : '#ffad35';
+        context.strokeStyle = event.skillId === 'lens' ? '#d7f8ff' : '#fff2ad';
+        context.moveTo(x - 24, y + 4); context.lineTo(x + 9, y); context.lineTo(x - 13, y - 13);
+        context.closePath(); context.fill();
       } else if (event.actor === 'hero' && battle.family === 'needle') {
-        context.moveTo(heroX + figureHeight * 0.25, y - figureHeight * 0.12);
-        context.bezierCurveTo(heroX + figureHeight * 0.42, y - figureHeight * 0.46, targetX - figureHeight * 0.25, y + figureHeight * 0.35, targetX, y);
+        const x = heroX + (targetX - heroX) * Math.min(1, p * 1.6);
+        context.strokeStyle = '#fff8d7'; context.lineWidth = 2.5;
+        context.moveTo(x - 29, y); context.lineTo(x + 7, y);
+        context.moveTo(x, y - 5); context.lineTo(x + 8, y); context.lineTo(x, y + 5);
+        context.moveTo(x - 26, y - 4); context.lineTo(x - 21, y); context.lineTo(x - 26, y + 4);
       } else {
         context.moveTo(targetX - figureHeight * 0.15, y + figureHeight * 0.14);
         context.quadraticCurveTo(targetX + figureHeight * 0.08, y, targetX + figureHeight * 0.13, y - figureHeight * 0.20);
@@ -194,13 +198,13 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
   }
 
   if (animate) {
-    // Wind-blown carmine leaves belong to the trees at the edges of the scene.
+    // Small regional particles follow the environment, away from combat text.
     context.save();
     for (let i = 0; i < 6; i++) {
       const cycle = (time * (0.018 + i * 0.003) + i * 0.167) % 1;
       const x = width * ((i % 2 ? 0.85 : 0.07) + cycle * 0.10 + Math.sin(time * 0.4 + i) * 0.025);
       const y = height * (0.27 + cycle * 0.49);
-      context.fillStyle = i % 2 ? '#d5848c' : '#bb5d76';
+      context.fillStyle = region.id === 'glassgarden' ? '#e6fbff' : region.id === 'carmine' ? '#ffb75e' : i % 2 ? '#ffe17c' : '#7bc654';
       context.globalAlpha = 0.65 * Math.sin(cycle * Math.PI);
       context.save();
       context.translate(x, y);
@@ -221,9 +225,9 @@ export default function BattleScene(props: BattleSceneProps) {
     const battle = props.battle;
     const sources = [
       [`region-${region.id}`, region.image],
-      [`hero-${battle.family}`, `/art/hero-${battle.family}.png`],
-      [`enemy-${battle.enemy.id}`, `/art/enemies/${battle.enemy.id}.png`],
-      [`enemy-${battle.enemy.kind}`, `/art/enemy-${battle.enemy.kind}.png`],
+      [`hero-${battle.family}`, `/art/fantasy/hero-${battle.family}.png`],
+      [`enemy-${battle.enemy.id}`, `/art/fantasy/enemies/${battle.enemy.id}.png`],
+      [`enemy-${battle.enemy.kind}`, `/art/fantasy/enemy-${battle.enemy.kind}.png`],
     ];
     const wanted = new Set(sources.map(([key]) => key));
     for (const key of artRef.current.keys()) if (!wanted.has(key)) artRef.current.delete(key);

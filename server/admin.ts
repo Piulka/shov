@@ -11,6 +11,8 @@ import { z } from 'zod';
 import { catalog, allowedAffixes, families, slots, upgradeCap } from '../shared/content.ts';
 import { computeStats, createGame, migrateGame, settle, startBattle, validateBuild, xpToNext } from '../shared/engine.ts';
 import type { AdminAuditEntry, AdminMutation, AdminOperation, AdminOverview, AdminPlayerDetail, AdminPlayerSummary } from '../shared/admin.ts';
+import { withPreservedAffixRolls } from '../shared/admin.ts';
+import { affixAmount, affixRollValues } from '../shared/item-affixes.ts';
 import type { GameState, Item, Slot } from '../shared/types.ts';
 import { GameStore, type SavedGame } from './store.ts';
 
@@ -41,7 +43,8 @@ const rule = z.strictObject({
 });
 const equipment = z.strictObject({ weapon: identifier, focus: identifier, head: identifier, armor: identifier, gloves: identifier, boots: identifier, amulet: identifier, ring: identifier });
 const build = z.strictObject({ name: name.max(30), equipment, skills: z.array(identifier).length(4), rules: z.array(rule).max(3) });
-const item = z.strictObject({ name, slot, level: z.number().int().min(1).max(100), rarity: z.enum(['common', 'fine', 'resonant', 'named']), family: family.optional(), affixes: z.array(affix).max(2), special: z.enum(['long_thread', 'mirror']).optional(), locked: z.boolean().optional() });
+const affixRolls = z.partialRecord(affix, z.number().int().refine(value => affixRollValues.some(roll => roll === value)));
+const item = z.strictObject({ name, slot, level: z.number().int().min(1).max(100), rarity: z.enum(['common', 'fine', 'resonant', 'named']), family: family.optional(), affixes: z.array(affix).max(2), affixRolls: affixRolls.optional(), special: z.enum(['long_thread', 'mirror']).optional(), locked: z.boolean().optional() });
 const upgrades = z.strictObject(Object.fromEntries(slots.map(value => [value, z.number().int().min(0).max(12).optional()])) as Record<Slot, z.ZodOptional<z.ZodNumber>>).refine(value => Object.keys(value).length > 0);
 const wallet = z.strictObject({ coins: amount.optional(), thread: amount.optional(), catalyst: amount.optional() }).refine(value => Object.keys(value).length > 0);
 const operation = z.discriminatedUnion('type', [
@@ -89,6 +92,7 @@ function validateItem(value: Item): void {
   if (value.slot === 'weapon' ? !value.family || !families.includes(value.family) : value.family !== undefined) reject('Семейство обязательно только для оружия.');
   const expected = value.rarity === 'common' ? 0 : value.rarity === 'fine' ? 1 : 2;
   if (value.affixes.length !== expected || new Set(value.affixes).size !== expected || value.affixes.some(entry => !allowedAffixes(value.slot).includes(entry))) reject('Число или сочетание свойств не соответствует редкости и слоту.');
+  if (Object.keys(value.affixRolls ?? {}).some(affix => !value.affixes.includes(affix as typeof value.affixes[number]))) reject('Значение свойства можно задать только для свойства этого предмета.');
   if (value.rarity === 'named') {
     if (value.special === 'long_thread' && value.slot === 'weapon' && value.family === 'needle') return;
     if (value.special === 'mirror' && ['amulet', 'ring'].includes(value.slot)) return;
@@ -101,8 +105,9 @@ function combatSignature(state: GameState): string {
     level: state.level, upgrades: state.upgrades, routeId: state.routeId,
     skills: state.build.skills, rules: state.build.rules,
     equipment: slots.map(slot => {
-      const { id: _id, name: _name, locked: _locked, ...attributes } = state.inventory.find(value => value.id === state.build.equipment[slot])!;
-      return attributes;
+      const item = state.inventory.find(value => value.id === state.build.equipment[slot])!;
+      const { id: _id, name: _name, locked: _locked, affixRolls: _rolls, ...attributes } = item;
+      return { ...attributes, affixAmounts: item.affixes.map(affix => affixAmount(item, affix)) };
     }),
   });
 }
@@ -134,6 +139,8 @@ function editState(state: GameState, operations: AdminOperation[], now: number):
       case 'item_update': {
         const index = state.inventory.findIndex(value => value.id === command.itemId);
         if (index < 0) reject('Предмет не найден.');
+        // Record the effective rolls in the audit even when an older client omits them.
+        command.item = withPreservedAffixRolls(command.item, state.inventory[index]);
         const value = { ...structuredClone(command.item), id: command.itemId };
         validateItem(value); state.inventory[index] = value; break;
       }

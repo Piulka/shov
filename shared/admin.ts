@@ -2,6 +2,11 @@ import type { Build, Catalog, GameState, Item, Slot, Stats, Wallet } from './typ
 
 export interface AdminSession { authenticated: boolean; expiresAt?: number }
 export type AdminItemInput = Omit<Item, 'id'>;
+export function withPreservedAffixRolls(input: AdminItemInput, previous?: Item): AdminItemInput {
+  if (input.affixRolls !== undefined || previous?.affixRolls === undefined) return input;
+  const affixRolls = Object.fromEntries(input.affixes.filter(affix => previous.affixRolls?.[affix] !== undefined).map(affix => [affix, previous.affixRolls![affix]]));
+  return { ...input, affixRolls };
+}
 export type AdminOperation =
   | { type: 'profile'; name?: string; publicName?: string; level?: number; xp?: number }
   | { type: 'wallet'; values: Partial<Wallet> }

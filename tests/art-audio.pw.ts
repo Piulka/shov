@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 
-const qa = 'assets/art-audio-v1/qa';
+const qa = '.local/screenshots/fantasy-art';
 
 test('art: responsive scene, map and equipment remain visible', async ({ page }) => {
   const errors: string[] = [];
@@ -10,6 +10,9 @@ test('art: responsive scene, map and equipment remain visible', async ({ page })
   page.on('response', response => { if (response.url().includes('/art/') && !response.ok()) missing.push(response.url()); });
   await mkdir(qa, { recursive: true });
   await page.goto('/');
+  const begin = page.getByRole('button', { name: 'В путь', exact: true });
+  await expect(page.locator('canvas.battle-canvas').or(begin)).toBeVisible();
+  if (await begin.isVisible()) await begin.click();
   await expect(page.locator('canvas.battle-canvas')).toBeVisible();
   await expect.poll(() => page.locator('canvas.battle-canvas').evaluate((canvas: HTMLCanvasElement) => {
     const values = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -43,6 +46,9 @@ test('audio: explicit enable, actual buffer playback, mute persistence and lifec
   });
   const probe = () => page.evaluate(() => (window as unknown as { audioProbe: { starts: number; stops: number; resumes: number; suspends: number } }).audioProbe);
   await page.goto('/');
+  const begin = page.getByRole('button', { name: 'В путь', exact: true });
+  await expect(page.locator('canvas.battle-canvas').or(begin)).toBeVisible();
+  if (await begin.isVisible()) await begin.click();
   await expect(page.locator('canvas.battle-canvas')).toBeVisible();
   expect((await probe()).starts).toBe(0);
   expect((await probe()).resumes).toBe(0);
@@ -52,6 +58,7 @@ test('audio: explicit enable, actual buffer playback, mute persistence and lifec
   await toggle.check();
   await expect.poll(async () => (await probe()).starts).toBeGreaterThan(0);
   await page.getByRole('slider', { name: /Эффекты/ }).fill('27');
+  await page.getByRole('slider', { name: /Музыка/ }).fill('18');
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     document.dispatchEvent(new Event('visibilitychange'));
@@ -75,10 +82,12 @@ test('audio: explicit enable, actual buffer playback, mute persistence and lifec
   await page.getByRole('button', { name: 'Настройки', exact: true }).filter({ visible: true }).click();
   await expect(page.getByRole('checkbox', { name: /Звуки игры/ })).not.toBeChecked();
   await expect(page.getByRole('slider', { name: /Эффекты/ })).toHaveValue('27');
-  await page.screenshot({ path: `${qa}/audio-settings.png` });
+  await expect(page.getByRole('slider', { name: /Музыка/ })).toHaveValue('18');
+  await mkdir('.local/screenshots/fantasy-audio', { recursive: true });
+  await page.screenshot({ path: '.local/screenshots/fantasy-audio/audio-settings.png' });
 });
 
-test('audio: every compressed source decodes and regional loops have valid bounds', async ({ page }) => {
+test('audio: fantasy sources decode and exactly three regional music loops have valid bounds', async ({ page }) => {
   await page.goto('/');
   const results = await page.evaluate(async () => {
     const manifest = await (await fetch('/audio/audio.json')).json();
@@ -94,8 +103,12 @@ test('audio: every compressed source decodes and regional loops have valid bound
       } catch (error) { results.push({ id: asset.assetId, source: source.src, error: String(error) }); }
     }
     await context.close();
-    return results;
+    return { results, assetCount: manifest.assets.length, music: manifest.assets.filter((asset: { bus: string }) => asset.bus === 'music').map((asset: { assetId: string }) => asset.assetId), ambience: manifest.assets.filter((asset: { bus: string }) => asset.bus === 'ambience').length };
   });
-  expect(results).toHaveLength(104);
-  expect(results.filter(result => result.error), JSON.stringify(results.filter(result => result.error))).toEqual([]);
+  expect(results.assetCount).toBe(52);
+  expect(results.results.length).toBeGreaterThanOrEqual(52);
+  expect(results.music).toEqual(['music.terraces', 'music.glassgarden', 'music.carmine']);
+  expect(results.ambience).toBe(0);
+  expect(results.results.every(result => result.source.startsWith('fantasy/'))).toBe(true);
+  expect(results.results.filter(result => result.error), JSON.stringify(results.results.filter(result => result.error))).toEqual([]);
 });

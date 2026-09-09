@@ -3,6 +3,7 @@ import { mkdir } from 'node:fs/promises';
 import { createApp } from '../server/app';
 import type { SocialView } from '../shared/social';
 import type { GameView } from '../shared/types';
+import { catalog } from '../shared/content';
 import { worldEpoch, worldFixture } from './fixtures/world';
 
 const test = base.extend<{ world: { origin: string; advance: (value: number) => void } }>({
@@ -72,7 +73,7 @@ test('route mode survives a state poll and reload, keeps queued travel and contr
   } });
   expect(queuedResponse.status(), await queuedResponse.text()).toBe(200);
   await expect(farm).toHaveAttribute('aria-pressed', 'true', { timeout: 8000 });
-  await expect(page.locator('.route-mode-status')).toContainText('Далее: Лес звенящих стволов');
+  await expect(page.locator('.route-mode-status')).toContainText(`Далее: ${catalog.routes.find(route => route.id === 'glasswood')!.name}`);
   const reconfigured = await command(page, () => push.click());
   expect(reconfigured.state.pendingRoute).toEqual({ routeId: 'glasswood', mode: 'push' });
   expect(reconfigured.state.routeId).toBe('sunny');
@@ -80,16 +81,16 @@ test('route mode survives a state poll and reload, keeps queued travel and contr
   world.advance(reconfigured.state.battle.endsAt);
   const arrived = await state(page, world.origin);
   expect(arrived.state.routeId).toBe('glasswood');
-  await expect(page.locator('.route-mode-status')).toContainText('Цель: Росные чаши', { timeout: 8000 });
+  await expect(page.locator('.route-mode-status')).toContainText(`Цель: ${catalog.routes.find(route => route.id === 'dew')!.name}`, { timeout: 8000 });
   await expect(push).toHaveAttribute('aria-pressed', 'true');
   world.advance(arrived.state.battle.endsAt);
   const advanced = await state(page, world.origin);
   expect(advanced.state.routeId).toBe('dew');
-  await expect(page.locator('.route-mode-status')).toContainText('Цель: Сердцевина стекла', { timeout: 8000 });
+  await expect(page.locator('.route-mode-status')).toContainText(`Цель: ${catalog.routes.find(route => route.id === 'heartwood')!.name}`, { timeout: 8000 });
   const stopped = await command(page, () => farm.click());
   world.advance(stopped.state.battle.endsAt);
   expect((await state(page, world.origin)).state.routeId).toBe('dew');
-  await expect(page.locator('.route-mode-status')).toContainText('Добыча: Росные чаши');
+  await expect(page.locator('.route-mode-status')).toContainText(`Добыча: ${catalog.routes.find(route => route.id === 'dew')!.name}`);
 });
 
 test('mobile keeps one persistent animation setting and readable route status', async ({ page, world }) => {

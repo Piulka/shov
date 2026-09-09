@@ -231,7 +231,7 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
   app.addHook('onSend', async (request, reply) => {
     const path = request.url.split('?')[0];
     const cache = reply.statusCode === 200 && request.method === 'GET'
-      ? path.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : path.startsWith('/art/') || /^\/audio\/.+\.(ogg|m4a)$/.test(path) ? 'public, max-age=3600' : 'no-store'
+      ? path.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : path.startsWith('/art/') || /^\/audio\/.+\.(ogg|m4a|wav)$/.test(path) ? 'public, max-age=3600' : 'no-store'
       : 'no-store';
     reply.header('Cache-Control', cache);
     reply.header('X-Content-Type-Options', 'nosniff');

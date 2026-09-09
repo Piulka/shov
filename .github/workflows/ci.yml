@@ -27,6 +27,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run check:design
+      - run: npm run check:art
 
       - name: Build production images
         run: |
@@ -101,7 +102,7 @@ jobs:
             assert.equal(response.status, 200, asset);
             assert.ok((await response.arrayBuffer()).byteLength > 0, asset);
           }
-          const scene = await get('/art/terraces.png');
+          const scene = await get('/art/fantasy/terraces.png');
           assert.equal(scene.status, 200);
           assert.ok((await scene.arrayBuffer()).byteLength > 0);
           assert.equal((await get('/api/state')).status, 401);

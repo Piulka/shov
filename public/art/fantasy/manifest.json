@@ -1,0 +1,395 @@
+{
+  "schema": "shov.fantasy.static.v1",
+  "revision": 2,
+  "generator": "tools/generate-fantasy-art.mjs",
+  "provenance": "Original geometric cartoon illustrations authored for SHOV. No third-party image sources. Static development assets; no frame animation implied.",
+  "assets": [
+    {
+      "assetId": "background.terraces",
+      "path": "/art/fantasy/terraces.png",
+      "width": 1200,
+      "height": 600,
+      "bytes": 55074,
+      "sha256": "f4d93b73b1e6d47c860e26ce91482181fb88f3d435b8dcce4fc7067d76c96ce6",
+      "transparent": false
+    },
+    {
+      "assetId": "background.glassgarden",
+      "path": "/art/fantasy/glassgarden.png",
+      "width": 1200,
+      "height": 600,
+      "bytes": 67615,
+      "sha256": "1bcf5c22d3e08c8cb32d1955a4d2d116774a74c77c3849a95593b81dca6d25d5",
+      "transparent": false
+    },
+    {
+      "assetId": "background.carmine",
+      "path": "/art/fantasy/carmine.png",
+      "width": 1200,
+      "height": 600,
+      "bytes": 44371,
+      "sha256": "931f06a9090c169801a83a013c4f915ef9aa18c6269ba228d4274b373f0494c2",
+      "transparent": false
+    },
+    {
+      "assetId": "hero.blade",
+      "path": "/art/fantasy/hero-blade.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 20858,
+      "sha256": "68c92ba86a03f21be07b412bef630e7863b55b779819ba8bc6baa5cc7ac713e5",
+      "transparent": true
+    },
+    {
+      "assetId": "hero.glass",
+      "path": "/art/fantasy/hero-glass.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 19769,
+      "sha256": "e07150bdaafff308005ff698b395881e3f0425aca25e8baea5f0117a5b2a7267",
+      "transparent": true
+    },
+    {
+      "assetId": "hero.needle",
+      "path": "/art/fantasy/hero-needle.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 20535,
+      "sha256": "aeb6c18c8ae53c9ec353173b2685e2ca6b1e479477bcc3e9e9eab87f38f9b8fb",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.porcelain",
+      "path": "/art/fantasy/enemies/porcelain.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 13279,
+      "sha256": "5b9473a7b5c8741083f393cfa5c96b461a8efec2bafd8bf08db46f16b88d13c2",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.splinter",
+      "path": "/art/fantasy/enemies/splinter.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 8842,
+      "sha256": "eef0b5f72b245f4c39c1809a01aceea18f963c5970765c06642eefee711a8592",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.gardener",
+      "path": "/art/fantasy/enemies/gardener.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 13891,
+      "sha256": "45190285cd4a8401b4fe92bbe2c1a7e7f213061b398515b8b08b59e4df3e4946",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.keeper",
+      "path": "/art/fantasy/enemies/keeper.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 14767,
+      "sha256": "8cafcdfe7fb330b9d5010c39558be6ed474d352e48f08cf15f87fa9f034787b0",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.rose",
+      "path": "/art/fantasy/enemies/rose.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 10087,
+      "sha256": "f0ed92058a194b1227adb8807564c10851ee27acb91b6e9f89a358eae7c9cfe5",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.loom",
+      "path": "/art/fantasy/enemies/loom.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 17208,
+      "sha256": "a2b163535333e53220d4bef8143abb9e2b9fdb6f119c7e3f9e3c04a2f47fb126",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.cantor",
+      "path": "/art/fantasy/enemies/cantor.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 17387,
+      "sha256": "7b2420aa5fe1e6d27b02acd888928f628a4c3a3093f095667d6491061ebd9595",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.barkguard",
+      "path": "/art/fantasy/enemies/barkguard.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 15559,
+      "sha256": "e8f021d202e64b5f8946bb85a44a081d880a73f4e15b7c5579f1709228eadbec",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.chime",
+      "path": "/art/fantasy/enemies/chime.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 10285,
+      "sha256": "342c403a881d67f133d06ee331f72bb070392769f8427d6ac83a61d5e648bc11",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.dewweaver",
+      "path": "/art/fantasy/enemies/dewweaver.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 17306,
+      "sha256": "df6d90780ab32a987604e59ba0fd088ed68421f48419df3ee58969578489cf32",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.cupkeeper",
+      "path": "/art/fantasy/enemies/cupkeeper.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 14627,
+      "sha256": "ff5bd80bf414b705b8c48bafa37ca462fcf64d365417004fbf2da6a19220bc25",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.dewsplinter",
+      "path": "/art/fantasy/enemies/dewsplinter.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 12058,
+      "sha256": "24d887d607c572bcbe3377e369e3b8ed67502e1aa74927f28a4f31f8689f0fcc",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.memoryweaver",
+      "path": "/art/fantasy/enemies/memoryweaver.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 16828,
+      "sha256": "f91e11451295bbf04aac98c5986d2bf64339e5ff325df9927bc59fc5708f3e8d",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.heartchoir",
+      "path": "/art/fantasy/enemies/heartchoir.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 19330,
+      "sha256": "88db581209ed54353f7d20e268a8c361a65be0d7864d034aec5d53c9448998ca",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.bankguard",
+      "path": "/art/fantasy/enemies/bankguard.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 16703,
+      "sha256": "d55f1de715f85ae46820cc71ea039119e828ba8cd4ee4b60133aee86eb513b82",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.redshard",
+      "path": "/art/fantasy/enemies/redshard.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 10068,
+      "sha256": "30958d1857f8d7529a3e3eb9049fe637d872b81f263c6c51a8ecaab40e899432",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.floodweaver",
+      "path": "/art/fantasy/enemies/floodweaver.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 16932,
+      "sha256": "476d2dbe2c0b7e1c22a0de72f49abbae919421c0aae522b4864b6c8542af2983",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.weftguard",
+      "path": "/art/fantasy/enemies/weftguard.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 16641,
+      "sha256": "2d2f8012dae3ad72489cd537be75332745284ef74d9a32ec1ca504fef62d5678",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.scarletshard",
+      "path": "/art/fantasy/enemies/scarletshard.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 12261,
+      "sha256": "8048179146454d6b1b899d49f9afc732311893bbababaca7e9e6ede965ba626b",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.knotweaver",
+      "path": "/art/fantasy/enemies/knotweaver.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 17012,
+      "sha256": "6cf03732eef121f25e653518b3f036c5fd0292161aac5c6124effa791b735548",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.lockmaster",
+      "path": "/art/fantasy/enemies/lockmaster.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 19829,
+      "sha256": "47ff669a029778cc6bc67f755a52294f244d3d9b1eac57632de8fa6965d32282",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.fallback.sentinel",
+      "path": "/art/fantasy/enemy-sentinel.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 13279,
+      "sha256": "5b9473a7b5c8741083f393cfa5c96b461a8efec2bafd8bf08db46f16b88d13c2",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.fallback.shard",
+      "path": "/art/fantasy/enemy-shard.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 8842,
+      "sha256": "eef0b5f72b245f4c39c1809a01aceea18f963c5970765c06642eefee711a8592",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.fallback.weaver",
+      "path": "/art/fantasy/enemy-weaver.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 17208,
+      "sha256": "a2b163535333e53220d4bef8143abb9e2b9fdb6f119c7e3f9e3c04a2f47fb126",
+      "transparent": true
+    },
+    {
+      "assetId": "enemy.fallback.boss",
+      "path": "/art/fantasy/enemy-boss.png",
+      "width": 256,
+      "height": 320,
+      "bytes": 17387,
+      "sha256": "7b2420aa5fe1e6d27b02acd888928f628a4c3a3093f095667d6491061ebd9595",
+      "transparent": true
+    },
+    {
+      "assetId": "item.weapon",
+      "path": "/art/fantasy/item-weapon.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 3484,
+      "sha256": "2e7ff8c513055339fb26a46a7f8fa89fd49007dc8e00530e020afa4803a3d593",
+      "transparent": true
+    },
+    {
+      "assetId": "item.weapon-blade",
+      "path": "/art/fantasy/item-weapon-blade.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 3484,
+      "sha256": "2e7ff8c513055339fb26a46a7f8fa89fd49007dc8e00530e020afa4803a3d593",
+      "transparent": true
+    },
+    {
+      "assetId": "item.weapon-glass",
+      "path": "/art/fantasy/item-weapon-glass.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 3364,
+      "sha256": "e0f4e67e917ad81b44e7aeb7082dce26e016991ce1c10fdd92cc139cfa10642a",
+      "transparent": true
+    },
+    {
+      "assetId": "item.weapon-needle",
+      "path": "/art/fantasy/item-weapon-needle.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 4397,
+      "sha256": "a3b22ba856d43dbf185d33f9edcaaa0276e97b4c5bd8370c4fc0e211905d0998",
+      "transparent": true
+    },
+    {
+      "assetId": "item.focus",
+      "path": "/art/fantasy/item-focus.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 5081,
+      "sha256": "e02308e424f2facb9452c8c46bae25ba2670ba6bca711b0b1039d67306747a82",
+      "transparent": true
+    },
+    {
+      "assetId": "item.head",
+      "path": "/art/fantasy/item-head.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 4362,
+      "sha256": "8772295a927b024f7cb659ed5551d7a4446cf5867a28024a5fc31779397f81be",
+      "transparent": true
+    },
+    {
+      "assetId": "item.armor",
+      "path": "/art/fantasy/item-armor.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 4797,
+      "sha256": "ef876fd14245a504cff6c5cf6161528e378cd09d2039cd2e947c67910382e574",
+      "transparent": true
+    },
+    {
+      "assetId": "item.gloves",
+      "path": "/art/fantasy/item-gloves.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 3636,
+      "sha256": "fbca224862dd1538212509efcbe33b4d9f66b07271495853cedd08eb90bbde4b",
+      "transparent": true
+    },
+    {
+      "assetId": "item.boots",
+      "path": "/art/fantasy/item-boots.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 4843,
+      "sha256": "e004ee0b1f199b99ccca563a009243f7a201c61ca40781e597239a95fdfe3385",
+      "transparent": true
+    },
+    {
+      "assetId": "item.amulet",
+      "path": "/art/fantasy/item-amulet.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 2603,
+      "sha256": "77ca8edc8840c2e3f887eb6f84047de1c30ff93f02e317d1a34d4fa03a60b4bb",
+      "transparent": true
+    },
+    {
+      "assetId": "item.ring",
+      "path": "/art/fantasy/item-ring.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 3584,
+      "sha256": "a04b02dc766f3a1ff7cc7dcb017b99f67481b7cd985bdd09627e3311942fd486",
+      "transparent": true
+    },
+    {
+      "assetId": "emblem",
+      "path": "/art/fantasy/emblem.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 6211,
+      "sha256": "cc0b18a93d09bc79874d47ac9620e045a5f01ccbc90e62cb642c7b3c17f4583f",
+      "transparent": true
+    }
+  ]
+}

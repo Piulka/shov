@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SocialError, SocialService, socialWeekStart } from '../server/social.ts';
 import { GameStore } from '../server/store.ts';
 import { createGame } from '../shared/engine.ts';
@@ -80,6 +80,26 @@ describe('social membership and identity', () => {
     expectError(() => command(id, { type: 'create', name: 'Шов', description: '', language: 'ru', tag: 'calm' }), 'SOCIAL_LOCKED', 403);
     expectError(() => service.practice(id, 'rupture', raidDefaults('rupture'), epoch), 'SOCIAL_LOCKED');
     expectError(() => service.view('missing-account', epoch), 'UNAUTHORIZED', 401);
+  });
+
+  it('rolls back public and hero names together when campaign persistence fails', () => {
+    const { store, service, account, command } = setup();
+    const id = account(1);
+    const before = store.getGame(id);
+    const profile = service.view(id, epoch).profile;
+    const requestId = randomUUID();
+    const save = vi.spyOn(store, 'saveGame').mockImplementationOnce(() => { throw new Error('Simulated write failure'); });
+    try {
+      expect(() => command(id, { type: 'profile', name: 'Новый герой' }, epoch, requestId)).toThrow('Simulated write failure');
+      expect(store.getGame(id)).toEqual(before);
+      expect(service.view(id, epoch).profile).toEqual(profile);
+      expect(store.database.prepare('SELECT COUNT(*) count FROM social_commands WHERE account_id = ? AND command_id = ?').get(id, requestId)).toEqual({ count: 0 });
+    } finally {
+      save.mockRestore();
+    }
+    expect(command(id, { type: 'profile', name: 'Новый герой' }, epoch, requestId).profile.name).toBe('Новый герой');
+    expect(store.getGame(id)?.revision).toBe(before!.revision + 1);
+    expect(JSON.parse(store.getGame(id)!.snapshot).name).toBe('Новый герой');
   });
 
   it('normalizes Cyrillic and compatibility name uniqueness and validates safe text', () => {

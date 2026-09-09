@@ -66,7 +66,7 @@ const clanRoles = { leader: "Глава", officer: "Офицер", member: "Уч
 const raidGoals: Record<RaidRole, string> = {
   rupture: "Три волны. Усильте урон с 4-й по 8-ю секунду каждой схватки.",
   bulwark: "Три волны. Сдержите тяжёлые удары на 9-й и 18-й секунде.",
-  cleanse: "Три волны. Снимайте следы, появляющиеся на 6-й, 12-й и 18-й секунде.",
+  cleanse: "Три волны. Снимайте кровотечение на 6-й, 12-й и 18-й секунде.",
 };
 const tags: Record<ClanTag, string> = {
   calm: "Спокойный ритм",
@@ -81,8 +81,8 @@ const conditions: Record<Condition, string> = {
   has_debuff: "Есть вредный эффект",
   vulnerable: "Враг уязвим",
   no_vulnerable: "Нет уязвимости",
-  three_marks: "Три следа на враге",
-  under_three_marks: "Меньше трёх следов",
+  three_marks: "Три заряда яда",
+  under_three_marks: "Меньше трёх зарядов яда",
 };
 
 function Modal({
@@ -136,7 +136,7 @@ function Modal({
 function ClanIdentity({ clan }: { clan: ClanSummary }) {
   return (
     <div className="clan-identity">
-      <img src="/art/emblem.png" alt="" />
+      <img src="/art/fantasy/emblem.png" alt="" />
       <div>
         <h2>{clan.name}</h2>
         <p>
@@ -281,7 +281,7 @@ function History({ social }: { social: SocialView }) {
   return (
     <section className="clan-history">
       <div className="section-title">
-        <h3>Летопись проводника</h3>
+        <h3>Достижения героя</h3>
         <span className="clan-reputation">
           <Medal size={16} /> {fmt(social.profile.reputation)} репутации
         </span>
@@ -1186,7 +1186,7 @@ function RaidPanel({
   );
 }
 
-export default function ClanPage({ view: game }: { view: GameView }) {
+export default function ClanPage({ view: game, onProfile }: { view: GameView; onProfile: () => void }) {
   const [query, setQuery] = useState("");
   const social = useSocial(query);
   const [tab, setTab] = useState<"raid" | "members" | "feed" | "ranking">(
@@ -1261,18 +1261,14 @@ export default function ClanPage({ view: game }: { view: GameView }) {
     <div className="clan-page">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">ПРОВОДНИКИ БЕЛЫХ ТЕРРАС</p>
+          <p className="eyebrow">ГИЛЬДИЯ ИСКАТЕЛЕЙ</p>
           <h1>{clan ? clan.name : "Кланы"}</h1>
         </div>
         <button
           className="clan-profile"
-          disabled={busy || !data.eligible}
-          onClick={() => {
-            setName(data.profile.name);
-            setModal("profile");
-          }}
-          title="Изменить имя в сообществе"
-          aria-label="Изменить имя в сообществе"
+          onClick={onProfile}
+          title="Открыть профиль в настройках"
+          aria-label="Открыть профиль в настройках"
         >
           <UserRound size={17} />
           <span>
@@ -1280,7 +1276,7 @@ export default function ClanPage({ view: game }: { view: GameView }) {
             <strong>{data.profile.name}</strong>
             <small>{fmt(data.profile.reputation)} репутации</small>
           </span>
-          <Pencil size={14} />
+          <Settings2 size={14} />
         </button>
       </div>
       {errorBanner}

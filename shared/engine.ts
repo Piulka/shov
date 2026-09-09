@@ -1,8 +1,10 @@
 import { allowedAffixes, catalog, families, slots, upgradeCap } from './content';
 import balance from '../model/balance.json' with { type: 'json' };
-import { awardChapter } from './chapter';
-import { canCraftResonant, craftingCost, gearLevelCap, reforgeCost } from './equipment';
-import type { Affix, BattleEvent, BattleRun, Build, Condition, Enemy, Family, GameCommand, GameState, Item, JourneyReport, Rarity, RegionId, Route, Rule, Slot, Stats, TrainingResult, Wallet } from './types';
+import { awardChapter, awardProgressChapters } from './chapter';
+import { canCraftResonant, craftingCost, gearLevelCap, itemProtection, reforgeCost, salvageValue } from './equipment';
+import { fantasyItemName as itemName, legacyBuildNames, legacyItemNames } from './fantasy';
+import { affixAmount, affixRollValues } from './item-affixes';
+import type { Affix, BattleEvent, BattleRun, Build, Condition, Enemy, Family, GameCommand, GameState, Item, JourneyReport, Rarity, Route, Rule, Slot, Stats, TrainingResult, Wallet } from './types';
 
 const HOUR = 3_600_000;
 const skillById = new Map(catalog.skills.map((skill) => [skill.id, skill]));
@@ -53,14 +55,13 @@ export function computeStats(state: GameState, build = state.pendingBuild ?? sta
   let hp = 500 + 20 * (state.level - 1);
   let armor = 0;
   const bonus: Record<Affix, number> = { hp: 0, armor: 0, haste: 0, crit: 0, direct: 0, dot: 0, support: 0 };
-  const amounts: Record<Affix, number> = { hp: 4, armor: 5, haste: 3, crit: 3, direct: 3, dot: 5, support: 4 };
   for (const slot of slots) {
     const item = owned(state, build.equipment[slot]);
     const scale = (100 + 6 * (item.level - 1)) * (1000 + 15 * state.upgrades[slot]);
     power += Math.floor(base[slot][0] * scale / 100_000);
     hp += Math.floor(base[slot][1] * scale / 100_000);
     armor += Math.floor(base[slot][2] * scale / 100_000);
-    for (const affix of item.affixes) bonus[affix] += amounts[affix];
+    for (const affix of item.affixes) bonus[affix] += affixAmount(item, affix);
   }
   return { power, hp: Math.floor(hp * (100 + Math.min(30, bonus.hp)) / 100), armor: Math.floor(armor * (100 + Math.min(30, bonus.armor)) / 100), haste: Math.min(40, bonus.haste) / 100, crit: Math.min(45, 5 + bonus.crit) / 100, direct: Math.min(30, bonus.direct) / 100, dot: Math.min(40, bonus.dot) / 100, support: Math.min(30, bonus.support) / 100 };
 }
@@ -196,7 +197,7 @@ export function simulate(state: GameState, build: Build, enemy: Enemy, startedAt
       case 'cut': coefficient = 2.2 + 0.6 * markCount; marks = []; break;
       case 'mend': coefficient = 0; heal = 1.4; break;
       case 'barrier': coefficient = 0; shield = 1.5; shieldDuration = 5000; break;
-      case 'cleanse': coefficient = 0; debuffs = []; push(at, 'hero', 'cleanse', 'Чистый шов · эффекты сняты', 0, skillId); break;
+      case 'cleanse': coefficient = 0; debuffs = []; push(at, 'hero', 'cleanse', `${skillById.get(skillId)!.name} · эффекты сняты`, 0, skillId); break;
       case 'hush': coefficient = 1.1; hushUntil = at + 4000; break;
     }
     if (shield > 0) {
@@ -222,7 +223,7 @@ export function simulate(state: GameState, build: Build, enemy: Enemy, startedAt
       dealToHero(raw, at, 'attack', heavy ? 'Раскалывающий удар' : 'Удар противника');
       if (enemy.mechanic === 'dot' && enemyAction % 3 === 0) {
         addMark(debuffs, at, 6000, enemy.power, 0);
-        push(at, 'enemy', 'skill', 'Рваный след · 6 с');
+        push(at, 'enemy', 'skill', 'Кровотечение · 6 с');
       }
       enemyAction++;
       nextEnemy += enemy.intervalMs;
@@ -231,14 +232,14 @@ export function simulate(state: GameState, build: Build, enemy: Enemy, startedAt
     for (const mark of marks) {
       if (mark.next !== at) continue;
       const raw = Math.max(1, Math.floor(mark.power * 0.25 * (1 + mark.bonus) * (vulnerableUntil > at ? 1.08 : 1) * (1 - reduction(enemy.armor, state.level))));
-      dealToEnemy(raw, at, 'dot', 'След нити');
+      dealToEnemy(raw, at, 'dot', 'Отравление');
       mark.next += 1000;
     }
     for (const mark of debuffs) {
       if (mark.next !== at) continue;
       const dampening = Math.min(0.2, (hushUntil > at ? 0.1 : 0) + (stanceUntil > at ? 0.1 : 0));
       const raw = Math.max(1, Math.floor(mark.power * 0.25 * (1 - reduction(stats.armor, enemy.level)) * (1 - dampening)));
-      dealToHero(raw, at, 'dot', 'Рваный след');
+      dealToHero(raw, at, 'dot', 'Кровотечение');
       mark.next += 1000;
     }
     if (heroHp <= 0 || enemyHp <= 0 || at === maxMs) {
@@ -255,8 +256,18 @@ export function simulate(state: GameState, build: Build, enemy: Enemy, startedAt
 export function startBattle(state: GameState, at: number): BattleRun {
   const route = routeFor(state.routeId);
   const enemyId = route.enemyIds[(state.routeWins[route.id] ?? 0) % route.enemyIds.length];
-  const enemy = catalog.enemies.find((entry) => entry.id === enemyId)!;
+  const enemy = routeEnemy(state, route, enemyId);
   return { ...simulate(state, state.build, enemy, at, state), regionId: route.regionId, production: productionFor(route) };
+}
+
+export function routeEnemy(state: Pick<GameState, 'level'>, route: Route, enemyId: string): Enemy {
+  const enemy = catalog.enemies.find(entry => entry.id === enemyId)!;
+  if (route.id !== 'sunny' || state.level >= enemy.level) return enemy;
+  const level = Math.max(1, state.level);
+  // The introductory route grows to its fixed ceiling; later routes retain their full difficulty.
+  const scale = (1 + 0.12 * (level - 1)) / (1 + 0.12 * (enemy.level - 1));
+  const powerScale = (1 + 0.08 * (level - 1)) / (1 + 0.08 * (enemy.level - 1));
+  return { ...enemy, level, hp: Math.round(enemy.hp * scale), power: Math.round(enemy.power * powerScale), armor: Math.round(enemy.armor * scale) };
 }
 
 function productionFor(route: Route): NonNullable<BattleRun['production']> {
@@ -265,40 +276,39 @@ function productionFor(route: Route): NonNullable<BattleRun['production']> {
 
 export function migrateGame(state: GameState): boolean {
   const version = (state as { schemaVersion: number }).schemaVersion;
-  if (version === 2) return false;
-  if (version !== 1) throw new Error('Неизвестная версия сохранения.');
-  state.schemaVersion = 2;
-  state.chapter = { completed: [], legacy: true };
-  state.progression = {
-    rewardRemainders: {},
-    lootElapsedMs: Object.fromEntries(catalog.routes.filter((route) => state.lootCounters[route.id] !== undefined).map((route) => [route.id, Math.floor(state.lootCounters[route.id] / 12 * route.lootIntervalMs)])),
-  };
-  state.battle.production = productionFor(routeFor(state.routeId));
-  return true;
+  if (version !== 1 && version !== 2) throw new Error('Неизвестная версия сохранения.');
+  let changed = false;
+  if (version === 1) {
+    state.schemaVersion = 2;
+    state.chapter = { completed: [], legacy: true };
+    state.progression = {
+      rewardRemainders: {},
+      lootElapsedMs: Object.fromEntries(catalog.routes.filter((route) => state.lootCounters[route.id] !== undefined).map((route) => [route.id, Math.floor(state.lootCounters[route.id] / 12 * route.lootIntervalMs)])),
+    };
+    state.battle.production = productionFor(routeFor(state.routeId));
+    changed = true;
+  }
+  for (const item of state.inventory) {
+    if (Object.hasOwn(legacyItemNames, item.name)) { item.name = legacyItemNames[item.name]; changed = true; }
+  }
+  for (const build of [state.build, ...(state.pendingBuild ? [state.pendingBuild] : []), ...state.presets]) {
+    if (Object.hasOwn(legacyBuildNames, build.name)) { build.name = legacyBuildNames[build.name]; changed = true; }
+  }
+  return changed;
 }
 
 function nextId(state: GameState): string { return `item-${state.nextItemId++}`; }
-
-function itemName(slot: Slot, family?: Family, regionId: RegionId = 'terraces'): string {
-  if (regionId === 'glassgarden') {
-    if (slot === 'weapon') return family === 'glass' ? 'Жезл стеклянной памяти' : family === 'needle' ? 'Игломёт росных чаш' : 'Клинок прозрачной коры';
-    return { focus: 'Резонатор сердцевины', head: 'Венец стеклосада', armor: 'Панцирь прозрачной коры', gloves: 'Перчатки собирателя росы', boots: 'Сапоги звенящего леса', amulet: 'Капля стеклянной памяти', ring: 'Кольцо росных чаш' }[slot];
-  }
-  if (regionId === 'carmine') {
-    if (slot === 'weapon') return family === 'glass' ? 'Жезл карминного разлива' : family === 'needle' ? 'Игломёт багряного шлюза' : 'Клинок алого переплетения';
-    return { focus: 'Резонатор половодья', head: 'Венец багряного берега', armor: 'Панцирь переплетения', gloves: 'Перчатки узлового ткача', boots: 'Сапоги нитяных проток', amulet: 'Сердце карминной нити', ring: 'Кольцо смотрителя шлюза' }[slot];
-  }
-  if (slot === 'weapon') return family === 'glass' ? 'Жезл светлого стекла' : family === 'needle' ? 'Игломёт красной нити' : 'Клинок первого звона';
-  return { focus: 'Фарфоровый резонатор', head: 'Венец садовника', armor: 'Керамический панцирь', gloves: 'Перчатки шовника', boots: 'Сапоги солнечного тракта', amulet: 'Осколок рассвета', ring: 'Кольцо тихого сада' }[slot];
-}
 
 export function createGame(id: string, now: number, seed = 0x51a7f00d): GameState {
   const inventory: Item[] = slots.map((slot, i) => ({ id: `item-${i + 1}`, name: itemName(slot, slot === 'weapon' ? 'blade' : undefined), slot, level: 1, rarity: 'common', affixes: [], ...(slot === 'weapon' ? { family: 'blade' as const } : {}) }));
   inventory.push({ id: 'item-9', name: itemName('weapon', 'glass'), slot: 'weapon', level: 1, rarity: 'common', family: 'glass', affixes: [] }, { id: 'item-10', name: itemName('weapon', 'needle'), slot: 'weapon', level: 1, rarity: 'common', family: 'needle', affixes: [] });
   const equipment = Object.fromEntries(slots.map((slot, i) => [slot, `item-${i + 1}`])) as Record<Slot, string>;
-  const presets = families.map((family, index) => ({ ...defaultSkills(family, 1), equipment: { ...equipment, weapon: index === 0 ? 'item-1' : `item-${index + 8}` } }));
+  const presets = families.map((family, index) => {
+    const skills = defaultSkills(family, 1);
+    return { ...skills, name: legacyBuildNames[skills.name] ?? skills.name, equipment: { ...equipment, weapon: index === 0 ? 'item-1' : `item-${index + 8}` } };
+  });
   const state: GameState = {
-    schemaVersion: 2, id, name: 'Шовник', createdAt: now, lastSimulatedAt: now, autonomyUntil: now + 48 * HOUR,
+    schemaVersion: 2, id, name: 'Искатель', createdAt: now, lastSimulatedAt: now, autonomyUntil: now + 48 * HOUR,
     level: 1, xp: 0, wallet: { coins: 0, thread: 0, catalyst: 0 }, inventory,
     upgrades: Object.fromEntries(slots.map((slot) => [slot, 0])) as Record<Slot, number>,
     build: structuredClone(presets[0]), pendingBuild: null, presets, routeId: 'sunny', pendingRoute: null, mode: 'farm',
@@ -322,7 +332,8 @@ function dropItem(state: GameState, route: Route): Item {
   const affixes: Affix[] = [];
   const count = rarity === 'common' ? 0 : rarity === 'resonant' ? 2 : 1;
   while (affixes.length < count) affixes.push(pool.splice(Math.floor(random(state) * pool.length), 1)[0]);
-  return { id: nextId(state), name: itemName(slot, family, route.regionId), slot, level, rarity, affixes, ...(family ? { family } : {}) };
+  const affixRolls = Object.fromEntries(affixes.map(affix => [affix, affixRollValues[Math.floor(random(state) * affixRollValues.length)]]));
+  return { id: nextId(state), name: itemName(slot, family, route.regionId), slot, level, rarity, affixes, ...(affixes.length ? { affixRolls } : {}), ...(family ? { family } : {}) };
 }
 
 function battleRewards(state: GameState, route: Route): Wallet & { xp: number } {
@@ -362,13 +373,9 @@ export function settle(state: GameState, now: number): JourneyReport {
         report.levels++;
       }
       if (state.level >= 100) state.xp = 0;
-      const chapterIds: Array<'first_win' | 'level10'> = [];
-      if (route.id === 'sunny') chapterIds.push('first_win');
-      if (state.level >= 10) chapterIds.push('level10');
-      for (const chapterId of chapterIds) {
-        const grant = awardChapter(state, chapterId);
-        for (const key of ['coins', 'thread', 'catalyst'] as const) report.rewards[key] += grant[key];
-      }
+      const firstWinGrant = route.id === 'sunny' ? awardChapter(state, 'first_win') : { coins: 0, thread: 0, catalyst: 0 };
+      const progressGrant = awardProgressChapters(state);
+      for (const key of ['coins', 'thread', 'catalyst'] as const) report.rewards[key] += firstWinGrant[key] + progressGrant[key];
       const lootInterval = (state.battle.production ?? productionFor(route)).lootIntervalMs;
       state.progression.lootElapsedMs[route.id] = (state.progression.lootElapsedMs[route.id] ?? 0) + state.battle.combatMs + 3000;
       while (state.progression.lootElapsedMs[route.id] >= lootInterval) {
@@ -441,7 +448,10 @@ export function applyCommand(state: GameState, command: GameCommand, now: number
       if (current.equipment[item.slot] === item.id) return;
       const next = structuredClone(current);
       next.equipment[item.slot] = item.id;
-      if (item.slot === 'weapon' && item.family !== familyFor(state, current)) Object.assign(next, defaultSkills(item.family!, state.level));
+      if (item.slot === 'weapon' && item.family !== familyFor(state, current)) {
+        const skills = defaultSkills(item.family!, state.level);
+        Object.assign(next, skills, { name: legacyBuildNames[skills.name] ?? skills.name });
+      }
       validateBuild(state, next);
       state.pendingBuild = next;
       awardChapter(state, 'equip');
@@ -487,10 +497,10 @@ export function applyCommand(state: GameState, command: GameCommand, now: number
       if (rarity !== 'fine' && rarity !== 'resonant') throw new Error('Эта редкость недоступна для изготовления.');
       const affixes = [command.affix];
       if (rarity === 'resonant') {
-        if (!canCraftResonant(state)) throw new Error('Резонансные рецепты открываются с 25-го уровня в Карминных поймах.');
+        if (!canCraftResonant(state)) throw new Error('Эпические рецепты открываются с 25-го уровня в Пепельных землях.');
         if (!command.secondAffix || command.secondAffix === command.affix || !allowedAffixes(command.slot).includes(command.secondAffix)) throw new Error('Выберите два разных допустимых свойства.');
         affixes.push(command.secondAffix);
-      } else if (command.secondAffix !== undefined) throw new Error('У тонкого предмета может быть только одно свойство.');
+      } else if (command.secondAffix !== undefined) throw new Error('У редкого предмета может быть только одно свойство.');
       const level = gearLevelCap(state);
       const regionId = catalog.routes.find((route) => route.itemLevel === level && state.unlockedRoutes.includes(route.id))?.regionId;
       pay(state, craftingCost(level, rarity));
@@ -505,15 +515,14 @@ export function applyCommand(state: GameState, command: GameCommand, now: number
       if (command.level > gearLevelCap(state)) throw new Error('Этот уровень предметов ещё не открыт.');
       pay(state, cost);
       item.level = command.level;
+      awardChapter(state, 'reforge');
       return;
     }
     case 'dismantle': {
       if (!Array.isArray(command.itemIds) || !command.itemIds.length || new Set(command.itemIds).size !== command.itemIds.length) throw new Error('Выберите предметы для разбора без повторений.');
-      const protectedIds = new Set([state.build, ...(state.pendingBuild ? [state.pendingBuild] : []), ...state.presets].flatMap((build) => Object.values(build.equipment)));
       const items = command.itemIds.map((id) => owned(state, id));
-      if (items.some((item) => item.locked || protectedIds.has(item.id))) throw new Error('Нельзя разобрать закреплённую вещь или предмет из сохранённой сборки.');
-      const multipliers: Record<Rarity, number> = { common: 1, fine: 2, resonant: 3, named: 4 };
-      state.wallet.thread += items.reduce((sum, item) => sum + Math.ceil(item.level / 10) * multipliers[item.rarity], 0);
+      if (items.some((item) => itemProtection(state, item))) throw new Error('Нельзя разобрать закреплённую вещь или предмет из сохранённой сборки.');
+      state.wallet.thread += items.reduce((sum, item) => sum + salvageValue(item), 0);
       const selected = new Set(command.itemIds);
       state.inventory = state.inventory.filter((item) => !selected.has(item.id));
       return;
@@ -557,7 +566,7 @@ export function train(state: GameState, routeId: string): TrainingResult {
   const build = state.pendingBuild ?? state.build;
   const runs: BattleRun[] = [];
   for (let i = 0; i < 12; i++) {
-    const enemy = catalog.enemies.find((entry) => entry.id === route.enemyIds[i % route.enemyIds.length])!;
+    const enemy = routeEnemy(state, route, route.enemyIds[i % route.enemyIds.length]);
     runs.push({ ...simulate(state, build, enemy, 0, { rng: 0x7a110000 + i }), regionId: route.regionId });
   }
   const totalMs = runs.reduce((sum, run) => sum + run.combatMs + 3000, 0);

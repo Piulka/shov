@@ -504,7 +504,7 @@ export default function App() {
                         `${number(player.stats.crit * 100)}%`,
                       ],
                       ["Прямой урон", `${number(player.stats.direct * 100)}%`],
-                      ["Урон следов", `${number(player.stats.dot * 100)}%`],
+                      ["Урон яда", `${number(player.stats.dot * 100)}%`],
                       [
                         "Лечение и щиты",
                         `${number(player.stats.support * 100)}%`,
@@ -627,7 +627,7 @@ export default function App() {
 function Brand() {
   return (
     <div className="admin-brand">
-      <img src="/art/emblem.png" alt="" />
+      <img src="/art/fantasy/emblem.png" alt="" />
       <div>
         <strong>ШОВЬ</strong>
         <small>Управление игрой</small>
@@ -747,7 +747,7 @@ function Overview({
       <Section title="Экономика">
         <div className="admin-metrics">
           <Stat label="Монеты на счетах" value={number(data.wealth.coins)} />
-          <Stat label="Нить на счетах" value={number(data.wealth.thread)} />
+          <Stat label="Материалы на счетах" value={number(data.wealth.thread)} />
           <Stat
             label="Катализаторы на счетах"
             value={number(data.wealth.catalyst)}

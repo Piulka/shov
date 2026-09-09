@@ -7,10 +7,12 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { createAdminApp, type AdminAppOptions } from '../server/admin';
 import { GameStore } from '../server/store';
 import { SocialService } from '../server/social';
-import { createGame, settle, validateBuild } from '../shared/engine';
+import { computeStats, createGame, settle, startBattle, validateBuild } from '../shared/engine';
 import { catalog, upgradeCap } from '../shared/content';
 import type { AdminMutation, AdminOperation, AdminPlayerDetail } from '../shared/admin';
 import type { GameState } from '../shared/types';
+import { affixAmount, formatItemAffix } from '../shared/item-affixes';
+import { auditSummary, describeChanges } from '../src/admin/changes';
 
 const epoch = Date.UTC(2026, 8, 9);
 const origin = 'https://admin.example.com';
@@ -291,6 +293,67 @@ describe('admin transactional edits', () => {
       expect(invalid.statusCode, invalid.body).toBe(400);
     }
     expect(JSON.parse(store.getGame(state.id)!.snapshot)).toEqual(changed);
+  });
+
+  it('preserves dropped rolls, combat and effective audit values when a rename omits rolls', async () => {
+    let itemId = '';
+    const { edit, state, detail } = await fixture(state => {
+      Object.assign(state, createGame(state.id, epoch - 24 * 3_600_000, 42));
+      settle(state, epoch);
+      const item = state.inventory.find(item => item.slot !== 'weapon' && item.affixes.length)!;
+      item.affixRolls = { [item.affixes[0]]: 120 };
+      state.build.equipment[item.slot] = item.id;
+      state.battle = startBattle(state, epoch);
+      itemId = item.id;
+    });
+    const before = (await detail()).json<AdminPlayerDetail>();
+    const item = state.inventory.find(item => item.id === itemId)!;
+    const { id: _id, affixRolls: _rolls, ...input } = item;
+    const operation: AdminOperation = { type: 'item_update', itemId, item: { ...input, name: 'Любимая находка' } };
+    expect(describeChanges(before, [operation], catalog)).toEqual([{ label: 'Название предмета', before: item.name, after: 'Любимая находка' }]);
+    const response = await edit([operation]);
+    expect(response.statusCode, response.body).toBe(200);
+    const result = response.json<AdminPlayerDetail>();
+    expect(result.state.inventory.find(item => item.id === itemId)).toEqual({ ...item, name: 'Любимая находка' });
+    expect(result.stats).toEqual(computeStats(state));
+    expect(result.state.battle).toEqual(state.battle);
+    expect(result.audit[0].effects.battleRestarted).toBe(false);
+    expect(auditSummary(result.audit[0].operations[0], catalog)).toContain(formatItemAffix(item, item.affixes[0]));
+    const lowered: AdminOperation = { type: 'item_update', itemId, item: { ...input, affixRolls: { [item.affixes[0]]: 80 } } };
+    const changes = describeChanges(result, [lowered], catalog);
+    expect(changes).toContainEqual({ label: 'Свойства', before: formatItemAffix(item, item.affixes[0]), after: formatItemAffix(lowered.item, item.affixes[0]) });
+    const changed = await edit([lowered]);
+    expect(changed.statusCode, changed.body).toBe(200);
+    expect(changed.json<AdminPlayerDetail>().audit[0].effects.battleRestarted).toBe(true);
+  });
+
+  it('accepts exact rolled values, rejects invalid and unrelated values atomically, and treats explicit 100 as unchanged', async () => {
+    const { app, edit, headers, state, store } = await fixture(state => {
+      const item = state.inventory.find(item => item.slot === 'ring')!;
+      item.rarity = 'fine'; item.affixes = ['hp'];
+      state.battle = startBattle(state, epoch);
+    });
+    const ring = state.inventory.find(item => item.slot === 'ring')!;
+    const { id: _id, ...input } = ring;
+    const baseline = await edit([{ type: 'item_update', itemId: ring.id, item: { ...input, affixRolls: { hp: 100 } } }]);
+    expect(baseline.statusCode, baseline.body).toBe(200);
+    expect(baseline.json<AdminPlayerDetail>().audit[0].effects.battleRestarted).toBe(false);
+    expect(baseline.json<AdminPlayerDetail>().state.battle).toEqual(state.battle);
+    const before = store.getGame(state.id);
+    for (const affixRolls of [{ hp: 79 }, { hp: 81 }, { hp: 121 }, { hp: 100.5 }, { hp: '100' }, { hp: 120, mana: 100 }, { support: 120 }]) {
+      const response = await app.inject({ method: 'POST', url: '/api/admin/players/telegram:42', headers, payload: { requestId: randomUUID(), revision: before!.revision, reason: 'Invalid rolled item', operations: [{ type: 'wallet', values: { coins: 500 } }, { type: 'item_update', itemId: ring.id, item: { ...input, affixRolls } }] } });
+      expect(response.statusCode, response.body).toBe(400);
+      expect(store.getGame(state.id)).toEqual(before);
+    }
+    for (const value of [80, 90, 110, 120]) {
+      const response = await edit([{ type: 'item_update', itemId: ring.id, item: { ...input, affixRolls: { hp: value } } }]);
+      expect(response.statusCode, response.body).toBe(200);
+      const item = response.json<AdminPlayerDetail>().state.inventory.find(item => item.id === ring.id)!;
+      expect(affixAmount(item, 'hp')).toBe(value * 4 / 100);
+    }
+    const cleared = await edit([{ type: 'item_update', itemId: ring.id, item: { ...input, affixes: ['support'] } }]);
+    expect(cleared.statusCode, cleared.body).toBe(200);
+    expect(cleared.json<AdminPlayerDetail>().state.inventory.find(item => item.id === ring.id)?.affixRolls).toEqual({});
   });
 
   it('clears only invalid queued references and enforces strict nested payloads', async () => {

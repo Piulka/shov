@@ -68,7 +68,7 @@ test('regional travel, preview, reforging and resonant crafting persist through 
   await expect(page.locator('.topbar')).toContainText(catalog.regions.find(region => region.id === 'carmine')!.name);
   await page.screenshot({ path: '.local/screenshots/world-carmine-journey.png', fullPage: true });
   await go(page, 'Карта мира', 'Карта');
-  await page.getByRole('tab', { name: /Стеклосад/ }).click();
+  await page.getByRole('tab', { name: new RegExp(catalog.regions.find(region => region.id === 'glassgarden')!.name) }).click();
   const route = catalog.routes.find(route => route.id === 'glasswood')!;
   const row = page.getByRole('article', { name: route.name, exact: true });
   await row.getByRole('button', { name: `Проверить сборку: ${route.name}`, exact: true }).click();
@@ -79,7 +79,7 @@ test('regional travel, preview, reforging and resonant crafting persist through 
   expect(queued.state.pendingRoute?.routeId).toBe(route.id);
   world.advance(queued.state.battle.endsAt);
   await expect.poll(async () => ((await (await page.request.get(`${world.origin}/api/state`)).json()) as GameView).state.routeId).toBe(route.id);
-  await expect(page.locator('.topbar')).toContainText('Стеклосад', { timeout: 8000 });
+  await expect(page.locator('.topbar')).toContainText(catalog.regions.find(region => region.id === 'glassgarden')!.name, { timeout: 8000 });
   await canvasHasArtwork(page);
   await page.screenshot({ path: '.local/screenshots/world-glassgarden-journey.png', fullPage: true });
 
@@ -94,7 +94,7 @@ test('regional travel, preview, reforging and resonant crafting persist through 
   await page.screenshot({ path: '.local/screenshots/world-reforged-item.png', fullPage: true });
   await page.keyboard.press('Escape');
   await go(page, 'Мастерская');
-  await page.getByRole('group', { name: 'Качество создаваемой вещи' }).getByRole('button', { name: 'Резонансное', exact: true }).click();
+  await page.getByRole('group', { name: 'Качество создаваемой вещи' }).getByRole('button', { name: 'Эпическое', exact: true }).click();
   await page.getByRole('combobox', { name: 'Предмет', exact: true }).selectOption('ring');
   await page.getByRole('combobox', { name: 'Свойство', exact: true }).selectOption('haste');
   await page.getByRole('combobox', { name: 'Второе свойство', exact: true }).selectOption('crit');
@@ -137,7 +137,7 @@ test('three region maps, current scene and equipment controls fit mobile and des
     await page.screenshot({ path: `.local/screenshots/world-reforge-${width}.png`, fullPage: true });
     await page.keyboard.press('Escape');
     await go(page, 'Мастерская');
-    await page.getByRole('group', { name: 'Качество создаваемой вещи' }).getByRole('button', { name: 'Резонансное', exact: true }).click();
+    await page.getByRole('group', { name: 'Качество создаваемой вещи' }).getByRole('button', { name: 'Эпическое', exact: true }).click();
     await noOverflow(page);
     await page.screenshot({ path: `.local/screenshots/world-workshop-${width}.png`, fullPage: true });
   }

@@ -35,4 +35,10 @@ describe('live battle audio', () => {
     expect(battleSounds(event(100, 'dot'), battle)).toEqual(['sfx.dot']);
     expect(commandSound({ type: 'craft', slot: 'ring', affix: 'hp' })).toEqual('sfx.item.craft');
   });
+  it('plays a distinct weapon attack for sword, magic staff and bow', () => {
+    for (const family of ['blade', 'glass', 'needle'] as const) {
+      expect(battleSounds(event(100), { ...battle, family })).toEqual([`sfx.attack.${family}`, 'sfx.hit.ceramic']);
+      expect(battleSounds({ ...event(100, 'skill'), critical: true }, { ...battle, family })).toEqual([`sfx.attack.${family}`, 'sfx.hit.ceramic', 'sfx.critical']);
+    }
+  });
 });

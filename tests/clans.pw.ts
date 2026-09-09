@@ -64,10 +64,13 @@ async function command(page: Page, action: () => Promise<unknown>): Promise<Soci
 }
 
 async function namePlayer(page: Page, name: string) {
-  await page.getByRole('button', { name: 'Изменить имя в сообществе', exact: true }).click();
-  const dialog = page.getByRole('dialog', { name: 'Имя в сообществе', exact: true });
-  await dialog.getByLabel('Имя в сообществе', { exact: true }).fill(name);
-  await command(page, () => dialog.getByRole('button', { name: 'Сохранить', exact: true }).click());
+  await page.getByRole('button', { name: 'Открыть профиль в настройках', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Настройки', exact: true });
+  await dialog.getByLabel('Имя героя', { exact: true }).fill(name);
+  const saved = await command(page, () => dialog.getByRole('button', { name: 'Сохранить имя', exact: true }).click());
+  expect(saved.profile.name).toBe(name);
+  await expect(dialog.getByRole('status')).toContainText('Имя сохранено');
+  await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();
 }
 
@@ -75,7 +78,7 @@ async function createClan(page: Page, name: string) {
   await page.getByRole('button', { name: 'Создать клан', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Новый клан' });
   await dialog.getByLabel('Название клана').fill(name);
-  await dialog.getByLabel('Описание клана').fill('Исследуем террасы вместе');
+  await dialog.getByLabel('Описание клана').fill('Исследуем Зеленолесье вместе');
   await command(page, () => dialog.getByRole('button', { name: 'Создать клан', exact: true }).click());
   await expect(dialog).not.toBeVisible();
   await expect(page.getByRole('heading', { name, exact: true, level: 1 })).toBeVisible();
@@ -135,7 +138,7 @@ test('two players: membership, private feed, raid, moderation, succession and we
   expect(scored.personalRaid?.attemptsUsed).toBe(1);
   expect(scored.personalRaid?.bestScore).toBeGreaterThan(6000);
   expect(scored.clan?.weekScore).toBe(scored.personalRaid?.bestScore);
-  await expect(a.getByRole('group', { name: 'Роль экспедиции' }).getByRole('button', { name: 'Опора' })).toBeDisabled();
+  await expect(a.getByRole('group', { name: 'Роль экспедиции' }).getByRole('button', { name: 'Защита' })).toBeDisabled();
   await a.getByRole('tab', { name: 'Рейтинг', exact: true }).click();
   await expect(a.locator('.clan-leaderboard li')).toHaveCount(1);
   await expect(a.locator('.clan-leaderboard')).toContainText('Медное эхо');

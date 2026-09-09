@@ -56,6 +56,39 @@ describe('social HTTP boundary', () => {
     expect(made.json<SocialView>().clan).toMatchObject({ name: 'Белая нить', members: 1, myRole: 'leader' });
   });
 
+  it('renames both identities at level one without touching progress and rejects stale game writes after rename', async () => {
+    const { app, setClock } = fixture();
+    const { cookie } = await login(app);
+    setClock(epoch + 30_000);
+    const before = await state(app, cookie);
+    expect(before.state.level).toBe(1);
+    expect(before.state.xp).toBeGreaterThan(0);
+    expect(before.state.wallet.coins).toBeGreaterThan(0);
+    const id = randomUUID();
+    const rename = { type: 'profile', name: '  Новый герой  ' };
+    const first = await command(app, cookie, rename, id);
+    expect(first.statusCode, first.body).toBe(200);
+    expect(first.json<SocialView>()).toMatchObject({ eligible: false, profile: { name: 'Новый герой' } });
+    const renamed = await state(app, cookie);
+    expect(renamed.state).toEqual({ ...before.state, name: 'Новый герой' });
+    expect(renamed.revision).toBe(before.revision + 1);
+    const replay = await command(app, cookie, rename, id);
+    expect(replay.statusCode, replay.body).toBe(200);
+    expect(replay.json<SocialView>().profile).toEqual(first.json<SocialView>().profile);
+    expect(await state(app, cookie)).toEqual(renamed);
+    const stale = await app.inject({ method: 'POST', url: '/api/command', headers: { cookie }, payload: { id: randomUUID(), revision: before.revision, command: { type: 'target', slot: 'ring' } } });
+    expect(stale.statusCode, stale.body).toBe(409);
+    expect(stale.json()).toMatchObject({ code: 'REVISION_CONFLICT', revision: renamed.revision });
+    expect((await state(app, cookie)).state).toEqual(renamed.state);
+    const current = await app.inject({ method: 'POST', url: '/api/command', headers: { cookie }, payload: { id: randomUUID(), revision: renamed.revision, command: { type: 'target', slot: 'ring' } } });
+    expect(current.statusCode, current.body).toBe(200);
+    expect(current.json<GameView>().state.name).toBe('Новый герой');
+    expect((await command(app, cookie, rename, id)).statusCode).toBe(200);
+    const after = await state(app, cookie);
+    expect(after.revision).toBe(current.json<GameView>().revision);
+    expect(after.state).toEqual(current.json<GameView>().state);
+  });
+
   it('keeps clan mutations independent of the campaign revision and economy', async () => {
     const { app, advance } = fixture();
     const { cookie, game } = await login(app);

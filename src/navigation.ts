@@ -1,11 +1,12 @@
 import type { ChapterTaskId } from '../shared/chapter';
 
 export type Page = 'journey' | 'hero' | 'workshop' | 'map' | 'clan';
-export type PageAnchor = 'equipment' | 'inventory' | 'build' | 'presets' | 'upgrade' | 'craft' | 'routes' | 'target';
+export type PageAnchor = 'equipment' | 'inventory' | 'build' | 'presets' | 'upgrade' | 'craft' | 'reforge' | 'routes' | 'target';
 export type Navigate = (page: Page, anchor?: PageAnchor) => void;
 
 export const chapterAnchors: Partial<Record<ChapterTaskId, PageAnchor>> = {
   equip: 'inventory', upgrade: 'upgrade', craft: 'craft', tactics: 'build', target: 'target',
+  reforge: 'reforge', first_boss: 'routes', frost_region: 'routes', frost_boss: 'routes', ash_region: 'routes', dragon_boss: 'routes',
 };
 
 export function revealAnchor(anchor: PageAnchor): HTMLElement | null {
