@@ -159,7 +159,7 @@ class GameAudio {
     if (!asset) return;
     const version = ++this.generation;
     const buffer = await this.load(asset);
-    if (!buffer || version !== this.generation || !this.audible) return;
+    if (!buffer || version !== this.generation || id !== `ambience.${this.region}` || !this.audible) return;
     const at = this.context.currentTime;
     // At most a current and an outgoing bed, including rapid route changes.
     for (const source of this.loops) if (source !== this.loop?.source) { try { source.stop(); } catch {} this.loops.delete(source); }

@@ -13,6 +13,7 @@ import type { GameCommand, GameState, GameView, JourneyReport } from '../shared/
 import { sessionDigest, validateTelegramInitData } from './auth.ts';
 import { GameStore, type SavedGame } from './store.ts';
 import { SocialError, SocialService } from './social.ts';
+import { registerTelegramWebhook } from './telegram.ts';
 import packageInfo from '../package.json' with { type: 'json' };
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -52,6 +53,7 @@ export interface AppOptions {
   databasePath?: string;
   mode?: 'local' | 'telegram';
   botToken?: string;
+  telegramWebhookSecret?: string;
   appOrigin?: string;
   trustedProxy?: string;
   betaAccess?: 'allowlist' | 'open';
@@ -229,7 +231,7 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
   app.addHook('onSend', async (request, reply) => {
     const path = request.url.split('?')[0];
     const cache = reply.statusCode === 200 && request.method === 'GET'
-      ? path.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : path.startsWith('/art/') ? 'public, max-age=3600' : 'no-store'
+      ? path.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : path.startsWith('/art/') || /^\/audio\/.+\.(ogg|m4a)$/.test(path) ? 'public, max-age=3600' : 'no-store'
       : 'no-store';
     reply.header('Cache-Control', cache);
     reply.header('X-Content-Type-Options', 'nosniff');
@@ -242,6 +244,8 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
     if (path === '/api/health' || path === '/api/ready') return;
     app.log.info({ event: 'request', requestId: request.id, method: request.method, path, status: reply.statusCode, durationMs: Math.round(reply.elapsedTime) });
   });
+
+  registerTelegramWebhook(app, { mode, origin: allowedOrigin, secret: options.telegramWebhookSecret ?? process.env.TELEGRAM_WEBHOOK_SECRET });
 
   app.get('/api/health', async () => ({ ok: true, mode, version: packageInfo.version }));
   app.get('/api/ready', async (_request, reply) => {
@@ -360,7 +364,7 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
   if (existsSync(resolve(dist, 'index.html'))) {
     app.register(staticFiles, { root: dist, prefix: '/' });
     app.setNotFoundHandler((request, reply) => {
-      if (/^\/(api|art|assets)\//.test(request.url) || request.method !== 'GET') return reply.code(404).send({ error: 'Маршрут не найден.', code: 'NOT_FOUND' });
+      if (/^\/(api|art|assets|audio)\//.test(request.url) || request.method !== 'GET') return reply.code(404).send({ error: 'Маршрут не найден.', code: 'NOT_FOUND' });
       return reply.sendFile('index.html');
     });
   } else {

@@ -104,9 +104,11 @@ describe('Telegram beta deployment', () => {
     expect(health.json()).toEqual({ ok: true, mode: 'telegram', version: '0.5.0' });
     expect(health.body).not.toContain(token);
     expect((await app.inject('/api/ready')).json()).toEqual({ ok: true });
-    const missing = await app.inject('/art/missing-beta-fixture.png');
-    expect(missing.statusCode).toBe(404);
-    expect(missing.headers['cache-control']).toBe('no-store');
+    for (const path of ['/art/missing-beta-fixture.png', '/audio/missing-beta-fixture.ogg', '/audio/missing-beta-fixture.m4a']) {
+      const missing = await app.inject(path);
+      expect(missing.statusCode).toBe(404);
+      expect(missing.headers['cache-control']).toBe('no-store');
+    }
   });
 });
 

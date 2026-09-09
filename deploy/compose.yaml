@@ -28,6 +28,7 @@ services:
       SERVER_PORT: "3001"
       DATABASE_PATH: ${DATABASE_PATH:-/data/shov.sqlite}
       BOT_TOKEN: ${BOT_TOKEN:?Set BOT_TOKEN in .env}
+      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET:-}
       APP_ORIGIN: ${APP_ORIGIN:?Set the public HTTPS APP_ORIGIN in .env}
       TRUSTED_PROXY: 172.29.43.2
       BETA_ACCESS: ${BETA_ACCESS:-open}

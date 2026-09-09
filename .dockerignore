@@ -3,6 +3,7 @@
 node_modules
 dist
 data
+assets
 test-results
 playwright-report
 .env
