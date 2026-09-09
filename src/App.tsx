@@ -67,6 +67,8 @@ import BattleScene from "./components/BattleScene";
 import ChapterProgress from "./components/ChapterProgress";
 import ClanPage from "./components/ClanPage";
 import { useGame } from "./api";
+import AudioSettings from './components/AudioSettings';
+import { useGameAudio } from './audio/useGameAudio';
 
 type Page = "journey" | "hero" | "workshop" | "map" | "clan";
 type Command = (command: GameCommand) => Promise<boolean>;
@@ -1798,6 +1800,7 @@ export default function App() {
   const game = useGame();
   const [page, setPage] = useState<Page>("journey");
   const [clock, setClock] = useState(Date.now());
+  useGameAudio(game.view?.state.battle, clock, page === 'journey');
   const [paused, setPaused] = useState(
     () =>
       localStorage.getItem("shov-reduced-motion") === "true" ||
@@ -2134,6 +2137,7 @@ export default function App() {
       )}
       {settings && (
         <Dialog title="Настройки" close={() => setSettings(false)}>
+          <AudioSettings />
           <label className="setting-row">
             <span>
               <b>Спокойная анимация</b>

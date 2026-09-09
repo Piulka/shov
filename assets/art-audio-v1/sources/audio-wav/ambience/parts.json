@@ -1,0 +1,131 @@
+{
+  "schema": "shov.wav-parts.v1",
+  "masters": [
+    {
+      "path": "carmine.wav",
+      "bytes": 18432102,
+      "sha256": "ce47d26d047d2fbcc5dc8b089af417fdc75098148f45ebe6fccb42fa5e9a7258",
+      "parts": [
+        {
+          "path": "carmine.wav.part01",
+          "bytes": 3000000,
+          "sha256": "6675d109f5a4d1aaa465422fdf4d2b6d6149f096472d6cd7142f8c36aa96f31f"
+        },
+        {
+          "path": "carmine.wav.part02",
+          "bytes": 3000000,
+          "sha256": "4d03c4fb16f6843ca2b96cb8f81b46ee016d972e0f327404a727dc65d764ffdb"
+        },
+        {
+          "path": "carmine.wav.part03",
+          "bytes": 3000000,
+          "sha256": "e8e0ece30eb803407b58fbc4ac1b557444f8c96f6f1dc549c5f9d10ca017765f"
+        },
+        {
+          "path": "carmine.wav.part04",
+          "bytes": 3000000,
+          "sha256": "51af07b327b78e5b7c3d10391d6f3d0913400499267920babf2d9a9e131469fd"
+        },
+        {
+          "path": "carmine.wav.part05",
+          "bytes": 3000000,
+          "sha256": "4fd8fd5d496199b5a3b396026fe572a628e9695e4e3514e96d7c8034f8955d70"
+        },
+        {
+          "path": "carmine.wav.part06",
+          "bytes": 3000000,
+          "sha256": "4b5946e3aeec381bf789b0564db471d9d731e4c43fa31de9b6c8bb000a2b7544"
+        },
+        {
+          "path": "carmine.wav.part07",
+          "bytes": 432102,
+          "sha256": "f5682672a1dbc384e14586e8df8e154cb49692d85b3a55b1ba2c8690491b4df0"
+        }
+      ]
+    },
+    {
+      "path": "glassgarden.wav",
+      "bytes": 18432102,
+      "sha256": "cbd4dfdf1e613a592b25671f5154ea21c9ed0e169f62372f142fe35af5ab8156",
+      "parts": [
+        {
+          "path": "glassgarden.wav.part01",
+          "bytes": 3000000,
+          "sha256": "8baa374d2762f8269e6c5141d95a662024e27cd8fb2165ba165121149e87e631"
+        },
+        {
+          "path": "glassgarden.wav.part02",
+          "bytes": 3000000,
+          "sha256": "3256489c71e851083a3ccae977d50a8ef32bc4db1969483f4c1b814cdc9f16eb"
+        },
+        {
+          "path": "glassgarden.wav.part03",
+          "bytes": 3000000,
+          "sha256": "2242bb922f2142a7b09e27a13011a7e8cef109f28f1dbc9a2825256a1a7de17a"
+        },
+        {
+          "path": "glassgarden.wav.part04",
+          "bytes": 3000000,
+          "sha256": "8130177c2d8aea2a2e787bc5974cf1185805e2292218560c293ea1e2415db845"
+        },
+        {
+          "path": "glassgarden.wav.part05",
+          "bytes": 3000000,
+          "sha256": "bf2f15cea069d0e0a79bbe4c53ae04ce381e0663dd83096258d412050331b950"
+        },
+        {
+          "path": "glassgarden.wav.part06",
+          "bytes": 3000000,
+          "sha256": "2d4936dd0d971af2d202ffb6ed296cc64cf41ab73529dd7bbd282ba09180593b"
+        },
+        {
+          "path": "glassgarden.wav.part07",
+          "bytes": 432102,
+          "sha256": "0f90fc7a230454a7ee935e6be01a553a3b596a1a3c5ac7f99d40cfe0bc8445f8"
+        }
+      ]
+    },
+    {
+      "path": "terraces.wav",
+      "bytes": 18432102,
+      "sha256": "95ea7a3542ca9bc8a61a4eee2bdfe8c16abbe2a420cef1ccbf11caf3200e5974",
+      "parts": [
+        {
+          "path": "terraces.wav.part01",
+          "bytes": 3000000,
+          "sha256": "22de123c2a88e84b71f43b514501be26f8143f502b2a80a080b84a3f3e0068e5"
+        },
+        {
+          "path": "terraces.wav.part02",
+          "bytes": 3000000,
+          "sha256": "06c3c961b8f969a1a5742c726ebd465478b72eb9ea216439f62e9993b7d40f6c"
+        },
+        {
+          "path": "terraces.wav.part03",
+          "bytes": 3000000,
+          "sha256": "5aa11f8c8048a1db596844e7efe9ea03983b485dc2ae334b2064d6eec3e0a458"
+        },
+        {
+          "path": "terraces.wav.part04",
+          "bytes": 3000000,
+          "sha256": "d3807a244b098d7dc10e573d86e401210fc4a1c82501c8211b89ae31260f34ba"
+        },
+        {
+          "path": "terraces.wav.part05",
+          "bytes": 3000000,
+          "sha256": "75f59606b3af80f0a7668c2e95165136d23570ff4e5827f40426445350317018"
+        },
+        {
+          "path": "terraces.wav.part06",
+          "bytes": 3000000,
+          "sha256": "612cec7ad38c1b4d151395c10b7e603059649c7996cdb9b5b9e45abf1b140d9f"
+        },
+        {
+          "path": "terraces.wav.part07",
+          "bytes": 432102,
+          "sha256": "67f73552f14ebf87ecab383ceeb5565f657684302fbd31474a91d8b31651a166"
+        }
+      ]
+    }
+  ]
+}

@@ -21,8 +21,8 @@ export const catalog: Catalog = {
   slots,
   regions: [
     { id: 'terraces', name: 'Белые террасы', subtitle: 'Цветущая керамика', description: 'Первые тропы между фарфоровыми садами и солнечными уступами.', order: 1, color: '#72c7aa', image: '/art/terraces.png', sceneFilter: 'none' },
-    { id: 'glassgarden', name: 'Стеклосад', subtitle: 'Память в прозрачных стволах', description: 'Лес растёт из застывшего звона. В его сердцевине ещё слышны голоса прежних шовников.', order: 2, color: '#69bed4', image: '/art/terraces.png', sceneFilter: 'hue-rotate(38deg) saturate(1.12)' },
-    { id: 'carmine', name: 'Карминные поймы', subtitle: 'Реки живой нити', description: 'Багряные течения несут целые узоры. Шлюз удерживает их от последнего разрыва.', order: 3, color: '#de7394', image: '/art/terraces.png', sceneFilter: 'hue-rotate(300deg) saturate(1.12)' },
+    { id: 'glassgarden', name: 'Стеклосад', subtitle: 'Память в прозрачных стволах', description: 'Лес растёт из застывшего звона. В его сердцевине ещё слышны голоса прежних шовников.', order: 2, color: '#69bed4', image: '/art/glassgarden.png', sceneFilter: 'none' },
+    { id: 'carmine', name: 'Карминные поймы', subtitle: 'Реки живой нити', description: 'Багряные течения несут целые узоры. Шлюз удерживает их от последнего разрыва.', order: 3, color: '#de7394', image: '/art/carmine.png', sceneFilter: 'none' },
   ],
   slotNames: { weapon: 'Оружие', focus: 'Фокус', head: 'Головной убор', armor: 'Доспех', gloves: 'Перчатки', boots: 'Обувь', amulet: 'Амулет', ring: 'Кольцо' },
   familyNames: { blade: 'Клинок-камертон', glass: 'Стекольный жезл', needle: 'Игломёт' },

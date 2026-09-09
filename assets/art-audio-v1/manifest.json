@@ -1,0 +1,869 @@
+{
+  "schema": "shov.delivery.v1",
+  "revision": 1,
+  "assets": [
+    {
+      "assetId": "background.terraces",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/terraces.png",
+          "width": 1200,
+          "height": 600,
+          "bytes": 549102,
+          "sha256": "29ef39a962d1012a5b2984171df50cfc898cf854a2954d5cf17247cd523b22d7"
+        }
+      ],
+      "transparency": false,
+      "source": "assets/art-audio-v1/sources/graphics/terraces.png",
+      "prompt": "Use case: stylized-concept. Create ONE production game background, landscape 2:1, for SHOV living painterly mosaic fantasy. White Terraces: matte ivory ceramic terrace ruins, lush jade plants between slabs, clear water channels BEHIND the battle floor, small carmine cloth banners, distant elegant ceramic bridges, sunlit open air. Sophisticated semi-pixel semi-realistic painted material clusters, deliberate broad tessellated brush marks, adult adventure world, not cute mobile 3D, no random pixel-noise filter. Soft top-left light, colored shadows, ivory #F2F5F3 jade #287D69 carmine #BC4D63 cyan #66B7CB. Very important: broad continuous level ivory ceramic fighting plaza spanning entire bottom 35% of image, no water/steps/precipice beneath characters. Quiet center x25%-75% suitable for square mobile crop, interesting architecture behind it and at edges. Background lower contrast than actors. No people, enemies, UI, words, borders, logos or watermark. Finished full bleed opaque raster, target 1200x600.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "hero.blade",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/hero-blade.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 89779,
+          "sha256": "f429088872ba1159b23726011a214f8c3203b7377ac95498ba518a43230dad97"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/hero-blade.png",
+      "prompt": "Use case: stylized-concept. ONE isolated production full body idle RPG hero sprite, 4:5 portrait canvas, genuine TRANSPARENT ALPHA BACKGROUND, no ground shadow. Facing RIGHT three-quarter view, entire adult man including boots and weapon visible. Age 32, short dark brown hair, light stubble, lean adult seven-head proportions, calm weathered face. Practical charcoal/jade travel tunic, matte ivory glazed ceramic shoulder and chest plates attached with thick woven straps, signature flowing CARMINE scarf, dark trousers and sturdy brown boots. Holds ONE ivory metal TUNING FORK SWORD with two long parallel prongs, simple crossguard and jade grip, angled upward to the right. Readable strong silhouette. Feet aligned at center x50%, y93.5%; top at 7%; minimum 5% transparent margins around weapon, scarf and body. Painterly mosaic: semi-pixel semi-realistic broad faceted paint clusters, hand-painted believable cloth folds and chipped ceramic thickness, warm top left light, colored deep green shadows, harmonious ivory jade carmine cyan palette. No neon circles, not chibi, not cartoon toy, not photoreal photo, no text or UI or watermark. This is a single sprite not a sheet.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "background.carmine",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/carmine.png",
+          "width": 1200,
+          "height": 600,
+          "bytes": 610863,
+          "sha256": "fff877324cad67204567fbfd463556af49eb3803649599a408778aa74141c775"
+        }
+      ],
+      "transparency": false,
+      "source": "assets/art-audio-v1/sources/graphics/carmine.png",
+      "prompt": "Use case: stylized-concept. SHOV painterly mosaic fantasy game. Semi-pixel semi-realistic deliberate broad tessellated painted clusters, believable ceramic thickness, faceted glass, dense cloth folds. Warm top-left light, colored deep jade shadows. Cohesive ivory #F2F5F3 jade #287D69 carmine #BC4D63 cyan #66B7CB muted gold #D8B843. No text, UI, border, neon circles, watermark or plastic/chibi aesthetic. ONE production RPG background landscape 2:1. Carmine floodplains: crimson reedbeds, burgundy trees frame edges, cool clear blue river BEHIND a broad continuous level ivory ceramic plaza covering bottom 35%, white floodgate pylons and distant mechanical lock, taut fine carmine threads across distant channels. Cool colorful atmosphere, NOT red monochrome. Quiet central 50% works square mobile crop. No characters. Opaque full bleed, 1200x600.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "background.glassgarden",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/glassgarden.png",
+          "width": 1200,
+          "height": 600,
+          "bytes": 613018,
+          "sha256": "b3d28627a22e4e3ef437da57f2b939c160791c24935257709d56c892f1eca7cb"
+        }
+      ],
+      "transparency": false,
+      "source": "assets/art-audio-v1/sources/graphics/glassgarden.png",
+      "prompt": "Use case: stylized-concept. SHOV painterly mosaic fantasy game. Semi-pixel semi-realistic deliberate broad tessellated painted clusters, believable ceramic thickness, faceted glass, dense cloth folds. Warm top-left light, colored deep jade shadows. Cohesive ivory #F2F5F3 jade #287D69 carmine #BC4D63 cyan #66B7CB muted gold #D8B843. No text, UI, border, neon circles, watermark or plastic/chibi aesthetic. ONE production RPG background landscape 2:1. Glassgarden: thick translucent glass tree trunks and faceted cyan/jade canopies framing sides, rare golden pollen, dew bowls, pale ivory ruins glimpsed through air. Broad uninterrupted level pale ceramic plaza across entire bottom 35%, glass forest and water only behind it. Quiet central 50% works square mobile crop. No characters. Opaque full bleed, 1200x600.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.porcelain",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/porcelain.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 119985,
+          "sha256": "89a3545f6077e4b38f303d555ec2cf7e885ca39c5698fecb33f0f39518e80ecf"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/porcelain.png",
+      "prompt": "Use case: stylized-concept. SHOV painterly mosaic fantasy game. Semi-pixel semi-realistic deliberate broad tessellated painted clusters, believable ceramic thickness, faceted glass, dense cloth folds. Warm top-left light, colored deep jade shadows. Cohesive ivory #F2F5F3 jade #287D69 carmine #BC4D63 cyan #66B7CB muted gold #D8B843. No text, UI, border, neon circles, watermark or plastic/chibi aesthetic. ONE isolated full body porcelain sentinel enemy sprite facing RIGHT in three-quarter, compact stocky guardian built of thick chipped ivory ceramic plates, narrow clear face slit, jade opaque woven joints, short heavy ceramic forearm blade. Strong adult nonhuman silhouette, no oversized cute head. Whole body and feet visible, feet center x50% y93.5%, transparent margin all sides, portrait 4:5. Genuine transparent ALPHA background, NO ground/shadow.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "hero.needle",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/hero-needle.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 86875,
+          "sha256": "61e19b8e464ba4f4e1e944181a97ddb60a97e87b4db9eaf6971a267c710d36cc"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/hero-needle.png",
+      "prompt": "Use case: background-extraction. Remove ALL of the baked gray checkerboard background from this image. Return the exact same full body hero with needle launcher, unchanged face, outfit, proportions, scarf, weapon and pose, isolated on a GENUINELY TRANSPARENT ALPHA background. The checkerboard in the input is painted pixels and must be REMOVED, NOT reproduced. Empty surroundings must have alpha=0. No ground shadow, no white or black replacement background. Preserve all character edges and thin needle/thread.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "hero.glass",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/hero-glass.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 90427,
+          "sha256": "45b021b4cccf464e69ec07d2fe8d29bdfad744995753159d8f5f88bfc6b482d0"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/hero-glass.png",
+      "prompt": "Use case: identity-preserve. Edit reference hero into one production full body sprite. Replace only the tuning fork sword with a GLASS STAFF: short substantial jade handle and thick faceted cyan glass lens head held in the same hand, readable chunky optical mount. Remove the sword completely. Preserve EXACT same man's face, hair, age, proportions, ivory ceramic armor, dark jade travel clothing, carmine scarf, boots, pose, lighting and painterly mosaic rendering. Whole figure comfortably inside portrait 4:5 canvas, boots at y93.5%, transparent margin 5% all sides. Genuine TRANSPARENT background, no shadow, no text, no UI. Single figure only.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.splinter",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/splinter.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 47099,
+          "sha256": "833f2d4cf9ef86cd2206405a69158a2b92dea03dd27a96617c1c2d037b60bdba"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/splinter.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Asymmetric floating thick cyan glass shard with one internal carmine thread, jagged angular silhouette; hovers with lower tip at y80%.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.loom",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/loom.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 105073,
+          "sha256": "a57cd3652550875ab1689a05d42a51ffa6304804f5bfa2aa4a064363bd5a2b45"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/loom.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Hooded weaver with visible ivory faceplate, carmine cloth folds, hands and taut red threads forming an open triangle, large spool at belt, full feet visible.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.gardener",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/gardener.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 108321,
+          "sha256": "172613b1fc39bdbb9d459282b47404014c496ee1ffe0be5e3c92df68bb0e0c92"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/gardener.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Tall garden keeper in dense moss-jade cloth folds, ivory ceramic face mask, pruning crack-opening hooked garden tool held in rightward working pose, sprouting tiny leaves.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.rose",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/rose.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 101516,
+          "sha256": "0011e2e90983a29ec04d0be14460b6a359f80373a0fa35e1c250c0f930abe80d"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/rose.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Floating radial thick glass ROSE with six sculptural translucent cyan petals and dense jade center, off-axis rightward forward petal; bottom at y80%.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.keeper",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/keeper.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 144068,
+          "sha256": "96dcc9d6d2a1b4ee77117e9f916628ff71ee8f8ba9d6a8a1ace904ef3d2e424b"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/keeper.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Broad heavy guardian in overlapping ivory ceramic slabs, huge asymmetric right working arm with rectangular ceramic hammer fist, low square shoulders.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.cantor",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/cantor.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 95019,
+          "sha256": "2b4c4da7983dd4567ce6a2a423a17de265678e719e8b32f6e0fd52f2189bab77"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/cantor.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: UNIQUE BOSS Cantor of the Rift: tall hollow ivory ceramic resonating torso like a split organ bell, opened chest resonator with three suspended ceramic tongues, slender mechanical legs and extended curved shoulder chambers. NOT a big armored soldier; unusual majestic asymmetrical instrument creature.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.barkguard",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/barkguard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 92345,
+          "sha256": "cfd11ba1700c68fc34874c49f0d116f8980a5d4fb954785185c3bb29f2ccd8de"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/barkguard.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Guardian made of tall vertical translucent teal glass bark plates, dark opaque jade joints, slender narrow tree-trunk head, angular forearm shield. Not standard metal armor.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.chime",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/chime.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 61254,
+          "sha256": "7a80fcbbf59ab33de44ccf48f747dfba87f565ea9519927aa91e0bf979644e11"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/chime.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Floating assembly of FIVE suspended thick glass chime elements of DIFFERENT lengths, tied to an asymmetrical ivory curved yoke by carmine threads, overall coherent rightward tilted silhouette, bottom at y80%.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.cupkeeper",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/cupkeeper.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 158699,
+          "sha256": "7e92087cc4f5acec9a8a4d8b871ca975c6d5ffaa2d47b53f2cd062c055aa7644"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/cupkeeper.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Heavy guardian with large bowl-shaped glass shoulders visibly containing small pools of water, heavy squat ceramic lower body, broad low silhouette.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.dewweaver",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/dewweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 113841,
+          "sha256": "6fc189d84f35188ffd2e41176bd09d47283d2f16d0c2ea76ba5f5f6893966343"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/dewweaver.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Dew collector, compact cloaked weaver in ivory and teal layered cloth, glass dew bowls and small vessels at waist, both hands around one large clear droplet, ivory narrow mask.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.dewsplinter",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/dewsplinter.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 57912,
+          "sha256": "d72a1486d917ff02cc48527f909e17121aacf9cb35399a35bae7ba7ee9ffc53d"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/dewsplinter.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Floating elongated teardrop glass shard, chipped lower rim, strong icy cyan edge, inner jade bubble, asymmetrical rightward point. Bottom at y80%.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.heartchoir",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/heartchoir.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 132825,
+          "sha256": "9e59967e27d1a635abe4d6c766633ef1f95eae946f6a1950915b396d90d87369"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/heartchoir.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: UNIQUE BOSS Heartwood Choir: massive hollow multilayer GLASS HEARTWOOD CORE on heavy ceramic root base, several curved resonating glass plates flare out from hollow center like organ pipes, dense dark jade inner cavity, asymmetric cyan crown. Non-humanoid huge musical tree-being. NO humanoid armor.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.memoryweaver",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/memoryweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 92754,
+          "sha256": "b2a32c3396ada7f68bd0e9aa48fe8bc1dbeb3a3c23c542d771dacc16db244ca7"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/memoryweaver.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Slender glass-memory weaver, long narrow glass ribbons curve around shoulders and arms, dark jade cloth under transparent torso plates holding fractured reflections, open visible weaving hand gesture.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.bankguard",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/bankguard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 141437,
+          "sha256": "227565ca45ccb9b0b3dd1922b60527e0f96741c67e19d3dcc136c8fd6c489d6b"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/bankguard.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Riverbank protector with light ivory ceramic armor, wet darkened lower plates, vivid carmine fibers connecting shoulder to heavy working wrist, compact wide helmet, long river shield.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.redshard",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/redshard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 54079,
+          "sha256": "e10c5b78f6cdc1022bfad291964194529b339c03c9707d7ea29f751bee8a84c9"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/redshard.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Floating cold cyan glass shard with a dense RED THREAD KNOT suspended visibly inside, strong wedge silhouette, mostly glass NOT a solid red creature. Bottom at y80%.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.floodweaver",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/floodweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 114119,
+          "sha256": "4495d8ea2e5db6981e7c42e6ca2eead31190256079c026fe1dd39f3427cf9b41"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/floodweaver.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Flood weaver with very wide unfurled ivory-and-carmine cloth mantle stretching sideways, taut threads over two small water vessels near hands, jade hood and narrow ceramic mask.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.weftguard",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/weftguard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 123552,
+          "sha256": "3a7cc972289ac6e68c421e7dd776ec4edc453ebb0200572783ff12f0532724d0"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/weftguard.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Sentinel of interweaving, visibly cross-woven flat ivory plates like basket weave, oversized knot joints, broad rectangular striking forearm, low polygonal head.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.scarletshard",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/scarletshard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 67956,
+          "sha256": "ee87bc37040142ca479cdb782b92fe51a0deff6421d0301e79c00ae78aef9971"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/scarletshard.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Floating arrangement of THREE long narrow sharp cyan glass facets slanting strongly toward RIGHT, carmine edges and delicate red inner filament; arrow-like forward silhouette. Bottom at y80%.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.knotweaver",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/knotweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 115084,
+          "sha256": "e2084f7c81cb010df365a7356f022ac9962a3ac2c250ad19b6c2ec21728db295"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/knotweaver.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: Knot weaver, compact hunched charcoal jade hooded cloth artisan, oversized dense carmine knots at shoulder and waist, one working arm surrounded by a heavy spiral of taut red cord, short ivory ceramic face mask.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.lockmaster",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/enemies/lockmaster.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 128714,
+          "sha256": "481822fa97a209055966b3ef68c3fccb1adecd06be85cd2d098b676e6c315091"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/lockmaster.png",
+      "prompt": "Use case: stylized-concept. ONE isolated full-body right-facing three-quarter fantasy enemy sprite for SHOV. Painterly mosaic semi-pixel semi-realistic deliberate broad faceted paint clusters, believable ceramic, thick glass and woven cloth; same top-left light, deep jade colored shadows, ivory/jade/carmine/cyan accents. Strong distinctive silhouette readable tiny. Portrait 4:5 canvas, entire creature visible, leave 8% EMPTY TRANSPARENT margin at ALL edges, feet at x50% y93.5% unless hovering. TRUE transparent ALPHA background (not checkerboard pixels), no floor or cast shadow. No UI, text, watermark, neon, cute oversized heads, plastic rendering. SUBJECT: UNIQUE BOSS floodgate keeper: dense squared ivory ceramic FLOODGATE MACHINE torso with enormous obvious locking bolt and flywheel, twin vertical pylons rising from back, taut load-bearing carmine rope across open mechanism, heavy articulated dark jade legs, asymmetrical gate-lever arm. Mechanical infrastructure creature, NOT another armored soldier.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.weapon.blade",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-weapon-blade.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 8689,
+          "sha256": "49048f335b1531a28d4d29a37739d7845d22169784a8f578f6d31d3f47bcec4b"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-weapon-blade.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE tuning fork sword icon: two long straight parallel ivory-metal prongs with gap, simple crossguard, short jade grip and tiny carmine tassel. Diagonal lower-left to upper-right.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.weapon.glass",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-weapon-glass.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 11978,
+          "sha256": "7af62fc93dd9620b99ee82b1fca26d83a94ce3bb813e8990046fca9f2591033c"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-weapon-glass.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE glass staff icon: jade grip, thick chunky pale cyan faceted glass LENS HEAD held in simple bronze optical clamps; short staff diagonal lower-left upper-right.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.weapon.needle",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-weapon-needle.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 11991,
+          "sha256": "8187c1a1997b32533966f93324d74f98de76c89fcad3e165f66b8bb5f92c1281"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-weapon-needle.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE needle launcher: jade ivory mechanical handle, visible thick CARMINE thread spool, ONE slender steel needle projecting upper-right, tiny taut red thread. Compact distinctive silhouette.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.head",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-head.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 23364,
+          "sha256": "ec2111c17d3aa5c1f5d29fad1ffd3b0ece6c9bd0b8deb4a10e0f51971b9ae230"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-head.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE practical adventurer's open-face ivory ceramic helmet with a jade forehead strip and woven dark cloth lining, no face or head inside.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.armor",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-armor.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 25847,
+          "sha256": "484603050c9403703dfda196a5433b09166ffcaa3134bccf3ed10b6522a23169"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-armor.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE travel breastplate: matte ivory glazed ceramic chest plates over a short dark jade cloth vest, leather woven straps, tiny carmine binding; no person.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.focus",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-focus.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 13973,
+          "sha256": "7830a1fafd5faeb51eb039d36c0031f38e00ffaeecafbe55eb93e8870a249adc"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-focus.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE magical focus: thick translucent cyan glass prism held in a simple open ivory ceramic tripod clamp, small carmine binding.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.boots",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-boots.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 25927,
+          "sha256": "d8d840c218b33fb9ff5942bd814ab09f47574b8f5673911ecf9da17693056b11"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-boots.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE matching pair of sturdy brown leather traveler boots with small ivory ceramic shin plates and thick woven straps, compact overlapping arrangement; no legs.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.gloves",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-gloves.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 27916,
+          "sha256": "2820228a936726317be71b2ef7af9ccd2cadc18adb04edc009d84cc4f678653a"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-gloves.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE matching pair of brown leather work gloves with ivory ceramic knuckle plates and carmine wrist bindings, overlapping compact shape; no hands.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.amulet",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-amulet.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 16213,
+          "sha256": "0f33efed73fd616bafa94ba95c7cc170dbf3082be3c85cdeb63f4f3716a6c14a"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-amulet.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE jade teardrop amulet enclosed in a thick broken ivory ceramic setting tied with carmine thread, short visible dark cord loop.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "emblem",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/emblem.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 25117,
+          "sha256": "2b8cc7aec6f7c015ae930168b90929efbe610bc936d713af83e6b3a8aba2444e"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/emblem.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE simple distinctive SHOV emblem, no lettering: TWO complementary thick ivory and jade ceramic crescent fragments joined along a central cracked seam by THREE bold CARMINE stitches. Compact round silhouette with open central negative space. Simplify to remain readable at 20px; no decorative surround.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "item.ring",
+      "revision": 1,
+      "status": "integrated",
+      "exports": [
+        {
+          "path": "public/art/item-ring.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 24561,
+          "sha256": "2821554061f386738011cbaf2b41ac57dea4e0fba97a4f682c16ba5119333873"
+        }
+      ],
+      "transparency": true,
+      "source": "assets/art-audio-v1/sources/graphics/item-ring.png",
+      "prompt": "Use case: stylized-concept. Single production inventory PNG icon for SHOV painterly mosaic RPG. Square composition, one isolated object/group ONLY, genuinely TRANSPARENT ALPHA background (not rendered checker pattern), centered with wide empty 12% margins, no shadow or scenery. Semi-realistic hand-painted broad faceted material clusters, deliberate semi-pixel grain, clear silhouette and simple large details readable at 32px. Top-left soft warm light, dark jade contours, ivory/jade/carmine/cyan palette. No text, frame, border, labels, UI, gold ornament overload, watermark or neon. ONE thick simple jade ceramic ring with an ivory split band stitched shut by two tiny carmine thread loops, three quarter perspective.",
+      "seed": "unavailable",
+      "model": "built-in imagegen; exact model/version unavailable",
+      "created": "2026-09-09",
+      "license": "OpenAI output; see licenses.csv"
+    },
+    {
+      "assetId": "enemy.sentinel",
+      "revision": 1,
+      "status": "integrated",
+      "aliasOf": "enemies/porcelain",
+      "exports": [
+        {
+          "path": "public/art/enemy-sentinel.png",
+          "sha256": "89a3545f6077e4b38f303d555ec2cf7e885ca39c5698fecb33f0f39518e80ecf",
+          "bytes": 119985
+        }
+      ]
+    },
+    {
+      "assetId": "enemy.shard",
+      "revision": 1,
+      "status": "integrated",
+      "aliasOf": "enemies/splinter",
+      "exports": [
+        {
+          "path": "public/art/enemy-shard.png",
+          "sha256": "833f2d4cf9ef86cd2206405a69158a2b92dea03dd27a96617c1c2d037b60bdba",
+          "bytes": 47099
+        }
+      ]
+    },
+    {
+      "assetId": "enemy.weaver",
+      "revision": 1,
+      "status": "integrated",
+      "aliasOf": "enemies/loom",
+      "exports": [
+        {
+          "path": "public/art/enemy-weaver.png",
+          "sha256": "a57cd3652550875ab1689a05d42a51ffa6304804f5bfa2aa4a064363bd5a2b45",
+          "bytes": 105073
+        }
+      ]
+    },
+    {
+      "assetId": "enemy.boss",
+      "revision": 1,
+      "status": "integrated",
+      "aliasOf": "enemies/cantor",
+      "exports": [
+        {
+          "path": "public/art/enemy-boss.png",
+          "sha256": "2b4c4da7983dd4567ce6a2a423a17de265678e719e8b32f6e0fd52f2189bab77",
+          "bytes": 95019
+        }
+      ]
+    },
+    {
+      "assetId": "item.weapon",
+      "revision": 1,
+      "status": "integrated",
+      "aliasOf": "item-weapon-blade",
+      "exports": [
+        {
+          "path": "public/art/item-weapon.png",
+          "sha256": "49048f335b1531a28d4d29a37739d7845d22169784a8f578f6d31d3f47bcec4b",
+          "bytes": 8689
+        }
+      ]
+    }
+  ]
+}

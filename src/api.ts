@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { gameAudio } from './audio/engine';
+import { commandSound } from './audio/events';
 import type {
   GameCommand,
   GameView,
@@ -14,6 +16,8 @@ declare global {
         ready?: () => void;
         expand?: () => void;
         colorScheme?: string;
+        onEvent?: (event: string, callback: () => void) => void;
+        offEvent?: (event: string, callback: () => void) => void;
         BackButton?: {
           show(): void;
           hide(): void;
@@ -172,6 +176,7 @@ export function useGame() {
           });
         }
         update(next);
+        gameAudio.play(commandSound(command));
         return true;
       } catch (caught) {
         setError(
@@ -179,6 +184,7 @@ export function useGame() {
             ? caught.message
             : "Не удалось выполнить действие",
         );
+        gameAudio.play('sfx.ui.reject');
         return false;
       } finally {
         lock.current = false;

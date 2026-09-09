@@ -2224,6 +2224,9 @@ main {
   width: 20px;
   height: 20px;
 }
+.audio-settings { border: 0; padding: 0; margin: 0 0 12px; min-width: 0; }
+.audio-settings legend { font-weight: 700; padding: 6px 0; }
+.audio-level input[type="range"] { width: 46%; height: 24px; accent-color: var(--green, #287d69); }
 .toast {
   position: fixed;
   z-index: 150;

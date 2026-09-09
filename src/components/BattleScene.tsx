@@ -14,20 +14,16 @@ interface Art {
   flash: HTMLCanvasElement;
 }
 
-const artSources = new Map([
-  ...catalog.regions.map((region) => [`region-${region.id}`, region.image] as const),
-  ...['hero-blade', 'hero-glass', 'hero-needle', 'enemy-sentinel', 'enemy-shard', 'enemy-weaver', 'enemy-boss'].map((name) => [name, `/art/${name}.png`] as const),
-]);
-
-let cachedArt: Promise<Map<string, Art>> | undefined;
-function loadArt() {
-  if (!cachedArt) {
-    cachedArt = Promise.all(Array.from(artSources, ([name, source]) => new Promise<[string, Art]>((resolve, reject) => {
+// Bounded source cache; only the current region, weapon, enemy and fallback are loaded.
+const cachedArt = new Map<string, Promise<Art>>();
+function loadOne(source: string): Promise<Art> {
+  let request = cachedArt.get(source);
+  if (!request) {
+    request = new Promise<Art>((resolve, reject) => {
       const image = new Image();
       image.onload = () => {
         const flash = document.createElement('canvas');
-        flash.width = image.width;
-        flash.height = image.height;
+        flash.width = image.width; flash.height = image.height;
         const context = flash.getContext('2d');
         if (context) {
           context.drawImage(image, 0, 0);
@@ -35,16 +31,15 @@ function loadArt() {
           context.fillStyle = '#fff5d8';
           context.fillRect(0, 0, flash.width, flash.height);
         }
-        resolve([name, { image, flash }]);
+        resolve({ image, flash });
       };
-      image.onerror = () => reject(new Error(`Could not load art: ${name}`));
+      image.onerror = () => { cachedArt.delete(source); reject(new Error(`Could not load art: ${source}`)); };
       image.src = source;
-    }))).then((entries) => new Map(entries)).catch((error: unknown) => {
-      cachedArt = undefined;
-      throw error;
     });
+    cachedArt.set(source, request);
+    while (cachedArt.size > 12) cachedArt.delete(cachedArt.keys().next().value!);
   }
-  return cachedArt;
+  return request;
 }
 
 const clamp = (value: number, low = 0, high = 1) => Math.max(low, Math.min(high, value));
@@ -60,7 +55,7 @@ function drawSprite(context: CanvasRenderingContext2D, art: Art | undefined, x: 
     context.globalAlpha = 0.45;
   }
   const width = height * 0.8;
-  // Art has 15 pixels of transparent footing; anchor the visible feet to the floor.
+  // Compatible 256 x 320 canvas: ground pivot is (128, 299.2).
   context.drawImage(art.image, -width / 2, -height * 0.935, width, height);
   if (flash > 0 && !defeated) {
     context.globalAlpha = flash * 0.72;
@@ -120,7 +115,7 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
   const heroBob = animate ? Math.sin(time * 2.7) * figureHeight * 0.006 : 0;
   const enemyBob = animate ? Math.sin(time * (battle.enemy.kind === 'shard' ? 2 : 2.4) + 1) * figureHeight * (battle.enemy.kind === 'shard' ? 0.024 : 0.006) : 0;
   drawSprite(context, art.get(`hero-${battle.family}`), heroX - heroFlash * 3, feet, figureHeight, 1, heroBob, heroFlash, heroLost);
-  drawSprite(context, art.get(`enemy-${battle.enemy.kind}`), enemyX + enemyFlash * 3, feet, enemyHeight, -1, enemyBob, enemyFlash, enemyLost);
+  drawSprite(context, art.get(`enemy-${battle.enemy.id}`) || art.get(`enemy-${battle.enemy.kind}`), enemyX + enemyFlash * 3, feet, enemyHeight, -1, enemyBob, enemyFlash, enemyLost);
 
   if ((lastEvent?.heroShield ?? 0) > 0 && !heroLost) {
     context.save();
@@ -220,6 +215,24 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
 export default function BattleScene(props: BattleSceneProps) {
   const region = catalog.regions.find((entry) => entry.id === props.battle.regionId) || catalog.regions[0];
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const artRef = useRef(new Map<string, Art>());
+  useEffect(() => {
+    let cancelled = false;
+    const battle = props.battle;
+    const sources = [
+      [`region-${region.id}`, region.image],
+      [`hero-${battle.family}`, `/art/hero-${battle.family}.png`],
+      [`enemy-${battle.enemy.id}`, `/art/enemies/${battle.enemy.id}.png`],
+      [`enemy-${battle.enemy.kind}`, `/art/enemy-${battle.enemy.kind}.png`],
+    ];
+    const wanted = new Set(sources.map(([key]) => key));
+    for (const key of artRef.current.keys()) if (!wanted.has(key)) artRef.current.delete(key);
+    // Set each successful image independently: a failed enemy never blanks the scene.
+    for (const [key, source] of sources) void loadOne(source).then(art => {
+      if (!cancelled) artRef.current.set(key, art);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [region.id, region.image, props.battle.family, props.battle.enemy.id, props.battle.enemy.kind]);
   const live = useRef({ props, received: performance.now() });
   live.current = { props, received: performance.now() };
 
@@ -232,7 +245,7 @@ export default function BattleScene(props: BattleSceneProps) {
     let stopped = false;
     let frame = 0;
     let lastDraw = 0;
-    let art: Map<string, Art> | undefined;
+    const art = artRef.current;
     let width = 0;
     let height = 0;
     const resize = () => {
@@ -248,14 +261,6 @@ export default function BattleScene(props: BattleSceneProps) {
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     resize();
-    void loadArt().then((loaded) => {
-      if (stopped) return;
-      art = loaded;
-      resize();
-    }).catch(() => {
-      // The CSS backdrop remains visible if a WebView cannot decode an asset.
-      context.clearRect(0, 0, canvas.width, canvas.height);
-    });
 
     const tick = (timestamp: number) => {
       if (stopped) return;

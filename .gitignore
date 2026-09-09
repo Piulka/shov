@@ -11,4 +11,7 @@ playwright-report/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
+
+# Full ambience WAVs are losslessly stored as verified .wav.partNN chunks.
+assets/art-audio-v1/sources/audio-wav/ambience/*.wav
 *.sqlite-journal

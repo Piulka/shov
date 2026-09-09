@@ -1,0 +1,351 @@
+{
+  "passed": true,
+  "pngCount": 43,
+  "totalBytes": 4807157,
+  "files": [
+    {
+      "path": "public/art/terraces.png",
+      "bytes": 549102,
+      "budgetBytes": 512000,
+      "exceedsPlanningBudget": true,
+      "dimensions": "1200x600",
+      "safeAlpha": null
+    },
+    {
+      "path": "public/art/hero-blade.png",
+      "bytes": 89779,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/carmine.png",
+      "bytes": 610863,
+      "budgetBytes": 512000,
+      "exceedsPlanningBudget": true,
+      "dimensions": "1200x600",
+      "safeAlpha": null
+    },
+    {
+      "path": "public/art/glassgarden.png",
+      "bytes": 613018,
+      "budgetBytes": 512000,
+      "exceedsPlanningBudget": true,
+      "dimensions": "1200x600",
+      "safeAlpha": null
+    },
+    {
+      "path": "public/art/enemies/porcelain.png",
+      "bytes": 119985,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/hero-needle.png",
+      "bytes": 86875,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/hero-glass.png",
+      "bytes": 90427,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/splinter.png",
+      "bytes": 47099,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/loom.png",
+      "bytes": 105073,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/gardener.png",
+      "bytes": 108321,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/rose.png",
+      "bytes": 101516,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/keeper.png",
+      "bytes": 144068,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/cantor.png",
+      "bytes": 95019,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/barkguard.png",
+      "bytes": 92345,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/chime.png",
+      "bytes": 61254,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/cupkeeper.png",
+      "bytes": 158699,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": true,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/dewweaver.png",
+      "bytes": 113841,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/dewsplinter.png",
+      "bytes": 57912,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/heartchoir.png",
+      "bytes": 132825,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/memoryweaver.png",
+      "bytes": 92754,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/bankguard.png",
+      "bytes": 141437,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/redshard.png",
+      "bytes": 54079,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/floodweaver.png",
+      "bytes": 114119,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/weftguard.png",
+      "bytes": 123552,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/scarletshard.png",
+      "bytes": 67956,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/knotweaver.png",
+      "bytes": 115084,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemies/lockmaster.png",
+      "bytes": 128714,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-weapon-blade.png",
+      "bytes": 8689,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-weapon-glass.png",
+      "bytes": 11978,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-weapon-needle.png",
+      "bytes": 11991,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-head.png",
+      "bytes": 23364,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-armor.png",
+      "bytes": 25847,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-focus.png",
+      "bytes": 13973,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-boots.png",
+      "bytes": 25927,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-gloves.png",
+      "bytes": 27916,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-amulet.png",
+      "bytes": 16213,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/emblem.png",
+      "bytes": 25117,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-ring.png",
+      "bytes": 24561,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemy-sentinel.png",
+      "bytes": 119985,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemy-shard.png",
+      "bytes": 47099,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemy-weaver.png",
+      "bytes": 105073,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/enemy-boss.png",
+      "bytes": 95019,
+      "budgetBytes": 153600,
+      "exceedsPlanningBudget": false,
+      "dimensions": "256x320",
+      "safeAlpha": 0
+    },
+    {
+      "path": "public/art/item-weapon.png",
+      "bytes": 8689,
+      "budgetBytes": 40960,
+      "exceedsPlanningBudget": false,
+      "dimensions": "128x128",
+      "safeAlpha": 0
+    }
+  ]
+}

@@ -13,7 +13,10 @@ export default defineConfig({
   reporter: "list",
   use: {
     baseURL: process.env.SHOV_URL || local.url,
-    channel: "chrome",
+    channel: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? undefined : "chrome",
+    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+      ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
+      : undefined,
     headless: true,
     screenshot: "only-on-failure",
     trace: "retain-on-failure",

@@ -263,7 +263,7 @@ test("mobile: all views fit and loaded artwork remains visible", async ({
     .getByRole("button", { name: "Настройки", exact: true })
     .filter({ visible: true })
     .click();
-  const reduced = page.getByRole("checkbox");
+  const reduced = page.getByRole("checkbox", { name: /Спокойная анимация/ });
   await reduced.check();
   await page.keyboard.press("Escape");
   expect(

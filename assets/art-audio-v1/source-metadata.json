@@ -1,0 +1,1690 @@
+{
+  "revision": 1,
+  "created": "2026-09-09",
+  "assets": [
+    {
+      "assetId": "background.terraces",
+      "exports": [
+        {
+          "path": "public/art/terraces.png",
+          "width": 1200,
+          "height": 600,
+          "bytes": 549102,
+          "sha256": "29ef39a962d1012a5b2984171df50cfc898cf854a2954d5cf17247cd523b22d7"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/terraces.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "hero.blade",
+      "exports": [
+        {
+          "path": "public/art/hero-blade.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 89779,
+          "sha256": "f429088872ba1159b23726011a214f8c3203b7377ac95498ba518a43230dad97"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/hero-blade.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "background.carmine",
+      "exports": [
+        {
+          "path": "public/art/carmine.png",
+          "width": 1200,
+          "height": 600,
+          "bytes": 610863,
+          "sha256": "fff877324cad67204567fbfd463556af49eb3803649599a408778aa74141c775"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/carmine.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "background.glassgarden",
+      "exports": [
+        {
+          "path": "public/art/glassgarden.png",
+          "width": 1200,
+          "height": 600,
+          "bytes": 613018,
+          "sha256": "b3d28627a22e4e3ef437da57f2b939c160791c24935257709d56c892f1eca7cb"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/glassgarden.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.porcelain",
+      "exports": [
+        {
+          "path": "public/art/enemies/porcelain.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 119985,
+          "sha256": "89a3545f6077e4b38f303d555ec2cf7e885ca39c5698fecb33f0f39518e80ecf"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/porcelain.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "hero.needle",
+      "exports": [
+        {
+          "path": "public/art/hero-needle.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 86875,
+          "sha256": "61e19b8e464ba4f4e1e944181a97ddb60a97e87b4db9eaf6971a267c710d36cc"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/hero-needle.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "hero.glass",
+      "exports": [
+        {
+          "path": "public/art/hero-glass.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 90427,
+          "sha256": "45b021b4cccf464e69ec07d2fe8d29bdfad744995753159d8f5f88bfc6b482d0"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/hero-glass.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.splinter",
+      "exports": [
+        {
+          "path": "public/art/enemies/splinter.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 47099,
+          "sha256": "833f2d4cf9ef86cd2206405a69158a2b92dea03dd27a96617c1c2d037b60bdba"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/splinter.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.loom",
+      "exports": [
+        {
+          "path": "public/art/enemies/loom.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 105073,
+          "sha256": "a57cd3652550875ab1689a05d42a51ffa6304804f5bfa2aa4a064363bd5a2b45"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/loom.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.gardener",
+      "exports": [
+        {
+          "path": "public/art/enemies/gardener.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 108321,
+          "sha256": "172613b1fc39bdbb9d459282b47404014c496ee1ffe0be5e3c92df68bb0e0c92"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/gardener.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.rose",
+      "exports": [
+        {
+          "path": "public/art/enemies/rose.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 101516,
+          "sha256": "0011e2e90983a29ec04d0be14460b6a359f80373a0fa35e1c250c0f930abe80d"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/rose.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.keeper",
+      "exports": [
+        {
+          "path": "public/art/enemies/keeper.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 144068,
+          "sha256": "96dcc9d6d2a1b4ee77117e9f916628ff71ee8f8ba9d6a8a1ace904ef3d2e424b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/keeper.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.cantor",
+      "exports": [
+        {
+          "path": "public/art/enemies/cantor.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 95019,
+          "sha256": "2b4c4da7983dd4567ce6a2a423a17de265678e719e8b32f6e0fd52f2189bab77"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/cantor.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.barkguard",
+      "exports": [
+        {
+          "path": "public/art/enemies/barkguard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 92345,
+          "sha256": "cfd11ba1700c68fc34874c49f0d116f8980a5d4fb954785185c3bb29f2ccd8de"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/barkguard.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.chime",
+      "exports": [
+        {
+          "path": "public/art/enemies/chime.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 61254,
+          "sha256": "7a80fcbbf59ab33de44ccf48f747dfba87f565ea9519927aa91e0bf979644e11"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/chime.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.cupkeeper",
+      "exports": [
+        {
+          "path": "public/art/enemies/cupkeeper.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 158699,
+          "sha256": "7e92087cc4f5acec9a8a4d8b871ca975c6d5ffaa2d47b53f2cd062c055aa7644"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/cupkeeper.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.dewweaver",
+      "exports": [
+        {
+          "path": "public/art/enemies/dewweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 113841,
+          "sha256": "6fc189d84f35188ffd2e41176bd09d47283d2f16d0c2ea76ba5f5f6893966343"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/dewweaver.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.dewsplinter",
+      "exports": [
+        {
+          "path": "public/art/enemies/dewsplinter.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 57912,
+          "sha256": "d72a1486d917ff02cc48527f909e17121aacf9cb35399a35bae7ba7ee9ffc53d"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/dewsplinter.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.heartchoir",
+      "exports": [
+        {
+          "path": "public/art/enemies/heartchoir.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 132825,
+          "sha256": "9e59967e27d1a635abe4d6c766633ef1f95eae946f6a1950915b396d90d87369"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/heartchoir.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.memoryweaver",
+      "exports": [
+        {
+          "path": "public/art/enemies/memoryweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 92754,
+          "sha256": "b2a32c3396ada7f68bd0e9aa48fe8bc1dbeb3a3c23c542d771dacc16db244ca7"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/memoryweaver.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.bankguard",
+      "exports": [
+        {
+          "path": "public/art/enemies/bankguard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 141437,
+          "sha256": "227565ca45ccb9b0b3dd1922b60527e0f96741c67e19d3dcc136c8fd6c489d6b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/bankguard.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.redshard",
+      "exports": [
+        {
+          "path": "public/art/enemies/redshard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 54079,
+          "sha256": "e10c5b78f6cdc1022bfad291964194529b339c03c9707d7ea29f751bee8a84c9"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/redshard.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.floodweaver",
+      "exports": [
+        {
+          "path": "public/art/enemies/floodweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 114119,
+          "sha256": "4495d8ea2e5db6981e7c42e6ca2eead31190256079c026fe1dd39f3427cf9b41"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/floodweaver.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.weftguard",
+      "exports": [
+        {
+          "path": "public/art/enemies/weftguard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 123552,
+          "sha256": "3a7cc972289ac6e68c421e7dd776ec4edc453ebb0200572783ff12f0532724d0"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/weftguard.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.scarletshard",
+      "exports": [
+        {
+          "path": "public/art/enemies/scarletshard.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 67956,
+          "sha256": "ee87bc37040142ca479cdb782b92fe51a0deff6421d0301e79c00ae78aef9971"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/scarletshard.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.knotweaver",
+      "exports": [
+        {
+          "path": "public/art/enemies/knotweaver.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 115084,
+          "sha256": "e2084f7c81cb010df365a7356f022ac9962a3ac2c250ad19b6c2ec21728db295"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/knotweaver.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.lockmaster",
+      "exports": [
+        {
+          "path": "public/art/enemies/lockmaster.png",
+          "width": 256,
+          "height": 320,
+          "bytes": 128714,
+          "sha256": "481822fa97a209055966b3ef68c3fccb1adecd06be85cd2d098b676e6c315091"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/lockmaster.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.weapon.blade",
+      "exports": [
+        {
+          "path": "public/art/item-weapon-blade.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 8689,
+          "sha256": "49048f335b1531a28d4d29a37739d7845d22169784a8f578f6d31d3f47bcec4b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-weapon-blade.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.weapon.glass",
+      "exports": [
+        {
+          "path": "public/art/item-weapon-glass.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 11978,
+          "sha256": "7af62fc93dd9620b99ee82b1fca26d83a94ce3bb813e8990046fca9f2591033c"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-weapon-glass.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.weapon.needle",
+      "exports": [
+        {
+          "path": "public/art/item-weapon-needle.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 11991,
+          "sha256": "8187c1a1997b32533966f93324d74f98de76c89fcad3e165f66b8bb5f92c1281"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-weapon-needle.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.head",
+      "exports": [
+        {
+          "path": "public/art/item-head.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 23364,
+          "sha256": "ec2111c17d3aa5c1f5d29fad1ffd3b0ece6c9bd0b8deb4a10e0f51971b9ae230"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-head.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.armor",
+      "exports": [
+        {
+          "path": "public/art/item-armor.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 25847,
+          "sha256": "484603050c9403703dfda196a5433b09166ffcaa3134bccf3ed10b6522a23169"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-armor.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.focus",
+      "exports": [
+        {
+          "path": "public/art/item-focus.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 13973,
+          "sha256": "7830a1fafd5faeb51eb039d36c0031f38e00ffaeecafbe55eb93e8870a249adc"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-focus.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.boots",
+      "exports": [
+        {
+          "path": "public/art/item-boots.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 25927,
+          "sha256": "d8d840c218b33fb9ff5942bd814ab09f47574b8f5673911ecf9da17693056b11"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-boots.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.gloves",
+      "exports": [
+        {
+          "path": "public/art/item-gloves.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 27916,
+          "sha256": "2820228a936726317be71b2ef7af9ccd2cadc18adb04edc009d84cc4f678653a"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-gloves.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.amulet",
+      "exports": [
+        {
+          "path": "public/art/item-amulet.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 16213,
+          "sha256": "0f33efed73fd616bafa94ba95c7cc170dbf3082be3c85cdeb63f4f3716a6c14a"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-amulet.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "emblem",
+      "exports": [
+        {
+          "path": "public/art/emblem.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 25117,
+          "sha256": "2b8cc7aec6f7c015ae930168b90929efbe610bc936d713af83e6b3a8aba2444e"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/emblem.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.ring",
+      "exports": [
+        {
+          "path": "public/art/item-ring.png",
+          "width": 128,
+          "height": 128,
+          "bytes": 24561,
+          "sha256": "2821554061f386738011cbaf2b41ac57dea4e0fba97a4f682c16ba5119333873"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/graphics/item-ring.png",
+      "aliasOf": null,
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.sentinel",
+      "exports": [
+        {
+          "path": "public/art/enemy-sentinel.png",
+          "sha256": "89a3545f6077e4b38f303d555ec2cf7e885ca39c5698fecb33f0f39518e80ecf",
+          "bytes": 119985
+        }
+      ],
+      "master": null,
+      "aliasOf": "enemies/porcelain",
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.shard",
+      "exports": [
+        {
+          "path": "public/art/enemy-shard.png",
+          "sha256": "833f2d4cf9ef86cd2206405a69158a2b92dea03dd27a96617c1c2d037b60bdba",
+          "bytes": 47099
+        }
+      ],
+      "master": null,
+      "aliasOf": "enemies/splinter",
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.weaver",
+      "exports": [
+        {
+          "path": "public/art/enemy-weaver.png",
+          "sha256": "a57cd3652550875ab1689a05d42a51ffa6304804f5bfa2aa4a064363bd5a2b45",
+          "bytes": 105073
+        }
+      ],
+      "master": null,
+      "aliasOf": "enemies/loom",
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "enemy.boss",
+      "exports": [
+        {
+          "path": "public/art/enemy-boss.png",
+          "sha256": "2b4c4da7983dd4567ce6a2a423a17de265678e719e8b32f6e0fd52f2189bab77",
+          "bytes": 95019
+        }
+      ],
+      "master": null,
+      "aliasOf": "enemies/cantor",
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "item.weapon",
+      "exports": [
+        {
+          "path": "public/art/item-weapon.png",
+          "sha256": "49048f335b1531a28d4d29a37739d7845d22169784a8f578f6d31d3f47bcec4b",
+          "bytes": 8689
+        }
+      ],
+      "master": null,
+      "aliasOf": "item-weapon-blade",
+      "workflow": "generation-inputs.json + ../../tools/prepare-art.mjs"
+    },
+    {
+      "assetId": "ambience.terraces",
+      "exports": [
+        {
+          "path": "public/audio/ambience/terraces.ogg",
+          "bytes": 498708,
+          "sha256": "aa0658fdaad092dd3a4c72fc993342e57721ad9a053076a705eb791ea58193fa"
+        },
+        {
+          "path": "public/audio/ambience/terraces.m4a",
+          "bytes": 788438,
+          "sha256": "d300879da2a1a5831c14df87a012561224dfd4a0c23502962e674ff119df206b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/ambience/terraces.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-26.01",
+      "measuredTruePeakDbtp": "-12.17",
+      "loop": {
+        "startSample": 0,
+        "endSample": 3072000
+      }
+    },
+    {
+      "assetId": "ambience.glassgarden",
+      "exports": [
+        {
+          "path": "public/audio/ambience/glassgarden.ogg",
+          "bytes": 498959,
+          "sha256": "c863a6eba4835cb0b55906a2c651ce15afe3e7f6b847ddeafafd00892ad28ab0"
+        },
+        {
+          "path": "public/audio/ambience/glassgarden.m4a",
+          "bytes": 788239,
+          "sha256": "52fa7922da4d676fc3a0baba2e5c85fc3b47798501beeaaed23d949b29cec5d9"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/ambience/glassgarden.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-26.01",
+      "measuredTruePeakDbtp": "-12.54",
+      "loop": {
+        "startSample": 0,
+        "endSample": 3072000
+      }
+    },
+    {
+      "assetId": "ambience.carmine",
+      "exports": [
+        {
+          "path": "public/audio/ambience/carmine.ogg",
+          "bytes": 498532,
+          "sha256": "7f6673c881281f201213c77d123c532aed5e7d3c4b0fb1df5716e8ff29ad4c8e"
+        },
+        {
+          "path": "public/audio/ambience/carmine.m4a",
+          "bytes": 788055,
+          "sha256": "5995911e1bb734e82964499cee43757710974a385136a3f3d85400dd78436c60"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/ambience/carmine.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-25.98",
+      "measuredTruePeakDbtp": "-12.49",
+      "loop": {
+        "startSample": 0,
+        "endSample": 3072000
+      }
+    },
+    {
+      "assetId": "sfx.attack.blade.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-blade-01.ogg",
+          "bytes": 4711,
+          "sha256": "72701fd5f5e0014c64a075835cc02aeaa3a5f7c10772a64b00a0b59387df3937"
+        },
+        {
+          "path": "public/audio/sfx/attack-blade-01.m4a",
+          "bytes": 2911,
+          "sha256": "54abf9b4d664d731ee09dae1fdf3f2669e2d356f4fc565708f4d3d0b0c8d17ea"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-blade-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-8.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.blade.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-blade-02.ogg",
+          "bytes": 4718,
+          "sha256": "8c27dca288088d8b3a837a53d211de081b62dc689b50a5ddc8618ccc0aa2d0bc"
+        },
+        {
+          "path": "public/audio/sfx/attack-blade-02.m4a",
+          "bytes": 2885,
+          "sha256": "a945e1c41efbb523eb5d1fba3c7be5fc5da602647bb85453ce5a709c117a8b09"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-blade-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-8.98",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.blade.03",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-blade-03.ogg",
+          "bytes": 4706,
+          "sha256": "60725145f09dbce1faff7928fbfd3254f60c1f5f1e798c81550fcfdc534ad16b"
+        },
+        {
+          "path": "public/audio/sfx/attack-blade-03.m4a",
+          "bytes": 2916,
+          "sha256": "0513af8b3d0c0a80021de1410fbdb4c3338ac262aa79a75cef5214895babf9ae"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-blade-03.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-8.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.glass.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-glass-01.ogg",
+          "bytes": 4875,
+          "sha256": "2b797cdbdfc0421ea36290caab0cdb31a818e2991fbbee9eb2fd5b2f87df35b4"
+        },
+        {
+          "path": "public/audio/sfx/attack-glass-01.m4a",
+          "bytes": 3695,
+          "sha256": "0631a049a53a2d112bac2d18911fce153ec00c375008d2750b5cb1a6aacb2e22"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-glass-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-11.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.glass.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-glass-02.ogg",
+          "bytes": 4860,
+          "sha256": "0d8b5e421fd6e6474a3d706088cd19d501afa492ce6f08842b924356ae9adcd6"
+        },
+        {
+          "path": "public/audio/sfx/attack-glass-02.m4a",
+          "bytes": 3684,
+          "sha256": "9e3e24427dbfe2b3d4d07e5931e32859e939ffbf0afcba7603eb06fef733b63b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-glass-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-10.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.glass.03",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-glass-03.ogg",
+          "bytes": 4871,
+          "sha256": "cc5ee5c3f687ae69d63e91dee2b42ef5f74b68009dd8ef4662256c03976c3b27"
+        },
+        {
+          "path": "public/audio/sfx/attack-glass-03.m4a",
+          "bytes": 3685,
+          "sha256": "daf59f3b0f917450100289af53d18c70740ae445dd06f5d8f10d9dbd1f7e68b9"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-glass-03.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-11.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.needle.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-needle-01.ogg",
+          "bytes": 4794,
+          "sha256": "a44f9590e4f250c756e54cb14dc29f309537c36ff758bf6d645775f105d96a21"
+        },
+        {
+          "path": "public/audio/sfx/attack-needle-01.m4a",
+          "bytes": 2875,
+          "sha256": "aeadbe9e6c22ea5c91de68558e4d4f7102280d12bc548c0901d8e2205b723bcd"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-needle-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-12.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.needle.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-needle-02.ogg",
+          "bytes": 4761,
+          "sha256": "426e0715695d214c11bd076cbeff27eee315e9c788aeebe28326b784255f8bf3"
+        },
+        {
+          "path": "public/audio/sfx/attack-needle-02.m4a",
+          "bytes": 2834,
+          "sha256": "d2184a1021f2552e020ea037caad715720c5812522cf1fc10818a0acd7f758a3"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-needle-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-11.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.attack.needle.03",
+      "exports": [
+        {
+          "path": "public/audio/sfx/attack-needle-03.ogg",
+          "bytes": 4749,
+          "sha256": "c81332cd8cc5c5596c5a3b688c20ba3db3980a3c44326f4cc381bd13784f02e0"
+        },
+        {
+          "path": "public/audio/sfx/attack-needle-03.m4a",
+          "bytes": 2829,
+          "sha256": "fb0b72fa9384401dbf6249843c72dd4e5efdb906f2b453ec6849d06112804b42"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/attack-needle-03.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-12.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.ceramic.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-ceramic-01.ogg",
+          "bytes": 4537,
+          "sha256": "ff4c874324c865398dc8598f5e6862d30263258863a98dbb1449a5da7b16171d"
+        },
+        {
+          "path": "public/audio/sfx/hit-ceramic-01.m4a",
+          "bytes": 2499,
+          "sha256": "fadad51dc41ebbd18116d2dcbfa6efae0b0544ccdc4a4053f599e581ec7786bd"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-ceramic-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-9.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.ceramic.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-ceramic-02.ogg",
+          "bytes": 4549,
+          "sha256": "d0bed5cc9f14c2bbf1a3ceae834447bc68b871d6db2833d78ebb49e8b93b4e1c"
+        },
+        {
+          "path": "public/audio/sfx/hit-ceramic-02.m4a",
+          "bytes": 2572,
+          "sha256": "b928c6e914ceac7eddaf718e8963a00a3ba03b9b0397b2b044dc6ac4141f99fd"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-ceramic-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-10.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.ceramic.03",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-ceramic-03.ogg",
+          "bytes": 4553,
+          "sha256": "ce32df994ee8063caf7e6b9292fb9e2e91739dd9fdbb26bc405270ef8ef13132"
+        },
+        {
+          "path": "public/audio/sfx/hit-ceramic-03.m4a",
+          "bytes": 2473,
+          "sha256": "a7acc33a25b817d640d6e76163030d6a648b588d21f95748b7fde9d5fc7f46c1"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-ceramic-03.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-9.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.glass.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-glass-01.ogg",
+          "bytes": 4607,
+          "sha256": "ec53c47d5e0e98f4aecafcaea2bec814a3d350495411b2f5bab8c366167487c7"
+        },
+        {
+          "path": "public/audio/sfx/hit-glass-01.m4a",
+          "bytes": 3112,
+          "sha256": "08096662c964bc31079b1a02bb8d19c9dcfe0fa62b5617ed52319208173842f5"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-glass-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-10.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.glass.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-glass-02.ogg",
+          "bytes": 4638,
+          "sha256": "6d8f98d1d1fd98ca6d7785d2f51363d78d4dee23963a250911ce1dc64b278977"
+        },
+        {
+          "path": "public/audio/sfx/hit-glass-02.m4a",
+          "bytes": 3081,
+          "sha256": "26c77e44f2ea5970175e549dd07673f1291800a2414cc8b31336352e43f4b731"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-glass-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-11.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.glass.03",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-glass-03.ogg",
+          "bytes": 4631,
+          "sha256": "f4ad1e511e2aa43150ce5826c77127de3519b17d13c5cc7fbfb05a395253c051"
+        },
+        {
+          "path": "public/audio/sfx/hit-glass-03.m4a",
+          "bytes": 3084,
+          "sha256": "83d459ff44a3939ef876a41b24c97a85e38a73057e9482d6cd3837724d2aa545"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-glass-03.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-11.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.fabric.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-fabric-01.ogg",
+          "bytes": 5059,
+          "sha256": "2a7ef50e74855d5497756b12547a3dec07fe3b62d8b5b686c048831e2021ed2a"
+        },
+        {
+          "path": "public/audio/sfx/hit-fabric-01.m4a",
+          "bytes": 2607,
+          "sha256": "37533da008026c81d43fe56bba670e6340f58d9af988e9d5398c4dc720ccf552"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-fabric-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-12.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.fabric.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-fabric-02.ogg",
+          "bytes": 5035,
+          "sha256": "73e75795c6e46c6658b7c8b18a2be9260b041285ae5892715667b7a6521c72d2"
+        },
+        {
+          "path": "public/audio/sfx/hit-fabric-02.m4a",
+          "bytes": 2591,
+          "sha256": "315b5e58a5320941ba0b247c39e631fe63ffaaad86db8aa2a5b66bed72e8063e"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-fabric-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-12.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.hit.fabric.03",
+      "exports": [
+        {
+          "path": "public/audio/sfx/hit-fabric-03.ogg",
+          "bytes": 5086,
+          "sha256": "4a980ec88ae2a223722102df9eacd746b4117d4dc61f75128b1a7148c371bdee"
+        },
+        {
+          "path": "public/audio/sfx/hit-fabric-03.m4a",
+          "bytes": 2602,
+          "sha256": "b64dd8209e062d2aeff2040aabdb4ce3ed2b1689a85dbbdc5a923faa4ce01d94"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/hit-fabric-03.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-11.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.heavy.impact.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/heavy-impact-01.ogg",
+          "bytes": 4819,
+          "sha256": "c2adba7928fbfe804f22c61f0b08974f1a1fe0d1966b3b826451b102b693d47a"
+        },
+        {
+          "path": "public/audio/sfx/heavy-impact-01.m4a",
+          "bytes": 4342,
+          "sha256": "6c6990172e78c6c6e5fd71a59cdb20d22f8b2cec474bfa0c2faf94991f29fd73"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/heavy-impact-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-20.85",
+      "measuredTruePeakDbtp": "-5.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.heavy.impact.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/heavy-impact-02.ogg",
+          "bytes": 4843,
+          "sha256": "bd146318ad1ff0c0fc301b46e32486b5cdc6454ceedbebc3c1c31e7f6d8673e5"
+        },
+        {
+          "path": "public/audio/sfx/heavy-impact-02.m4a",
+          "bytes": 4347,
+          "sha256": "6dc05b32d5ce499839c1db531bfe89b830b6e09f005b79c6ad9ed567c37b3834"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/heavy-impact-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-20.85",
+      "measuredTruePeakDbtp": "-6.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.shield.absorb.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/shield-absorb-01.ogg",
+          "bytes": 4647,
+          "sha256": "b505c4ee64a34c038e5b1d2096c04b2f475a4a31552dac970df6bf62975468e8"
+        },
+        {
+          "path": "public/audio/sfx/shield-absorb-01.m4a",
+          "bytes": 2714,
+          "sha256": "8e58ddff187dfc3373702b208438067778b5ef2a9cc0d5e514949370648687f9"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/shield-absorb-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-13.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.shield.absorb.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/shield-absorb-02.ogg",
+          "bytes": 4650,
+          "sha256": "d3a108f44f8312493a8407781e917b88344f5e7802d87918f4ce432ea2be1173"
+        },
+        {
+          "path": "public/audio/sfx/shield-absorb-02.m4a",
+          "bytes": 2670,
+          "sha256": "c5fa23df4e1d237abd08568425160d096cba8624d754ad4688adc4b6ecb3670f"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/shield-absorb-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-12.53",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.dot.01",
+      "exports": [
+        {
+          "path": "public/audio/sfx/dot-01.ogg",
+          "bytes": 4299,
+          "sha256": "95a59cf3a53748f1bf7535d7cb4f13be336a2f9f7fc3be9827e206f372d9ac1c"
+        },
+        {
+          "path": "public/audio/sfx/dot-01.m4a",
+          "bytes": 2102,
+          "sha256": "f664b00bc346c005f059e7d9436683795fbac3b3637736e9b6f4f8b0d0cfeb68"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/dot-01.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-22.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.dot.02",
+      "exports": [
+        {
+          "path": "public/audio/sfx/dot-02.ogg",
+          "bytes": 4319,
+          "sha256": "0bc6b506b0dff8c4a0be28b99980e48f8166a07c1b2b9206165c17b7680d7fe5"
+        },
+        {
+          "path": "public/audio/sfx/dot-02.m4a",
+          "bytes": 2119,
+          "sha256": "40ff37a7b252713ed60ac73e8da1475b5adc5d53e7ce5e51ec57f06ccc48cb1b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/dot-02.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-23.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.heavy.windup",
+      "exports": [
+        {
+          "path": "public/audio/sfx/heavy-windup.ogg",
+          "bytes": 17932,
+          "sha256": "09f30c4d4954cd36647e2cbd580180ed7d0f40039593f8192b61b828a62ab52e"
+        },
+        {
+          "path": "public/audio/sfx/heavy-windup.m4a",
+          "bytes": 17516,
+          "sha256": "a0f51cc22397ee55f4cfeb14cbfb0c787c3300f210293e518d16ea8080c8067a"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/heavy-windup.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-25.25",
+      "measuredTruePeakDbtp": "-16.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.shield.raise",
+      "exports": [
+        {
+          "path": "public/audio/sfx/shield-raise.ogg",
+          "bytes": 5493,
+          "sha256": "5f652a23349406d2f6116c560c61a54a4b7b9d70ab216032290de4249bc26a6c"
+        },
+        {
+          "path": "public/audio/sfx/shield-raise.m4a",
+          "bytes": 4300,
+          "sha256": "d36e1525e2ae93e4e154f7728ea0acf95cba88b0d4636090559863b15c5a4fac"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/shield-raise.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-14.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.heal",
+      "exports": [
+        {
+          "path": "public/audio/sfx/heal.ogg",
+          "bytes": 5911,
+          "sha256": "8cacf90d5b512d638e4879e7937ca06567a2cab34291fe61756f7314970d0083"
+        },
+        {
+          "path": "public/audio/sfx/heal.m4a",
+          "bytes": 5477,
+          "sha256": "c8254c6916bab75f2646a77504da255fd4dc34b093fd22ec9820059616e682fa"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/heal.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-28.67",
+      "measuredTruePeakDbtp": "-15.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.cleanse",
+      "exports": [
+        {
+          "path": "public/audio/sfx/cleanse.ogg",
+          "bytes": 4921,
+          "sha256": "cb101eb88984eeacab102e98c4f8c960ba6fa10bd064314f7322ff7b0c568193"
+        },
+        {
+          "path": "public/audio/sfx/cleanse.m4a",
+          "bytes": 3727,
+          "sha256": "c8c1b2c9965d1a1688d4fae67197e8aa17894647900e156826dd21d5e5c89045"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/cleanse.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-16.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.critical",
+      "exports": [
+        {
+          "path": "public/audio/sfx/critical.ogg",
+          "bytes": 4507,
+          "sha256": "ece354f7d8260e9bdbd768a7b6157f3bae1001c78361ddd4a358d4422af16a15"
+        },
+        {
+          "path": "public/audio/sfx/critical.m4a",
+          "bytes": 2473,
+          "sha256": "c6c72970a11350f12d87d47eab8f35b89bad825700126e858b43fc5100c1d48e"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/critical.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-14.98",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.defeat.ceramic",
+      "exports": [
+        {
+          "path": "public/audio/sfx/defeat-ceramic.ogg",
+          "bytes": 8577,
+          "sha256": "75d739e1c24d20f84f3093b0f59ee8a86a545085173d34b9afc658372e9d4e30"
+        },
+        {
+          "path": "public/audio/sfx/defeat-ceramic.m4a",
+          "bytes": 6837,
+          "sha256": "b3674c10f384bc10c53215e9960ef5304de6bd71d1d999e623e106ca80cbfb25"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/defeat-ceramic.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-38.94",
+      "measuredTruePeakDbtp": "-14.98",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.defeat.glass",
+      "exports": [
+        {
+          "path": "public/audio/sfx/defeat-glass.ogg",
+          "bytes": 5548,
+          "sha256": "5893e80e283acdc823112cb7bbd2f45a4fd10e6a8267270a571b4e095a3c725f"
+        },
+        {
+          "path": "public/audio/sfx/defeat-glass.m4a",
+          "bytes": 4675,
+          "sha256": "36363897f6a49b57a311fecfd40c8c02c8e1a5e450eb6ed129a11fd47c00c1eb"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/defeat-glass.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-33.92",
+      "measuredTruePeakDbtp": "-15.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.defeat.fabric",
+      "exports": [
+        {
+          "path": "public/audio/sfx/defeat-fabric.ogg",
+          "bytes": 7599,
+          "sha256": "a5fb713d81b52732f33b1a3bacc62af3d3f25450d47e9882a36d80d3e35636dc"
+        },
+        {
+          "path": "public/audio/sfx/defeat-fabric.m4a",
+          "bytes": 6318,
+          "sha256": "b3b9384b6eff6051f09c16857eac072d6443a39574483eb7ba2d56653290d563"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/defeat-fabric.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-39.11",
+      "measuredTruePeakDbtp": "-16.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.victory",
+      "exports": [
+        {
+          "path": "public/audio/sfx/victory.ogg",
+          "bytes": 6018,
+          "sha256": "c49f27adff399079d5e842add5872ee378f4bb584cac39b036476899812d3fbc"
+        },
+        {
+          "path": "public/audio/sfx/victory.m4a",
+          "bytes": 5852,
+          "sha256": "f9c92ffa13c12db9166244c376f50c84d582f72953d1c890994da1db8e5f5090"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/victory.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-34.20",
+      "measuredTruePeakDbtp": "-18.73",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.retreat",
+      "exports": [
+        {
+          "path": "public/audio/sfx/retreat.ogg",
+          "bytes": 4354,
+          "sha256": "0a3928a53141201f826f6b5733f4eb131fc7d4f261b5241f974d9179ead5b629"
+        },
+        {
+          "path": "public/audio/sfx/retreat.m4a",
+          "bytes": 3446,
+          "sha256": "7d25c4dda07508126742d9334b1f6bf0737dc1db6e87466d7cc08843ca928f78"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/retreat.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-34.90",
+      "measuredTruePeakDbtp": "-19.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.click",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-click.ogg",
+          "bytes": 4007,
+          "sha256": "739e0ae0836f5b404a872b7dc20f1767c2b2b01e428a7fba7482fe7fbcece922"
+        },
+        {
+          "path": "public/audio/sfx/ui-click.m4a",
+          "bytes": 1621,
+          "sha256": "cd93889084fbfa45b98bcad2d2941f466b516afac0dcc9a2c474d1301c176c8a"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-click.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-27.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.back",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-back.ogg",
+          "bytes": 3719,
+          "sha256": "a8f499b78456d4f50f618b0776812705ac7db5cd4bdbb3369f379561d4271289"
+        },
+        {
+          "path": "public/audio/sfx/ui-back.m4a",
+          "bytes": 1803,
+          "sha256": "02c47f521327b5fb5e5baf9a96e3fd674e14fb9340904de4d5e059808d19bd58"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-back.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-26.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.confirm",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-confirm.ogg",
+          "bytes": 4642,
+          "sha256": "54749dfcbdd31bac584ee0daad23fcd0338a0adf04a71efadafe086c4423ed6c"
+        },
+        {
+          "path": "public/audio/sfx/ui-confirm.m4a",
+          "bytes": 2620,
+          "sha256": "c633c94cad9481fcac5f7fb68375d7ac2731766c91944ad8db4c9fd137ec5cbd"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-confirm.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-23.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.reject",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-reject.ogg",
+          "bytes": 3926,
+          "sha256": "5a990d9d60267ab6badd061365e4fe78e1081b828f7fdcbbfe362846bb0ae4e5"
+        },
+        {
+          "path": "public/audio/sfx/ui-reject.m4a",
+          "bytes": 2653,
+          "sha256": "e3e597b4318331ae00a538631444dba932171c8d027ebbe9e88c67df270d6f80"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-reject.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-22.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.equip",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-equip.ogg",
+          "bytes": 4484,
+          "sha256": "466f1a52718fe398187e7a7b6eddc9dbc3b86bb57a06f421558d1b70844bafbd"
+        },
+        {
+          "path": "public/audio/sfx/ui-equip.m4a",
+          "bytes": 2503,
+          "sha256": "47f7dfe87493068139fef659bc0899c96dce0a543f7436f95ec3f4031d74686f"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-equip.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-21.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.lock",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-lock.ogg",
+          "bytes": 4469,
+          "sha256": "8dc3ffe73fc346d06e083da8674da48c6293245213ec370d5d5fe68b49de356e"
+        },
+        {
+          "path": "public/audio/sfx/ui-lock.m4a",
+          "bytes": 2507,
+          "sha256": "ea449f65407dc22145e0606acc5aba0cf4afa8a52e27e6e1e89c5a7794891e7b"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-lock.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-23.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.salvage",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-salvage.ogg",
+          "bytes": 6534,
+          "sha256": "d3153d0346125569af6378a4ff1303a96f04a84d9bbeab4e9aca8c6032ac051f"
+        },
+        {
+          "path": "public/audio/sfx/item-salvage.m4a",
+          "bytes": 4599,
+          "sha256": "f31f8dbeb31dbf82deaee2901d4a25637887fbe8b7571d352ab7b6ce095ddbff"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-salvage.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-40.35",
+      "measuredTruePeakDbtp": "-21.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.drop.common",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-drop-common.ogg",
+          "bytes": 4723,
+          "sha256": "b08d27861428abec8122e8c76901df7a81d0899e901941b30e9d463cc74c5337"
+        },
+        {
+          "path": "public/audio/sfx/item-drop-common.m4a",
+          "bytes": 2770,
+          "sha256": "727d9843668d30f795fccc687365207f270c0b253d4497220bd3de9f60f6c967"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-drop-common.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-25.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.drop.fine",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-drop-fine.ogg",
+          "bytes": 5302,
+          "sha256": "5cdf4479ee63faec96cc6b91d254ab856d06c47419d2a6b53178c227303df280"
+        },
+        {
+          "path": "public/audio/sfx/item-drop-fine.m4a",
+          "bytes": 4029,
+          "sha256": "3c79ac0e10b84508fda07250ea65fc86e58f893f93b74ebc437096d52876d5e2"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-drop-fine.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-inf",
+      "measuredTruePeakDbtp": "-23.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.drop.resonant",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-drop-resonant.ogg",
+          "bytes": 5750,
+          "sha256": "96fe94af2aa979a4d1485f61d8900e5b8a9152e72361135712c6978c726a24cb"
+        },
+        {
+          "path": "public/audio/sfx/item-drop-resonant.m4a",
+          "bytes": 5157,
+          "sha256": "d35d7f0161719a674b3a88c43bacf5753d255bb11d1113107d5d44caac1f8595"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-drop-resonant.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-34.44",
+      "measuredTruePeakDbtp": "-21.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.craft",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-craft.ogg",
+          "bytes": 5949,
+          "sha256": "ccd289db6d7ef8e20c307c5503a60ec351f6e13202f2ecc9dae4383d2e107250"
+        },
+        {
+          "path": "public/audio/sfx/item-craft.m4a",
+          "bytes": 5736,
+          "sha256": "c65089b8918019f0dc78bd01b26a8c18787caab728634a859f875ef6c3f3d4f2"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-craft.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-35.14",
+      "measuredTruePeakDbtp": "-19.99",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.reforge",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-reforge.ogg",
+          "bytes": 5865,
+          "sha256": "ba23f87526d79301493379cd9bb0d4cde0092158dab01a20eb9efd1569f269d5"
+        },
+        {
+          "path": "public/audio/sfx/item-reforge.m4a",
+          "bytes": 5521,
+          "sha256": "0584e406aa2c6edb73d3e3b47b6deb2755111f3e5982a449b306e08b9239f521"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-reforge.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-34.64",
+      "measuredTruePeakDbtp": "-21.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.item.upgrade",
+      "exports": [
+        {
+          "path": "public/audio/sfx/item-upgrade.ogg",
+          "bytes": 6145,
+          "sha256": "c9d1a06a807e16ded18e09d2fc414b230650fe232bfe5e749969067bead34844"
+        },
+        {
+          "path": "public/audio/sfx/item-upgrade.m4a",
+          "bytes": 6034,
+          "sha256": "438569f4bdd6fed09d44ae4a0d9131134f2fcb3453f0cb649048053261224855"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/item-upgrade.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-35.16",
+      "measuredTruePeakDbtp": "-20.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.levelup",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-levelup.ogg",
+          "bytes": 6465,
+          "sha256": "f87c2bc98c3e5f1613a03ca59f0b7d8612c53f570dd04733b9d1c21631d3391a"
+        },
+        {
+          "path": "public/audio/sfx/ui-levelup.m4a",
+          "bytes": 6557,
+          "sha256": "f3fe1f2d0d95412924dc9ce13678963a6a531b3a235079d76b2d3d3d1f85db5a"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-levelup.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-35.11",
+      "measuredTruePeakDbtp": "-20.00",
+      "loop": null
+    },
+    {
+      "assetId": "sfx.ui.routeunlock",
+      "exports": [
+        {
+          "path": "public/audio/sfx/ui-routeunlock.ogg",
+          "bytes": 4946,
+          "sha256": "f1a7905cafe1f88478fc5227bec9f7b2747f7732ab9821f4e78d2989803f310d"
+        },
+        {
+          "path": "public/audio/sfx/ui-routeunlock.m4a",
+          "bytes": 3517,
+          "sha256": "cdd1500a2e3618f20544722b92921f7350c005e0ffde964db8a4aeecc77d4adf"
+        }
+      ],
+      "master": "assets/art-audio-v1/sources/audio-wav/sfx/ui-routeunlock.wav",
+      "workflow": "../../tools/generate-audio.py",
+      "measuredLufsI": "-38.75",
+      "measuredTruePeakDbtp": "-21.00",
+      "loop": null
+    }
+  ]
+}

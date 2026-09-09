@@ -16,7 +16,8 @@
     "db:backup": "node tools/backup.mjs",
     "db:restore": "node tools/restore.mjs",
     "moderate": "tsx tools/moderate.ts",
-    "check:deploy": "node tools/check-deploy.mjs"
+    "check:deploy": "node tools/check-deploy.mjs",
+    "check:art": "node tools/check-art.mjs"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
