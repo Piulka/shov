@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "status": "design_hypothesis",
+  "heroLevelCap": 100,
+  "gearLevelCap": 100,
+  "slotCount": 8,
+  "offlineRewardWindowHours": 48,
+  "restIncomeMultiplier": 0,
+  "upgradeBaseStatIncreasePerLevel": 0.015,
+  "maxUpgradeLevel": 12,
+  "currencies": ["coins", "thread", "catalyst"],
+  "progression": {
+    "targetTotalHours": 7201,
+    "excludesCatchup": true,
+    "rangeInterpolation": "linear_hours_per_level",
+    "bands": [
+      { "fromLevel": 1, "toLevel": 10, "firstLevelHours": 0.1111111111111111, "lastLevelHours": 0.1111111111111111, "totalHours": 1, "referenceXpPerHour": 900 },
+      { "fromLevel": 10, "toLevel": 25, "firstLevelHours": 4, "lastLevelHours": 15.2, "totalHours": 144, "referenceXpPerHour": 1500 },
+      { "fromLevel": 25, "toLevel": 40, "firstLevelHours": 18, "lastLevelHours": 58.8, "totalHours": 576, "referenceXpPerHour": 3500 },
+      { "fromLevel": 40, "toLevel": 60, "firstLevelHours": 60, "lastLevelHours": 84, "totalHours": 1440, "referenceXpPerHour": 3800 },
+      { "fromLevel": 60, "toLevel": 80, "firstLevelHours": 84, "lastLevelHours": 132, "totalHours": 2160, "referenceXpPerHour": 5700 },
+      { "fromLevel": 80, "toLevel": 100, "firstLevelHours": 132, "lastLevelHours": 156, "totalHours": 2880, "referenceXpPerHour": 7600 }
+    ]
+  },
+  "dailyReferenceIncome": [
+    { "minLevel": 1, "maxLevel": 9, "coins": 1200, "thread": 24, "catalyst": 0 },
+    { "minLevel": 10, "maxLevel": 24, "coins": 3600, "thread": 72, "catalyst": 2 },
+    { "minLevel": 25, "maxLevel": 39, "coins": 8000, "thread": 160, "catalyst": 6 },
+    { "minLevel": 40, "maxLevel": 59, "coins": 16000, "thread": 320, "catalyst": 10 },
+    { "minLevel": 60, "maxLevel": 79, "coins": 24000, "thread": 480, "catalyst": 16 },
+    { "minLevel": 80, "maxLevel": 99, "coins": 36000, "thread": 720, "catalyst": 24 },
+    { "minLevel": 100, "maxLevel": 100, "coins": 48000, "thread": 960, "catalyst": 32 }
+  ],
+  "upgradeUnlocks": [
+    { "heroLevel": 1, "maxUpgradeLevel": 3 },
+    { "heroLevel": 25, "maxUpgradeLevel": 6 },
+    { "heroLevel": 40, "maxUpgradeLevel": 8 },
+    { "heroLevel": 60, "maxUpgradeLevel": 10 },
+    { "heroLevel": 80, "maxUpgradeLevel": 12 }
+  ],
+  "upgradeCosts": [
+    { "level": 1, "coins": 200, "thread": 4, "catalyst": 0 },
+    { "level": 2, "coins": 400, "thread": 8, "catalyst": 0 },
+    { "level": 3, "coins": 800, "thread": 16, "catalyst": 0 },
+    { "level": 4, "coins": 1600, "thread": 32, "catalyst": 1 },
+    { "level": 5, "coins": 2600, "thread": 52, "catalyst": 2 },
+    { "level": 6, "coins": 4000, "thread": 80, "catalyst": 3 },
+    { "level": 7, "coins": 6000, "thread": 120, "catalyst": 6 },
+    { "level": 8, "coins": 8500, "thread": 170, "catalyst": 10 },
+    { "level": 9, "coins": 12000, "thread": 240, "catalyst": 14 },
+    { "level": 10, "coins": 17000, "thread": 340, "catalyst": 20 },
+    { "level": 11, "coins": 24000, "thread": 480, "catalyst": 28 },
+    { "level": 12, "coins": 34000, "thread": 680, "catalyst": 40 }
+  ],
+  "crafting": {
+    "fine": { "coins": 600, "threadBase": 12, "threadSalvageMargin": 1, "catalyst": 0 },
+    "resonant": { "coins": 18000, "thread": 360, "catalyst": 24 },
+    "named": { "coins": 36000, "thread": 720, "catalyst": 48 },
+    "affixSelection": "deterministic_compatible_options_only"
+  },
+  "reforge": {
+    "coinsPerSquaredGearLevelDelta": 20,
+    "threadPerSquaredGearLevelDelta": 0.4,
+    "threadRounding": "ceil",
+    "catalystCost": 0
+  },
+  "salvage": {
+    "baseThreadFormula": "ceil(gearLevel / 10)",
+    "rarityMultipliers": { "common": 1, "fine": 2, "resonant": 3, "named": 4 },
+    "returnsCoins": false,
+    "returnsCatalyst": false
+  },
+  "loot": {
+    "status": "design_hypothesis",
+    "winsPerItem": 12,
+    "counterScope": "hero_route_point_difficulty",
+    "countUnit": "won_encounter",
+    "countIndividualWaves": false,
+    "countLosses": false,
+    "counterPersistsOnLogout": true,
+    "counterPersistsOnRouteChange": true,
+    "counterTransfersBetweenRoutes": false,
+    "slots": ["weapon", "focus", "head", "armor", "gloves", "boots", "amulet", "ring"],
+    "selectionOrder": ["slot", "rarity_eligibility", "rarity", "gear_level", "base_or_named_recipe", "affixes"],
+    "slotTargeting": {
+      "withoutTarget": "uniform_all_slots",
+      "targetSlotProbability": 0.5,
+      "remainingProbability": 0.5,
+      "remainingDistribution": "uniform_other_slots",
+      "targetChangesRarityWeights": false,
+      "targetChangesItemFrequency": false
+    },
+    "rarityWeights": { "common": 60, "fine": 30, "resonant": 9, "named": 1 },
+    "ineligibleRarityWeightDestination": "common",
+    "rarityEligibility": {
+      "common": { "always": true },
+      "fine": { "requiresFineCraftUnlock": true },
+      "resonant": { "minHeroLevel": 25, "requiresRouteRarityUnlock": true },
+      "named": {
+        "requiresResonantEligibility": true,
+        "allowedSlots": ["weapon", "amulet", "ring"],
+        "requiresKnownRecipeMatchingRouteAndSlot": true
+      }
+    },
+    "gearLevel": {
+      "upperBound": "min(routeGearLevelCap, unlockedGearLevelCap, gearLevelCap)",
+      "maxOffsetBelowUpperBound": 3,
+      "minLevel": 1,
+      "distribution": "uniform_inclusive_integers"
+    },
+    "baseSelection": "uniform_matching_route_slot_catalog",
+    "namedRecipeSelection": "uniform_known_matching_route_slot_recipes",
+    "affixSelection": "uniform_valid_combinations_without_duplicates",
+    "affixValuesRolled": false,
+    "desiredItemGuarantee": "deterministic_crafting_only",
+    "equipmentSalvageIncludedInReferenceIncome": false,
+    "tutorialEquipmentUsesSeparateOneTimeEvents": true
+  },
+  "catchup": {
+    "enabledFromWorldDay": 90,
+    "targetReferenceLagDays": 60,
+    "targetLevelCap": 80,
+    "xpMultiplierBelowTarget": 2,
+    "currencyMultiplier": 1,
+    "lootMultiplier": 1
+  },
+  "tutorialGrant": { "coins": 200, "thread": 4, "catalyst": 0 },
+  "examples": {
+    "referenceHeroLevel": 60,
+    "referenceDailyIncome": { "coins": 24000, "thread": 480, "catalyst": 16 },
+    "meaningfulUpgrade": {
+      "fromUpgrade": 6,
+      "toUpgrade": 9,
+      "slotCount": 1,
+      "expectedCost": { "coins": 26500, "thread": 530, "catalyst": 30 },
+      "expectedDays": 1.875
+    },
+    "setUpgrade": {
+      "fromUpgrade": 6,
+      "toUpgrade": 9,
+      "slotCount": 8,
+      "expectedCost": { "coins": 212000, "thread": 4240, "catalyst": 240 },
+      "expectedDays": 15,
+      "expectedRemainder": { "coins": 148000, "thread": 2960, "catalyst": 0 }
+    },
+    "fullUpgrade": {
+      "fromUpgrade": 0,
+      "toUpgrade": 12,
+      "slotCount": 8,
+      "expectedCost": { "coins": 888800, "thread": 17776, "catalyst": 992 },
+      "expectedDaysAtReferenceIncome": 62,
+      "ignoresUnlockCalendar": true
+    },
+    "lateUpgrade": {
+      "referenceHeroLevel": 80,
+      "fromUpgrade": 10,
+      "toUpgrade": 12,
+      "slotCount": 8,
+      "expectedCost": { "coins": 464000, "thread": 9280, "catalyst": 544 },
+      "expectedHours": 544
+    },
+    "resonantCraft": {
+      "count": 1,
+      "expectedHoursAtReferenceIncome": 36
+    },
+    "resonantSetCraft": {
+      "count": 8,
+      "expectedDaysAtReferenceIncome": 12
+    },
+    "setCraftAndUpgrade": {
+      "craftRarity": "resonant",
+      "craftCount": 8,
+      "fromUpgrade": 6,
+      "toUpgrade": 9,
+      "slotCount": 8,
+      "expectedDaysAtReferenceIncome": 27
+    },
+    "reforge": {
+      "fromGearLevel": 60,
+      "toGearLevel": 65,
+      "expectedCost": { "coins": 12500, "thread": 250, "catalyst": 0 },
+      "expectedHoursAtReferenceIncome": 12.5
+    }
+  }
+}
