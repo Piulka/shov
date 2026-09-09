@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { isIP } from 'node:net';
-import Fastify, { type FastifyInstance, type FastifyRequest } from 'fastify';
+import Fastify, { LogController, type FastifyInstance, type FastifyRequest } from 'fastify';
 import cookie from '@fastify/cookie';
 import staticFiles from '@fastify/static';
 import { z } from 'zod';
@@ -13,6 +13,7 @@ import type { GameCommand, GameState, GameView, JourneyReport } from '../shared/
 import { sessionDigest, validateTelegramInitData } from './auth.ts';
 import { GameStore, type SavedGame } from './store.ts';
 import { SocialError, SocialService } from './social.ts';
+import packageInfo from '../package.json' with { type: 'json' };
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const sessionCookie = 'shov_session';
@@ -31,8 +32,10 @@ const commandSchema = z.discriminatedUnion('type', [
   z.strictObject({ type: z.literal('equip'), itemId: identifier }),
   z.strictObject({ type: z.literal('build'), skills: z.array(identifier).length(4), rules: z.array(rule).max(3) }),
   z.strictObject({ type: z.literal('route'), routeId: identifier, mode: z.enum(['farm', 'push']) }),
+  z.strictObject({ type: z.literal('mode'), mode: z.enum(['farm', 'push']) }),
   z.strictObject({ type: z.literal('upgrade'), slot }),
-  z.strictObject({ type: z.literal('craft'), slot, family: family.optional(), affix }),
+  z.strictObject({ type: z.literal('craft'), slot, family: family.optional(), affix, rarity: z.enum(['fine', 'resonant']).optional(), secondAffix: affix.optional() }),
+  z.strictObject({ type: z.literal('reforge'), itemId: identifier, level: z.number().int().min(1).max(100) }),
   z.strictObject({ type: z.literal('dismantle'), itemIds: z.array(identifier).min(1).max(100) }),
   z.strictObject({ type: z.literal('lock'), itemId: identifier, locked: z.boolean() }),
   z.strictObject({ type: z.literal('target'), slot: slot.nullable() }),
@@ -51,6 +54,10 @@ export interface AppOptions {
   botToken?: string;
   appOrigin?: string;
   trustedProxy?: string;
+  betaAccess?: 'allowlist' | 'open';
+  betaTelegramIds?: string;
+  blockedTelegramIds?: string;
+  logLevel?: string;
   now?: () => number;
 }
 
@@ -76,17 +83,41 @@ function trustedProxies(value: string | undefined): false | string[] {
   return entries;
 }
 
+function telegramIds(value: string | undefined, name: string): Set<string> {
+  if (!value?.trim()) return new Set();
+  const entries = value.split(',').map(entry => entry.trim());
+  if (entries.some(entry => !/^[1-9]\d*$/.test(entry) || !Number.isSafeInteger(Number(entry)))) {
+    throw new Error(`${name} must contain comma-separated positive Telegram user IDs.`);
+  }
+  return new Set(entries.map(entry => `telegram:${entry}`));
+}
+
 export function createApp(options: AppOptions = {}): FastifyInstance {
   const mode = options.mode ?? 'local';
   const botToken = options.botToken ?? process.env.BOT_TOKEN;
   if (mode === 'telegram' && !botToken) throw new Error('BOT_TOKEN is required in telegram mode.');
   const appOrigin = options.appOrigin ?? process.env.APP_ORIGIN;
-  const allowedOrigin = appOrigin ? new URL(appOrigin).origin : undefined;
+  let allowedOrigin: string | undefined;
+  try {
+    const parsedOrigin = appOrigin ? new URL(appOrigin) : undefined;
+    if (mode === 'telegram' && (!parsedOrigin || parsedOrigin.protocol !== 'https:' || parsedOrigin.username || parsedOrigin.password || parsedOrigin.pathname !== '/' || parsedOrigin.search || parsedOrigin.hash)) throw new Error();
+    allowedOrigin = parsedOrigin?.origin;
+  } catch { throw new Error('APP_ORIGIN must be the public HTTPS origin without credentials, path, query or fragment.'); }
+  const betaAccess = options.betaAccess ?? process.env.BETA_ACCESS ?? 'allowlist';
+  if (!['allowlist', 'open'].includes(betaAccess)) throw new Error('BETA_ACCESS must be allowlist or open.');
+  const betaIds = telegramIds(options.betaTelegramIds ?? process.env.BETA_TELEGRAM_IDS, 'BETA_TELEGRAM_IDS');
+  const blockedIds = telegramIds(options.blockedTelegramIds ?? process.env.BLOCKED_TELEGRAM_IDS, 'BLOCKED_TELEGRAM_IDS');
+  const logLevel = options.logLevel ?? process.env.LOG_LEVEL ?? (mode === 'telegram' ? 'info' : 'silent');
+  if (!['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'].includes(logLevel)) throw new Error('LOG_LEVEL is invalid.');
   const clock = options.now ?? Date.now;
   const trustProxy = trustedProxies(options.trustedProxy ?? process.env.TRUSTED_PROXY);
   const store = new GameStore(options.databasePath ?? resolve(projectRoot, 'data/shov.sqlite'));
   const social = new SocialService(store);
-  const app = Fastify({ logger: false, bodyLimit: 16 * 1024, requestTimeout: 10_000, trustProxy });
+  const app = Fastify({
+    logger: logLevel === 'silent' ? false : { level: logLevel, redact: ['req.headers.cookie', 'req.headers.authorization', 'res.headers["set-cookie"]'] },
+    logController: new LogController({ disableRequestLogging: true }), requestIdHeader: false,
+    bodyLimit: 16 * 1024, requestTimeout: 10_000, trustProxy,
+  });
   const limits = new Map<string, { until: number; count: number }>();
 
   function rateLimit(key: string, limit: number, now: number): void {
@@ -106,10 +137,19 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
     return result.data;
   }
 
+  function requireBetaAccess(accountId: string): void {
+    if (store.isBlocked(accountId)) throw new ApiError(403, 'Доступ к бета-тесту приостановлен.', 'ACCOUNT_BLOCKED');
+    if (mode !== 'telegram') return;
+    if (!accountId.startsWith('telegram:')) throw new ApiError(401, 'Откройте игру через Telegram.', 'TELEGRAM_REQUIRED');
+    if (blockedIds.has(accountId)) throw new ApiError(403, 'Доступ к бета-тесту приостановлен.', 'ACCOUNT_BLOCKED');
+    if (betaAccess === 'allowlist' && !betaIds.has(accountId)) throw new ApiError(403, 'Бета-тест пока доступен приглашённым участникам.', 'BETA_ACCESS_REQUIRED');
+  }
+
   function getAccount(request: FastifyRequest, now: number): string {
     const token = request.cookies[sessionCookie];
     const session = token && /^[a-f0-9]{64}$/.test(token) ? store.getSession(sessionDigest(token), now) : undefined;
     if (!session) throw new ApiError(401, 'Откройте игру заново для входа.', 'UNAUTHORIZED');
+    requireBetaAccess(session.account_id);
     rateLimit(`account:${session.account_id}`, 240, now);
     return session.account_id;
   }
@@ -183,16 +223,35 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
     if (typeof statusCode === 'number' && statusCode >= 400 && statusCode < 500) {
       return reply.code(statusCode).send({ error: 'Некорректный запрос.', code: 'INVALID_REQUEST' });
     }
-    app.log.error(error);
+    app.log.error({ event: 'request_error', requestId: _request.id, errorType: error instanceof Error ? error.name : 'UnknownError' });
     return reply.code(500).send({ error: 'Не удалось сохранить действие. Повторите запрос.', code: 'SERVER_ERROR' });
   });
-  app.addHook('onSend', async (_request, reply) => {
-    reply.header('Cache-Control', 'no-store');
+  app.addHook('onSend', async (request, reply) => {
+    const path = request.url.split('?')[0];
+    const cache = reply.statusCode === 200 && request.method === 'GET'
+      ? path.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : path.startsWith('/art/') ? 'public, max-age=3600' : 'no-store'
+      : 'no-store';
+    reply.header('Cache-Control', cache);
     reply.header('X-Content-Type-Options', 'nosniff');
     reply.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+    reply.header('X-Request-Id', request.id);
+    if (mode === 'telegram') reply.header('Strict-Transport-Security', 'max-age=31536000');
+  });
+  app.addHook('onResponse', async (request, reply) => {
+    const path = request.url.split('?')[0];
+    if (path === '/api/health' || path === '/api/ready') return;
+    app.log.info({ event: 'request', requestId: request.id, method: request.method, path, status: reply.statusCode, durationMs: Math.round(reply.elapsedTime) });
   });
 
-  app.get('/api/health', async () => ({ ok: true, mode, version: '0.3.0' }));
+  app.get('/api/health', async () => ({ ok: true, mode, version: packageInfo.version }));
+  app.get('/api/ready', async (_request, reply) => {
+    try {
+      store.database.prepare('SELECT id FROM accounts LIMIT 1').get();
+      return { ok: true };
+    } catch {
+      return reply.code(503).send({ ok: false, code: 'DATABASE_UNAVAILABLE' });
+    }
+  });
 
   app.post('/api/auth', async (request, reply) => {
     const now = clock();
@@ -208,6 +267,7 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
       const session = existingToken && /^[a-f0-9]{64}$/.test(existingToken) ? store.getSession(sessionDigest(existingToken), now) : undefined;
       accountId = session?.account_id ?? `local:${randomUUID()}`;
     }
+    requireBetaAccess(accountId);
     const token = randomBytes(32).toString('hex');
     const result = store.transaction(() => {
       const saved = store.getGame(accountId) ?? store.createGame(createGame(accountId, now, randomInt(1, 0x1_0000_0000)), now);
@@ -300,7 +360,7 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
   if (existsSync(resolve(dist, 'index.html'))) {
     app.register(staticFiles, { root: dist, prefix: '/' });
     app.setNotFoundHandler((request, reply) => {
-      if (request.url.startsWith('/api/') || request.method !== 'GET') return reply.code(404).send({ error: 'Маршрут не найден.', code: 'NOT_FOUND' });
+      if (/^\/(api|art|assets)\//.test(request.url) || request.method !== 'GET') return reply.code(404).send({ error: 'Маршрут не найден.', code: 'NOT_FOUND' });
       return reply.sendFile('index.html');
     });
   } else {

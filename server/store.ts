@@ -40,6 +40,22 @@ export class GameStore {
         created_at INTEGER NOT NULL,
         PRIMARY KEY(account_id, command_id)
       );
+      CREATE TABLE IF NOT EXISTS account_blocks (
+        account_id TEXT PRIMARY KEY REFERENCES accounts(id), reason TEXT NOT NULL, created_at INTEGER NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS moderation_reports (
+        id TEXT PRIMARY KEY, reporter_id TEXT NOT NULL REFERENCES accounts(id),
+        author_id TEXT NOT NULL REFERENCES accounts(id), message_id TEXT NOT NULL,
+        clan_id TEXT NOT NULL, author_name TEXT NOT NULL, message_text TEXT NOT NULL,
+        reason TEXT NOT NULL CHECK(reason IN ('spam', 'abuse', 'other')),
+        created_at INTEGER NOT NULL, resolved_at INTEGER,
+        UNIQUE(reporter_id, message_id)
+      );
+      CREATE INDEX IF NOT EXISTS reports_reporter_time ON moderation_reports(reporter_id, created_at);
+      CREATE TABLE IF NOT EXISTS moderation_actions (
+        sequence INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL,
+        target TEXT NOT NULL, note TEXT NOT NULL, created_at INTEGER NOT NULL
+      );
     `);
   }
 
@@ -83,6 +99,10 @@ export class GameStore {
 
   getSession(hash: string, now: number): Session | undefined {
     return this.db.prepare('SELECT account_id, expires_at FROM sessions WHERE token_hash = ? AND expires_at > ?').get(hash, now) as Session | undefined;
+  }
+
+  isBlocked(accountId: string): boolean {
+    return !!this.db.prepare('SELECT 1 FROM account_blocks WHERE account_id = ?').get(accountId);
   }
 
   createSession(hash: string, accountId: string, expiresAt: number, now: number): void {

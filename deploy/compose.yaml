@@ -1,0 +1,118 @@
+name: shov
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: "3"
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: shov:${SHOV_IMAGE_TAG:-beta}
+    init: true
+    restart: unless-stopped
+    user: "1000:1000"
+    pids_limit: 256
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    environment:
+      NODE_ENV: production
+      APP_MODE: telegram
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: "3001"
+      DATABASE_PATH: ${DATABASE_PATH:-/data/shov.sqlite}
+      BOT_TOKEN: ${BOT_TOKEN:?Set BOT_TOKEN in .env}
+      APP_ORIGIN: ${APP_ORIGIN:?Set the public HTTPS APP_ORIGIN in .env}
+      TRUSTED_PROXY: 172.29.43.2
+      BETA_ACCESS: ${BETA_ACCESS:-open}
+      BETA_TELEGRAM_IDS: ${BETA_TELEGRAM_IDS:-}
+      BLOCKED_TELEGRAM_IDS: ${BLOCKED_TELEGRAM_IDS:-}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    volumes:
+      - game-data:/data
+    networks:
+      web:
+        ipv4_address: 172.29.43.3
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3001/api/ready', {signal: AbortSignal.timeout(3000)}).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    stop_grace_period: 30s
+    logging: *logging
+
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    image: shov-caddy:${SHOV_IMAGE_TAG:-beta}
+    restart: unless-stopped
+    user: "1000:1000"
+    pids_limit: 128
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    environment:
+      APP_ORIGIN: ${APP_ORIGIN:?Set the public HTTPS APP_ORIGIN in .env}
+      ACME_EMAIL: ${ACME_EMAIL:?Set an ACME contact email in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      web:
+        ipv4_address: 172.29.43.2
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, "http://127.0.0.1:2019/config/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging: *logging
+
+  backup:
+    profiles: [tools]
+    image: shov:${SHOV_IMAGE_TAG:-beta}
+    user: "1000:1000"
+    pids_limit: 64
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    network_mode: none
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    environment:
+      DATABASE_PATH: ${DATABASE_PATH:-/data/shov.sqlite}
+      BACKUP_DIR: /backups
+    volumes:
+      - game-data:/data
+      - game-backups:/backups
+    command: [node, tools/backup.mjs]
+    logging: *logging
+
+networks:
+  web:
+    ipam:
+      config:
+        - subnet: 172.29.43.0/24
+
+volumes:
+  game-data:
+  game-backups:
+  caddy-data:
+  caddy-config:

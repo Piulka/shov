@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import type {
   ClanDetail,
+  ClanMessage,
   ClanSummary,
   ClanTag,
   SocialCommand,
@@ -478,12 +479,16 @@ function Feed({
   command,
   confirm,
   lastCommand,
+  profileId,
+  reportMessage,
 }: {
   clan: ClanDetail;
   busy: boolean;
   command: Command;
   confirm: Confirm;
   lastCommand: SocialCommand | null;
+  profileId: string;
+  reportMessage: (message: ClanMessage) => void;
 }) {
   const [message, setMessage] = useState("");
   useEffect(() => {
@@ -499,6 +504,7 @@ function Feed({
         <h2>У костра</h2>
         <MessageSquare size={18} />
       </div>
+      {lastCommand?.type === "report_message" && lastCommand.clanId === clan.id && <p className="clan-report-receipt" role="status"><Check size={15} /> Жалоба отправлена</p>}
       <form
         className="clan-compose"
         onSubmit={async (e) => {
@@ -557,6 +563,17 @@ function Feed({
                     minute: "2-digit",
                   })}
                 </time>
+                {message.kind === "message" && message.authorId !== profileId && (
+                  <button
+                    className="icon-button"
+                    title={message.reported ? "Жалоба отправлена" : "Пожаловаться на сообщение"}
+                    aria-label={message.reported ? "Жалоба отправлена" : "Пожаловаться на сообщение"}
+                    disabled={busy || message.reported}
+                    onClick={() => reportMessage(message)}
+                  >
+                    {message.reported ? <Check size={15} /> : <Flag size={15} />}
+                  </button>
+                )}
                 {message.canDelete && message.kind === "message" && (
                   <button
                     className="icon-button"
@@ -1183,6 +1200,14 @@ export default function ClanPage({ view: game }: { view: GameView }) {
   const [tag, setTag] = useState<ClanTag>("calm");
   const [recruitment, setRecruitment] = useState<"open" | "closed">("open");
   const [editingClan, setEditingClan] = useState("");
+  const [reporting, setReporting] = useState<{ clanId: string; message: ClanMessage } | null>(null);
+  const [reportReason, setReportReason] = useState<"spam" | "abuse" | "other">("spam");
+  useEffect(() => {
+    const command = social.lastCommand;
+    if (command?.type === "report_message") {
+      setReporting(current => current?.clanId === command.clanId && current.message.id === command.messageId ? null : current);
+    }
+  }, [social.lastCommand]);
   const data = social.view;
   const busy = social.busy || social.unresolved;
   const clan = data?.clan;
@@ -1397,6 +1422,11 @@ export default function ClanPage({ view: game }: { view: GameView }) {
           <Feed
             key={clan.id}
             lastCommand={social.lastCommand}
+            profileId={data.profile.id}
+            reportMessage={(message) => {
+              setReportReason("spam");
+              setReporting({ clanId: clan.id, message });
+            }}
             clan={clan}
             command={social.command}
             busy={busy}
@@ -1442,6 +1472,29 @@ export default function ClanPage({ view: game }: { view: GameView }) {
           </>
         )}
       </div>
+      {reporting && (
+        <Modal title="Пожаловаться на сообщение" close={() => setReporting(null)} busy={social.busy}>
+          <div className="clan-confirm-copy"><strong>{reporting.message.authorName}</strong><blockquote>{reporting.message.text}</blockquote></div>
+          <form className="clan-form" onSubmit={async (event) => {
+            event.preventDefault();
+            if (await social.command({ type: "report_message", clanId: reporting.clanId, messageId: reporting.message.id, reason: reportReason })) setReporting(null);
+          }}>
+            <label>
+              Причина жалобы
+              <select aria-label="Причина жалобы" value={reportReason} disabled={busy} onChange={event => setReportReason(event.target.value as typeof reportReason)}>
+                <option value="spam">Спам</option>
+                <option value="abuse">Оскорбления или угрозы</option>
+                <option value="other">Другое нарушение</option>
+              </select>
+            </label>
+            <div className="dialog-actions">
+              <button type="button" className="button secondary" disabled={social.busy} onClick={() => setReporting(null)}>Отмена</button>
+              <button type="submit" className="button primary" disabled={busy}><Flag size={16} /> Отправить жалобу</button>
+            </div>
+          </form>
+          {errorBanner}
+        </Modal>
+      )}
       {confirmation && (
         <Modal
           title={confirmation.title}

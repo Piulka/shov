@@ -1796,6 +1796,33 @@ main {
   box-shadow: 0 1px 3px #244a1810;
   color: #4d7650;
 }
+.route-mode-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  margin-bottom: 14px;
+  color: #477156;
+}
+.route-mode-status > svg {
+  flex-shrink: 0;
+}
+.route-mode-status > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.route-mode-status strong {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.route-mode-status span {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
 .route-list {
   display: flex;
   flex-direction: column;
@@ -3540,6 +3567,7 @@ main {
 .clan-compose > div { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; }
 .clan-message { padding: 19px 0; border-bottom: 1px solid var(--line); }
 .clan-message > div { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.clan-report-receipt { display: flex; align-items: center; gap: 8px; color: #477156; font-size: 12px; margin-bottom: 16px; }
 .clan-message strong { font-size: 12px; }
 .clan-message time { font-size: 10px; color: var(--muted); margin-left: auto; flex-shrink: 0; }
 .clan-message p { white-space: pre-wrap; font-size: 13px; line-height: 1.8; }
@@ -3615,6 +3643,7 @@ main {
 .clan-form label.clan-checkbox { display: flex; align-items: center; gap: 9px; padding: 10px 0; }
 .clan-checkbox input { width: 18px; height: 18px; accent-color: var(--green); }
 .clan-confirm-copy { font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.clan-confirm-copy + .clan-form { margin-top: 18px; }
 .clan-confirm-copy p + p { margin-top: 12px; }
 .clan-confirm-copy blockquote { white-space: pre-wrap; margin: 0; border-left: 2px solid var(--line); padding-left: 15px; max-height: 220px; overflow-y: auto; }
 .raid-confirm ul, .raid-confirm ol { padding-left: 20px; font-size: 12px; }
@@ -3686,4 +3715,78 @@ main {
   .clan-page .page-heading { flex-direction: column; gap: 10px; }
   .clan-page .page-heading > div { width: 100%; min-width: 0; }
   .clan-page .clan-profile { max-width: 100%; align-self: flex-start; padding-top: 0; }
+}
+
+.sidebar-world { text-align: left; }
+.map-banner::after { background: linear-gradient(0deg, #173f32b8, #173f3220 45%, transparent 70%); }
+.map-banner > div { text-shadow: 0 1px 3px #102d2880; }
+.region-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.region-tabs > button { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 7px 9px; text-align: left; padding: 15px 12px; border-bottom: 2px solid transparent; color: #73877a; min-height: 82px; }
+.region-tabs > button.selected { border-bottom-color: var(--green); color: var(--green); background: #edf4ef; }
+.region-tab-number { grid-row: span 2; font-size: 11px; padding-top: 2px; color: #8da193; }
+.region-tabs strong { font-size: 13px; line-height: 1.55; font-weight: 600; overflow-wrap: anywhere; }
+.region-tabs button > span:last-child { display: flex; align-items: center; gap: 5px; font-size: 10px; }
+.region-summary { display: flex; gap: 20px; align-items: center; justify-content: space-between; padding: 17px 0 5px; }
+.region-summary p { font-size: 12px; color: #6b8074; line-height: 1.8; max-width: 620px; }
+.region-summary > span { flex-shrink: 0; font-size: 10px; color: #84958a; }
+.route-actions { display: flex; flex-direction: column; align-items: stretch; justify-content: center; flex-shrink: 0; gap: 13px; min-width: 144px; }
+.route-actions > .text-button { justify-content: center; font-size: 11px; }
+.resonant-route { display: inline-flex; align-items: center; gap: 4px; color: #90629d; font-size: 10px; }
+.route-enemies { margin-top: 13px; }
+.route-enemies > summary { cursor: pointer; color: #637f70; font-size: 11px; line-height: 1.8; }
+.route-enemies > div { margin-top: 10px; }
+.route-enemy { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.route-enemy > img { width: 45px; height: 64px; flex-shrink: 0; object-fit: contain; }
+.route-enemy > div { min-width: 0; }
+.route-enemy strong { font-size: 11px; line-height: 1.7; }
+.route-enemy strong small { color: #8c9b90; font-size: 9px; white-space: nowrap; font-weight: 400; }
+.route-enemy p { color: #788c7e; font-size: 10px; line-height: 1.65; margin: 3px 0; }
+.route-enemy div > span { display: flex; align-items: center; gap: 6px; color: #839588; font-size: 10px; }
+.route-enemy div > span svg:not(:first-child) { margin-left: 5px; }
+.craft-rarity { width: 100%; }
+.craft-rarity > button { flex: 1; min-width: 0; padding: 10px 6px; font-size: 11px; min-height: 42px; }
+.craft-unlock { display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: #8f8191; line-height: 1.7; margin-top: 10px; }
+.craft-unlock svg { flex-shrink: 0; margin-top: 3px; }
+.rarity-label.rarity-resonant { color: #8b62a5; }
+.reforge-item { padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.reforge-item .section-title { margin-bottom: 15px; }
+.reforge-item .section-title h3 { font-size: 14px; }
+.reforge-levels { display: grid; grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1.5fr); align-items: center; gap: 14px; color: #789080; }
+.reforge-levels > span { font-size: 13px; }
+.reforge-levels b { color: var(--ink); font-size: 21px; font-weight: 500; margin-left: 5px; }
+.reforge-levels select { width: 100%; min-height: 42px; }
+.reforge-item p { font-size: 11px; color: #7b8e80; line-height: 1.8; margin-top: 12px; }
+.reforge-item p.reforge-alternative { color: #9b7a4f; }
+.reforge-item .craft-footer { margin-top: 16px; }
+.reforge-confirm { margin-top: 15px; padding-top: 8px; border-top: 1px solid var(--line); }
+.reforge-confirm .dialog-actions { margin-top: 14px; }
+.reforge-confirm .button { font-size: 12px; }
+.reforge-cap { display: flex; align-items: flex-start; gap: 8px; color: #8a9b8d; font-size: 11px; line-height: 1.8; padding: 14px 0; border-top: 1px solid var(--line); }
+.reforge-cap svg { flex-shrink: 0; margin-top: 3px; }
+
+@media (max-width: 1100px) {
+  .route-actions { min-width: 120px; }
+  .route-actions > .button { font-size: 11px; padding-inline: 9px; }
+  .route-actions > .text-button { font-size: 10px; gap: 5px; }
+}
+@media (max-width: 600px) {
+  .region-tabs { margin-bottom: 17px; }
+  .region-tabs > button { grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 11px 7px; min-height: 108px; align-content: start; }
+  .region-tab-number { grid-row: auto; font-size: 9px; }
+  .region-tabs strong { font-size: 11px; line-height: 1.5; min-height: 34px; }
+  .region-tabs button > span:last-child { font-size: 9px; }
+  .region-summary { display: block; padding-top: 12px; }
+  .region-summary p { font-size: 11px; }
+  .region-summary > span { display: inline-block; margin-top: 8px; }
+  .route-actions { grid-column: 1 / -1; flex-direction: row; gap: 12px; align-items: center; justify-content: space-between; min-width: 0; }
+  .route-actions > .button { min-height: 41px; font-size: 12px; padding-inline: 15px; }
+  .route-actions > .text-button { font-size: 10px; }
+  .route-enemy { gap: 7px; }
+  .route-enemy > img { width: 29px; height: 50px; }
+  .route-enemy strong { font-size: 10px; }
+  .route-enemy p { font-size: 10px; }
+  .craft-rarity > button { font-size: 11px; min-height: 42px; }
+  .reforge-levels { gap: 8px; }
+  .reforge-confirm .dialog-actions { flex-wrap: wrap; }
+  .reforge-confirm .dialog-actions > .button { flex: 1; }
 }

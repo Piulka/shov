@@ -1,0 +1,118 @@
+name: Verify beta
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-beta-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:design
+
+      - name: Build production images
+        run: |
+          docker build --tag shov:ci .
+          docker build --file deploy/Dockerfile.caddy --tag shov-caddy:ci deploy
+
+      - name: Validate Compose and Caddy without issuing a certificate
+        env:
+          APP_ORIGIN: https://game.example.invalid
+          BOT_TOKEN: 123456789:ci-fixture-not-a-real-token
+          ACME_EMAIL: ops@example.invalid
+          SHOV_IMAGE_TAG: ci
+          BETA_ACCESS: open
+        run: |
+          docker compose --file deploy/compose.yaml config --quiet
+          docker run --rm --read-only --tmpfs /tmp:size=32m,mode=1777 \
+            --env APP_ORIGIN --env ACME_EMAIL shov-caddy:ci \
+            caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+
+      - name: Start production application with persistent test volumes
+        run: |
+          docker run --detach --name shov-ci --init --read-only \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --tmpfs /tmp:size=64m,mode=1777 \
+            --mount source=shov-ci-data,target=/data \
+            --mount source=shov-ci-backups,target=/backups \
+            --publish 127.0.0.1:3101:3001 \
+            --env APP_MODE=telegram --env SERVER_HOST=0.0.0.0 --env SERVER_PORT=3001 \
+            --env DATABASE_PATH=/data/shov.sqlite \
+            --env BOT_TOKEN=123456789:ci-fixture-not-a-real-token \
+            --env BETA_ACCESS=open --env APP_ORIGIN=https://game.example.invalid \
+            --env LOG_LEVEL=warn shov:ci
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:3101/api/ready > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --silent --show-error --fail http://127.0.0.1:3101/api/ready
+          test "$(docker exec shov-ci id -u)" = 1000
+
+      - name: Verify HTTP endpoints and bundled frontend assets
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readdir } from 'node:fs/promises';
+          const origin = 'http://127.0.0.1:3101';
+          const get = path => fetch(new URL(path, origin), { signal: AbortSignal.timeout(5000), redirect: 'error' });
+          const healthResponse = await get('/api/health');
+          assert.equal(healthResponse.status, 200);
+          const health = await healthResponse.json();
+          assert.equal(health.ok, true);
+          assert.equal(health.mode, 'telegram');
+          const ready = await get('/api/ready');
+          assert.equal(ready.status, 200);
+          assert.equal((await ready.json()).ok, true);
+          const page = await get('/');
+          assert.equal(page.status, 200);
+          assert.match(await page.text(), /id="root"/);
+          for (const asset of await readdir('dist/assets')) {
+            const response = await get(`/assets/${encodeURIComponent(asset)}`);
+            assert.equal(response.status, 200, asset);
+            assert.ok((await response.arrayBuffer()).byteLength > 0, asset);
+          }
+          const scene = await get('/art/terraces.png');
+          assert.equal(scene.status, 200);
+          assert.ok((await scene.arrayBuffer()).byteLength > 0);
+          assert.equal((await get('/api/state')).status, 401);
+          console.log('Container health, database, frontend assets and anonymous rejection passed.');
+          JS
+
+      - name: Exercise backup, restore and moderation in the production image
+        run: |
+          docker exec shov-ci node tools/backup.mjs /data/shov.sqlite /backups/ci.sqlite
+          docker exec shov-ci node tools/restore.mjs /backups/ci.sqlite /data/restored-ci.sqlite
+          if docker exec shov-ci node tools/restore.mjs /backups/ci.sqlite /data/restored-ci.sqlite; then
+            echo "Restore unexpectedly overwrote an existing database." >&2
+            exit 1
+          fi
+          docker exec shov-ci node --import tsx tools/moderate.ts reports
+
+      - name: Container logs and cleanup
+        if: always()
+        run: |
+          if docker container inspect shov-ci > /dev/null 2>&1; then
+            docker logs shov-ci
+            docker rm --force shov-ci
+          fi
+          docker volume rm shov-ci-data shov-ci-backups || true

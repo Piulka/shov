@@ -31,6 +31,7 @@ export interface ClanMessage {
   kind: 'message' | 'event';
   createdAt: number;
   canDelete: boolean;
+  reported: boolean;
 }
 export interface ClanDetail extends ClanSummary {
   roster: ClanMember[];
@@ -71,4 +72,5 @@ export type SocialCommand =
   | { type: 'transfer'; clanId: string; memberId: string }
   | { type: 'message'; clanId: string; text: string }
   | { type: 'delete_message'; clanId: string; messageId: string }
+  | { type: 'report_message'; clanId: string; messageId: string; reason: 'spam' | 'abuse' | 'other' }
   | { type: 'raid'; clanId: string; weekStart: number; role: RaidRole; loadout: RaidLoadout };

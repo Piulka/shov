@@ -8,6 +8,7 @@ export type Slot =
   | "amulet"
   | "ring";
 export type Family = "blade" | "glass" | "needle";
+export type RegionId = "terraces" | "glassgarden" | "carmine";
 export type Rarity = "common" | "fine" | "resonant" | "named";
 export type Affix =
   | "hp"
@@ -85,8 +86,19 @@ export interface Enemy {
   mechanic: "regular" | "heavy" | "dot";
   description: string;
 }
+export interface Region {
+  id: RegionId;
+  name: string;
+  subtitle: string;
+  description: string;
+  order: number;
+  color: string;
+  image: string;
+  sceneFilter: string;
+}
 export interface Route {
   id: string;
+  regionId: RegionId;
   name: string;
   subtitle: string;
   description: string;
@@ -100,6 +112,7 @@ export interface Route {
   unlockLevel: number;
   boss: boolean;
   color: string;
+  resonant?: boolean;
 }
 export interface BattleEvent {
   at: number;
@@ -123,6 +136,7 @@ export interface BattleEvent {
   critical?: boolean;
 }
 export interface BattleRun {
+  regionId?: RegionId;
   startedAt: number;
   endsAt: number;
   combatMs: number;
@@ -198,6 +212,7 @@ export interface GameView {
   catalog: Catalog;
 }
 export interface Catalog {
+  regions: Region[];
   slots: Slot[];
   slotNames: Record<Slot, string>;
   familyNames: Record<Family, string>;
@@ -212,8 +227,10 @@ export type GameCommand =
   | { type: "equip"; itemId: string }
   | { type: "build"; skills: string[]; rules: Rule[] }
   | { type: "route"; routeId: string; mode: "farm" | "push" }
+  | { type: "mode"; mode: "farm" | "push" }
   | { type: "upgrade"; slot: Slot }
-  | { type: "craft"; slot: Slot; family?: Family; affix: Affix }
+  | { type: "craft"; slot: Slot; family?: Family; affix: Affix; rarity?: "fine" | "resonant"; secondAffix?: Affix }
+  | { type: "reforge"; itemId: string; level: number }
   | { type: "dismantle"; itemIds: string[] }
   | { type: "lock"; itemId: string; locked: boolean }
   | { type: "target"; slot: Slot | null }

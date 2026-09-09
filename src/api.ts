@@ -135,8 +135,9 @@ export function useGame() {
           setReport(next.report);
           setReturnReport(true);
         }
-      } catch {
+      } catch (caught) {
         setOnline(false);
+        if (caught instanceof ApiError && (caught.status === 401 || caught.status === 403)) setError(caught.message);
       } finally {
         lock.current = false;
       }

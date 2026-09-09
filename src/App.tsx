@@ -25,8 +25,6 @@ import {
   LockKeyhole,
   Map,
   Mountain,
-  Pause,
-  Play,
   Plus,
   RotateCcw,
   Route as RouteIcon,
@@ -64,6 +62,7 @@ import type {
 } from "../shared/types";
 import { allowedAffixes, upgradeCap } from "../shared/content";
 import { chapterTasks } from "../shared/chapter";
+import { canCraftResonant, craftingCost, gearLevelCap, reforgeCost } from "../shared/equipment";
 import BattleScene from "./components/BattleScene";
 import ChapterProgress from "./components/ChapterProgress";
 import ClanPage from "./components/ClanPage";
@@ -351,7 +350,6 @@ function Journey({
   view,
   now,
   paused,
-  setPaused,
   go,
   inspect,
   showReport,
@@ -359,13 +357,14 @@ function Journey({
   view: GameView;
   now: number;
   paused: boolean;
-  setPaused: (v: boolean) => void;
   go: (p: Page) => void;
   inspect: (i: Item) => void;
   showReport: () => void;
 }) {
   const { state, catalog } = view;
   const route = catalog.routes.find((r) => r.id === state.routeId)!;
+  const region = catalog.regions.find((r) => r.id === route.regionId)!;
+  const regionRoutes = catalog.routes.filter((r) => r.regionId === region.id);
   const frame = battleFrame(state.battle, now);
   const elapsed = Math.max(0, now - state.battle.startedAt);
   const recent = state.battle.events
@@ -373,6 +372,7 @@ function Journey({
     .slice(-3)
     .reverse();
   const routeIndex = catalog.routes.findIndex((r) => r.id === route.id);
+  const regionRouteIndex = regionRoutes.findIndex((r) => r.id === route.id);
   const nextRoute = catalog.routes[routeIndex + 1];
   const wins = state.routeWins[route.id] || 0;
   const nextNeeded = nextRoute?.unlockWins || 1;
@@ -392,7 +392,7 @@ function Journey({
       <div className="page-heading">
         <div>
           <p className="eyebrow">
-            <span className="chapter-mark">01</span> БЕЛЫЕ ТЕРРАСЫ
+            <span className="chapter-mark">{String(region.order).padStart(2, "0")}</span> {region.name.toLocaleUpperCase("ru")}
           </p>
           <h1>Путь продолжается</h1>
           <p className="subtitle">За каждой трещиной начинается новый мир.</p>
@@ -409,7 +409,7 @@ function Journey({
             <span>{route.name}</span>
             <span className="location-dot" />
             <span className="route-number">
-              {String(routeIndex + 1).padStart(2, "0")} / {String(catalog.routes.length).padStart(2, "0")}
+              {String(regionRouteIndex + 1).padStart(2, "0")} / {String(regionRoutes.length).padStart(2, "0")}
             </span>
           </div>
           <div className="stage-tools">
@@ -417,11 +417,6 @@ function Journey({
               <Clock3 size={13} />
               {duration(Math.min(elapsed, state.battle.combatMs) / 1000)}
             </span>
-            <IconButton
-              icon={paused ? Play : Pause}
-              label={paused ? "Продолжить анимацию" : "Приостановить анимацию"}
-              onClick={() => setPaused(!paused)}
-            />
           </div>
         </div>
         <div className="stage-bottom">
@@ -467,7 +462,7 @@ function Journey({
       </div>
       <div className="journey-lower">
         <section className="next-goal">
-          {state.chapter && !state.chapter.legacy ? <ChapterProgress view={view} go={go} /> : <>
+          {state.chapter && !state.chapter.legacy && state.chapter.completed.length < chapterTasks.length ? <ChapterProgress view={view} go={go} /> : <>
           <SectionTitle
             action={<span className="micro-label">ТЕКУЩАЯ ЦЕЛЬ</span>}
           >
@@ -478,17 +473,17 @@ function Journey({
               <Mountain size={23} />
             </span>
             <div>
-              <h3>{nextRoute ? nextRoute.name : "Хранитель Белых террас"}</h3>
+              <h3>{nextRoute ? nextRoute.name : "За краем атласа"}</h3>
               <p>
                 {nextRoute
                   ? `Открытие: уровень ${nextLevel} и ${nextNeeded} побед`
-                  : "Завершить путь через террасы"}
+                  : "Все земли открыты. Совершенствуй сборку для клановой экспедиции."}
               </p>
             </div>
-            <b>
+            {nextRoute && <b>
               {Math.min(wins, nextNeeded)}
               <small> / {nextNeeded}</small>
-            </b>
+            </b>}
           </div>
           <div className="thin-progress">
             <span
@@ -1083,6 +1078,8 @@ function Workshop({
   const [craftSlot, setCraftSlot] = useState<Slot>("weapon");
   const [family, setFamily] = useState<Family>("blade");
   const [affix, setAffix] = useState<Affix>(allowedAffixes("weapon")[0]);
+  const [secondAffix, setSecondAffix] = useState<Affix>(allowedAffixes("weapon")[1]);
+  const [rarity, setRarity] = useState<"fine" | "resonant">("fine");
   const [confirmCraft, setConfirmCraft] = useState(false);
   const level = view.state.upgrades[slot];
   const cost = view.catalog.upgradeCosts[level];
@@ -1094,13 +1091,14 @@ function Workshop({
   const item = view.state.inventory.find(
     (i) => i.id === view.state.build.equipment[slot],
   )!;
-  const craftLevel = Math.max(...view.catalog.routes.filter(route => view.state.unlockedRoutes.includes(route.id)).map(route => route.itemLevel));
-  const craftCost = { coins: 600, thread: Math.max(12, 2 * Math.ceil(craftLevel / 10) + 1), catalyst: 0 };
+  const craftLevel = gearLevelCap(view.state);
+  const resonantUnlocked = canCraftResonant(view.state);
+  const craftCost = craftingCost(craftLevel, rarity);
   return (
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">РЕМЕСЛО ТЕРРАС</p>
+          <p className="eyebrow">РЕМЕСЛО ПРОВОДНИКА</p>
           <h1>Мастерская</h1>
           <p className="subtitle">Вещи меняются. Мастерство остаётся.</p>
         </div>
@@ -1156,7 +1154,7 @@ function Workshop({
               <Money wallet={cost} />
             ) : (
               <span className="muted">
-                <CheckCheck size={16} /> Ступени террас освоены
+                <CheckCheck size={16} /> Достигнут предел усиления
               </span>
             )}
             <button
@@ -1186,9 +1184,14 @@ function Workshop({
             Создание вещи
           </SectionTitle>
           <div className="craft-visual">
-            <ItemImage item={{ slot: craftSlot }} />
-            <span className="rarity-label rarity-fine">Тонкое · ур. {craftLevel}</span>
+            <ItemImage item={{ slot: craftSlot, family }} />
+            <span className={`rarity-label rarity-${rarity}`}>{view.catalog.rarityNames[rarity]} · ур. {craftLevel}</span>
           </div>
+          <div className="segmented craft-rarity" role="group" aria-label="Качество создаваемой вещи">
+            <button className={rarity === "fine" ? "active" : ""} aria-pressed={rarity === "fine"} onClick={() => setRarity("fine")}><Sparkles size={15} /> Тонкое</button>
+            <button className={rarity === "resonant" ? "active" : ""} aria-pressed={rarity === "resonant"} disabled={!resonantUnlocked} onClick={() => setRarity("resonant")}><Gem size={15} /> Резонансное</button>
+          </div>
+          {!resonantUnlocked && <p className="craft-unlock"><LockKeyhole size={13} /> Резонанс: уровень 25 и открытый Карминный разлив.</p>}
           <label className="field">
             Предмет
             <select
@@ -1197,6 +1200,7 @@ function Workshop({
                 const value = e.target.value as Slot;
                 setCraftSlot(value);
                 setAffix(allowedAffixes(value)[0]);
+                setSecondAffix(allowedAffixes(value)[1]);
               }}
             >
               {view.catalog.slots.map((s) => (
@@ -1225,7 +1229,11 @@ function Workshop({
             Свойство
             <select
               value={affix}
-              onChange={(e) => setAffix(e.target.value as Affix)}
+              onChange={(e) => {
+                const next = e.target.value as Affix;
+                setAffix(next);
+                if (next === secondAffix) setSecondAffix(allowedAffixes(craftSlot).find((value) => value !== next)!);
+              }}
             >
               {allowedAffixes(craftSlot).map((a) => (
                 <option key={a} value={a}>
@@ -1234,8 +1242,14 @@ function Workshop({
               ))}
             </select>
           </label>
+          {rarity === "resonant" && <label className="field">
+            Второе свойство
+            <select value={secondAffix} onChange={(e) => setSecondAffix(e.target.value as Affix)}>
+              {allowedAffixes(craftSlot).filter((value) => value !== affix).map((value) => <option key={value} value={value}>{view.catalog.affixNames[value]}</option>)}
+            </select>
+          </label>}
           <p className="recipe-result">
-            <Check size={14} /> Выбранное свойство гарантировано
+            <Check size={14} /> {rarity === "resonant" ? "Оба свойства гарантированы" : "Выбранное свойство гарантировано"}
           </p>
           <div className="craft-footer">
             <Money wallet={craftCost} small />
@@ -1252,9 +1266,9 @@ function Workshop({
       {confirmCraft && (
         <Dialog title="Создать предмет" close={() => setConfirmCraft(false)}>
           <div className="confirm-craft">
-            <ItemImage item={{ slot: craftSlot }} />
-            <h3>{view.catalog.slotNames[craftSlot]} · Тонкое · ур. {craftLevel}</h3>
-            <p>{view.catalog.affixNames[affix]}</p>
+            <ItemImage item={{ slot: craftSlot, family }} />
+            <h3>{view.catalog.slotNames[craftSlot]} · {view.catalog.rarityNames[rarity]} · ур. {craftLevel}</h3>
+            <p>{[affix, ...(rarity === "resonant" ? [secondAffix] : [])].map((value) => view.catalog.affixNames[value]).join(" · ")}</p>
             <Money wallet={craftCost} />
           </div>
           <div className="dialog-actions">
@@ -1266,7 +1280,7 @@ function Workshop({
             </button>
             <button
               className="button primary"
-              disabled={busy}
+              disabled={busy || !canAfford(craftCost)}
               onClick={async () => {
                 if (
                   await command({
@@ -1274,6 +1288,8 @@ function Workshop({
                     slot: craftSlot,
                     family: craftSlot === "weapon" ? family : undefined,
                     affix,
+                    rarity,
+                    secondAffix: rarity === "resonant" ? secondAffix : undefined,
                   })
                 ) {
                   setConfirmCraft(false);
@@ -1295,62 +1311,117 @@ function WorldMap({
   command,
   busy,
   go,
+  onTrain,
 }: {
   view: GameView;
   command: Command;
   busy: boolean;
   go: (p: Page) => void;
+  onTrain: (routeId: string) => void;
 }) {
-  const [mode, setMode] = useState<"farm" | "push">(view.state.mode);
+  const mode = view.state.pendingRoute?.mode ?? view.state.mode;
+  const currentRoute = view.catalog.routes.find((route) => route.id === view.state.routeId)!;
+  const plannedRoute = view.catalog.routes.find((route) => route.id === view.state.pendingRoute?.routeId) ?? currentRoute;
+  const nextRoute = view.catalog.routes[view.catalog.routes.indexOf(plannedRoute) + 1];
+  const nextUnlocked = nextRoute && view.state.unlockedRoutes.includes(nextRoute.id);
+  const [regionId, setRegionId] = useState(currentRoute.regionId);
+  const region = view.catalog.regions.find((entry) => entry.id === regionId)!;
+  const routes = view.catalog.routes.filter((route) => route.regionId === regionId);
+  const unlockedCount = routes.filter((route) => view.state.unlockedRoutes.includes(route.id)).length;
   return (
     <>
       <div className="page-heading">
         <div>
           <p className="eyebrow">АТЛАС ПРОВОДНИКА</p>
-          <h1>Белые террасы</h1>
-          <p className="subtitle">Там, где мир впервые разошёлся по шву.</p>
+          <h1>Земли за разломом</h1>
+          <p className="subtitle">{view.catalog.regions.length} земли, связанные одной нитью.</p>
         </div>
         <span className="map-discovery">
           <Compass size={16} /> {view.state.unlockedRoutes.length} / {view.catalog.routes.length} участка
         </span>
       </div>
+      <div className="region-tabs" role="tablist" aria-label="Земли атласа">
+        {view.catalog.regions.map((entry) => {
+          const areaRoutes = view.catalog.routes.filter((route) => route.regionId === entry.id);
+          const count = areaRoutes.filter((route) => view.state.unlockedRoutes.includes(route.id)).length;
+          return <button key={entry.id} id={`region-tab-${entry.id}`} role="tab" aria-label={entry.name} aria-selected={entry.id === regionId} aria-controls="region-routes" tabIndex={entry.id === regionId ? 0 : -1} className={entry.id === regionId ? "selected" : ""} onClick={() => setRegionId(entry.id)} onKeyDown={(event) => {
+            const index = view.catalog.regions.indexOf(entry);
+            const nextIndex = event.key === "ArrowRight" ? (index + 1) % view.catalog.regions.length : event.key === "ArrowLeft" ? (index + view.catalog.regions.length - 1) % view.catalog.regions.length : event.key === "Home" ? 0 : event.key === "End" ? view.catalog.regions.length - 1 : null;
+            if (nextIndex === null) return;
+            event.preventDefault();
+            const next = view.catalog.regions[nextIndex];
+            setRegionId(next.id);
+            document.getElementById(`region-tab-${next.id}`)?.focus();
+          }}>
+            <span className="region-tab-number">{String(entry.order).padStart(2, "0")}</span>
+            <strong>{entry.name}</strong>
+            <span>{count ? <Compass size={12} /> : <LockKeyhole size={12} />}{count} / {areaRoutes.length}</span>
+          </button>;
+        })}
+      </div>
+      <section id="region-routes" role="tabpanel" aria-labelledby={`region-tab-${region.id}`}>
       <div className="map-banner">
         <img
-          src="/art/terraces.png"
-          alt="Керамические террасы над стеклянным садом"
+          src={region.image}
+          alt={region.name}
+          style={{ filter: region.sceneFilter }}
         />
         <div>
-          <span>ПЕРВАЯ ГЛАВА</span>
-          <h2>Собрать мир заново</h2>
+          <span>{region.subtitle}</span>
+          <h2>{region.name}</h2>
         </div>
       </div>
+      <div className="region-summary"><p>{region.description}</p><span>{unlockedCount} / {routes.length} участков открыто</span></div>
       <div className="route-options">
         <h2>Маршруты</h2>
-        <div className="segmented" aria-label="Режим путешествия">
+        <div className="segmented" role="group" aria-label="Режим путешествия">
           <button
             className={mode === "farm" ? "active" : ""}
-            onClick={() => setMode("farm")}
+            aria-pressed={mode === "farm"}
+            title="Повторять текущий маршрут"
+            disabled={busy}
+            onClick={() => { if (mode !== "farm") void command({ type: "mode", mode: "farm" }); }}
           >
             <Backpack size={15} /> Добыча
           </button>
           <button
             className={mode === "push" ? "active" : ""}
-            onClick={() => setMode("push")}
+            aria-pressed={mode === "push"}
+            title="Переходить на следующий открытый маршрут после победы"
+            disabled={busy}
+            onClick={() => { if (mode !== "push") void command({ type: "mode", mode: "push" }); }}
           >
             <ArrowRight size={15} /> Продвижение
           </button>
         </div>
       </div>
+      <div className="route-mode-status" role="status" aria-live="polite">
+        {mode === "farm" ? <Backpack size={18} /> : <ArrowRight size={18} />}
+        <div>
+          <strong>{view.state.pendingRoute
+            ? `Далее: ${plannedRoute.name}`
+            : mode === "farm" ? `Добыча: ${currentRoute.name}`
+              : nextRoute ? `Цель: ${nextRoute.name}` : `Последний маршрут: ${currentRoute.name}`}</strong>
+          <span>{view.state.pendingRoute
+            ? `После текущего боя · ${mode === "farm" ? "Добыча" : "Продвижение"}`
+            : mode === "farm" ? "Маршрут закреплён"
+              : nextRoute ? nextUnlocked ? "Переход после победы"
+                : `Уровень ${Math.min(view.state.level, nextRoute.unlockLevel)} / ${nextRoute.unlockLevel} · Победы: ${Math.min(view.state.routeWins[currentRoute.id] || 0, nextRoute.unlockWins)} / ${nextRoute.unlockWins}`
+                : "Добыча продолжается"}</span>
+        </div>
+      </div>
       <div className="route-list">
-        {view.catalog.routes.map((route, index) => {
+        {routes.map((route, index) => {
           const unlocked = view.state.unlockedRoutes.includes(route.id);
           const current = view.state.routeId === route.id;
-          const previous = view.catalog.routes[index - 1];
+          const pending = view.state.pendingRoute?.routeId === route.id;
+          const previous = view.catalog.routes[view.catalog.routes.findIndex((entry) => entry.id === route.id) - 1];
           const wins = previous ? view.state.routeWins[previous.id] || 0 : 0;
           return (
             <article
               className={`route-row ${!unlocked ? "locked" : ""}`}
               key={route.id}
+              aria-label={route.name}
             >
               <div className={`route-emblem route-${index}`}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
@@ -1371,7 +1442,9 @@ function WorldMap({
                       Текущий путь
                     </span>
                   )}
+                  {pending && <span className="status-tag"><Clock3 size={12} /> Следующий путь</span>}
                   {route.boss && <span className="boss-label">Хранитель</span>}
+                  {route.resonant && <span className="resonant-route"><Gem size={12} /> Резонанс</span>}
                 </div>
                 <p>{route.description}</p>
                 <div className="route-reward">
@@ -1379,21 +1452,33 @@ function WorldMap({
                     <Mountain size={13} /> Сложность {route.difficulty}
                   </span>
                   <span>
-                    <Backpack size={13} /> Вещи ур. {route.itemLevel}
+                    <Backpack size={13} /> Вещи до ур. {route.itemLevel}
                   </span>
                   <span>
                     <Coins size={13} /> {decimal(route.reward.coins * 3_600_000 / route.rewardPeriodMs)} / ч
                   </span>
                   <span><Layers3 size={13} /> {decimal(route.reward.thread * 3_600_000 / route.rewardPeriodMs)} / ч</span>
                   <span><Zap size={13} /> {fmt(route.reward.xp * 3_600_000 / route.rewardPeriodMs)} опыта / ч</span>
+                  {route.reward.catalyst > 0 && <span><Gem size={13} /> {decimal(route.reward.catalyst * 86_400_000 / route.rewardPeriodMs)} / сутки</span>}
                 </div>
                 <p className="route-income-note">При победах · находка за {duration(route.lootIntervalMs / 1000)} успешного пути</p>
+                <details className="route-enemies">
+                  <summary>Противники · {route.enemyIds.length}</summary>
+                  <div>{route.enemyIds.map((id) => {
+                    const enemy = view.catalog.enemies.find((entry) => entry.id === id)!;
+                    return <div className="route-enemy" key={id}>
+                      <img src={`/art/enemy-${enemy.kind}.png`} alt="" loading="lazy" />
+                      <div><strong>{enemy.name} <small>Ур. {enemy.level}</small></strong><p>{enemy.description}</p><span><Heart size={11} /> {fmt(enemy.hp)} <Swords size={11} /> {fmt(enemy.power)} <Shield size={11} /> {fmt(enemy.armor)}</span></div>
+                    </div>;
+                  })}</div>
+                </details>
                 {!unlocked && (
                   <p className="unlock-requirement">
                     <LockKeyhole size={12} /> Уровень {Math.min(view.state.level, route.unlockLevel)} / {route.unlockLevel} · Победы: {previous?.name} · {Math.min(wins, route.unlockWins)} / {route.unlockWins}
                   </p>
                 )}
               </div>
+              <div className="route-actions">
               <button
                 className={`button ${unlocked ? "primary" : "secondary"}`}
                 disabled={!unlocked || busy}
@@ -1412,10 +1497,13 @@ function WorldMap({
                   </>
                 )}
               </button>
+              {unlocked && <button className="text-button" disabled={busy} aria-label={`Проверить сборку: ${route.name}`} onClick={() => onTrain(route.id)}><FlaskConical size={15} /> Проверить сборку</button>}
+              </div>
             </article>
           );
         })}
       </div>
+      </section>
       <section className="target-selection">
         <Target size={22} />
         <div>
@@ -1445,8 +1533,48 @@ function WorldMap({
   );
 }
 
+function ReforgeItem({ item, view, command, busy, notify }: {
+  item: Item;
+  view: GameView;
+  command: Command;
+  busy: boolean;
+  notify: (message: string) => void;
+}) {
+  const cap = gearLevelCap(view.state);
+  const [target, setTarget] = useState(cap);
+  const [quote, setQuote] = useState<{ from: number; to: number; cost: Wallet } | null>(null);
+  const level = quote?.to ?? Math.max(item.level + 1, Math.min(cap, target));
+  if (cap <= item.level && !quote) return <div className="reforge-cap"><Hammer size={14} /><span>Перековка откроется с ростом уровня и освоением новых маршрутов.</span></div>;
+  const cost = quote?.cost ?? reforgeCost(item.level, level);
+  const staleQuote = quote !== null && (item.level !== quote.from || cap < quote.to);
+  const craftCost = craftingCost(level);
+  const affordable = Object.entries(cost).every(([key, value]) => view.state.wallet[key as keyof Wallet] >= value);
+  return <section className="reforge-item" aria-label="Перековка предмета">
+    <div className="section-title"><h3>Перековка</h3><span className="micro-label">УРОВЕНЬ ВЕЩИ</span></div>
+    <div className="reforge-levels">
+      <span>Ур. <b>{quote?.from ?? item.level}</b></span><ArrowRight size={18} />
+      {quote ? <span>Ур. <b>{quote.to}</b></span> : <label><span className="sr-only">Новый уровень предмета</span><select value={level} disabled={busy} onChange={(event) => setTarget(Number(event.target.value))}>{Array.from({ length: cap - item.level }, (_, index) => item.level + 1 + index).map((value) => <option value={value} key={value}>Уровень {value}</option>)}</select></label>}
+    </div>
+    <p>Свойства, редкость и сохранённые сборки сохраняются.</p>
+    {(item.rarity === "common" || item.rarity === "fine") && cost.coins > craftCost.coins && cost.thread >= craftCost.thread && <p className="reforge-alternative">Новая тонкая вещь этого уровня в мастерской: {fmt(craftCost.coins)} монет и {fmt(craftCost.thread)} нити.</p>}
+    <div className="craft-footer"><Money wallet={cost} small />{!quote && <button className="button secondary" disabled={busy || !affordable} onClick={() => setQuote({ from: item.level, to: level, cost })}><Hammer size={15} /> Перековать</button>}</div>
+    {!affordable && <p className="resource-note">Недостаточно материалов для перековки.</p>}
+    {quote && <div className="reforge-confirm">
+      <p>Перековать «{item.name}» с {quote.from} до {quote.to} уровня?</p>
+      {staleQuote && <p role="alert">Предмет или предел перековки изменился. Обнови расчёт перед подтверждением.</p>}
+      <div className="dialog-actions"><button className="button secondary" disabled={busy} onClick={() => setQuote(null)}>{staleQuote ? "Обновить расчёт" : "Отмена"}</button><button className="button primary" disabled={busy || !affordable || staleQuote} onClick={async () => {
+        if (staleQuote) return;
+        if (await command({ type: "reforge", itemId: item.id, level: quote.to })) {
+          setQuote(null);
+          notify(`Предмет перекован до ${quote.to} уровня`);
+        }
+      }}><Hammer size={15} /> Подтвердить перековку</button></div>
+    </div>}
+  </section>;
+}
+
 function ItemDialog({
-  item,
+  item: initialItem,
   view,
   close,
   command,
@@ -1461,7 +1589,8 @@ function ItemDialog({
   notify: (s: string) => void;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const liveItem = view.state.inventory.find((i) => i.id === item.id) || item;
+  const item = view.state.inventory.find((i) => i.id === initialItem.id) || initialItem;
+  const liveItem = item;
   const current = view.state.inventory.find(
     (i) =>
       i.id ===
@@ -1537,6 +1666,7 @@ function ItemDialog({
           {liveItem.locked ? "Защищено" : "Защитить"}
         </button>
       </div>
+      <ReforgeItem item={item} view={view} command={command} busy={busy} notify={notify} />
       {confirmDelete ? (
         <div className="delete-confirm">
           <p>Разобрать «{item.name}»? Предмет будет утрачен.</p>
@@ -1609,7 +1739,7 @@ function ReportDialog({
         <h3>
           {report
             ? `${duration(report.seconds)} в пути`
-            : "Следы на Белых террасах"}
+            : "Следы за разломом"}
         </h3>
         <p>
           {report?.stopped
@@ -1760,11 +1890,14 @@ export default function App() {
       </div>
     );
   const view = game.view;
+  const activeRoute = view.catalog.routes.find((route) => route.id === view.state.routeId)!;
+  const activeRegion = view.catalog.regions.find((region) => region.id === activeRoute.regionId)!;
+  const activeRegionRoutes = view.catalog.routes.filter((route) => route.regionId === activeRegion.id);
+  const chapterNumber = ["I", "II", "III"][activeRegion.order - 1] || String(activeRegion.order);
   const activeFamily =
     view.state.inventory.find((i) => i.id === view.state.build.equipment.weapon)
       ?.family || "blade";
-  const train = async () => {
-    const routeId = view.state.pendingRoute?.routeId || view.state.routeId;
+  const train = async (routeId = view.state.pendingRoute?.routeId || view.state.routeId) => {
     const result = await game.train(routeId);
     if (result)
       setTraining({
@@ -1801,11 +1934,11 @@ export default function App() {
             </button>
           ))}
         </nav>
-        <div className="sidebar-world">
-          <img src="/art/terraces.png" alt="" />
-          <span>01 · Белые террасы</span>
-          <p>{view.state.unlockedRoutes.length} из {view.catalog.routes.length} участков открыто</p>
-        </div>
+        <button className="sidebar-world" onClick={() => go("map")} aria-label={`Открыть атлас: ${activeRegion.name}`}>
+          <img src={activeRegion.image} alt="" style={{ filter: activeRegion.sceneFilter }} />
+          <span>{String(activeRegion.order).padStart(2, "0")} · {activeRegion.name}</span>
+          <p>{activeRegionRoutes.filter((route) => view.state.unlockedRoutes.includes(route.id)).length} из {activeRegionRoutes.length} участков открыто</p>
+        </button>
         <div className="sidebar-bottom">
           <button className="profile" onClick={() => go("hero")}>
             <span className="profile-picture">
@@ -1834,10 +1967,10 @@ export default function App() {
         <header className="topbar">
           <div className="topbar-world">
             <span className="mobile-brand">ШОВЬ</span>
-            <span className="desktop-world">
-              <Compass size={15} /> Белые террасы <ChevronDown size={12} />
-            </span>
-            <span className="early-badge">I</span>
+            <button className="desktop-world" onClick={() => go("map")}>
+              <Compass size={15} /> {activeRegion.name} <ChevronDown size={12} />
+            </button>
+            <span className="early-badge">{chapterNumber}</span>
           </div>
           <Money wallet={view.state.wallet} />
           <div className="topbar-actions">
@@ -1865,7 +1998,6 @@ export default function App() {
               view={view}
               now={clock}
               paused={paused}
-              setPaused={setPaused}
               go={go}
               inspect={setItem}
               showReport={() => setReportOpen(true)}
@@ -1894,6 +2026,7 @@ export default function App() {
               command={game.command}
               busy={game.busy || !game.online}
               go={go}
+              onTrain={(routeId) => void train(routeId)}
             />
           )}
           {page === "clan" && <ClanPage view={view} />}
@@ -1901,7 +2034,7 @@ export default function App() {
         <footer className="world-footer">
           <img src="/art/emblem.png" alt="" />
           <span>Мир помнит каждый твой шаг.</span>
-          <span>Белые террасы · Глава I</span>
+          <span>{activeRegion.name} · Глава {chapterNumber}</span>
         </footer>
       </div>
       <nav className="mobile-nav">
@@ -1995,7 +2128,7 @@ export default function App() {
             className="button primary full"
             onClick={() => setTraining(null)}
           >
-            К сборке <ArrowRight size={16} />
+            Вернуться <ArrowRight size={16} />
           </button>
         </Dialog>
       )}

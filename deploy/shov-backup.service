@@ -1,0 +1,10 @@
+[Unit]
+Description=Create a consistent SHOV SQLite snapshot
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/shov
+ExecStart=/usr/bin/docker compose --env-file .env -f deploy/compose.yaml run --rm --no-deps backup
+TimeoutStartSec=300

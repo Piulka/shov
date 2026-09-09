@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { BattleEvent, BattleRun } from '../../shared/types';
+import { catalog } from '../../shared/content';
 
 interface BattleSceneProps {
   battle: BattleRun;
@@ -13,15 +14,15 @@ interface Art {
   flash: HTMLCanvasElement;
 }
 
-const filenames = [
-  'terraces', 'hero-blade', 'hero-glass', 'hero-needle',
-  'enemy-sentinel', 'enemy-shard', 'enemy-weaver', 'enemy-boss',
-];
+const artSources = new Map([
+  ...catalog.regions.map((region) => [`region-${region.id}`, region.image] as const),
+  ...['hero-blade', 'hero-glass', 'hero-needle', 'enemy-sentinel', 'enemy-shard', 'enemy-weaver', 'enemy-boss'].map((name) => [name, `/art/${name}.png`] as const),
+]);
 
 let cachedArt: Promise<Map<string, Art>> | undefined;
 function loadArt() {
   if (!cachedArt) {
-    cachedArt = Promise.all(filenames.map((name) => new Promise<[string, Art]>((resolve, reject) => {
+    cachedArt = Promise.all(Array.from(artSources, ([name, source]) => new Promise<[string, Art]>((resolve, reject) => {
       const image = new Image();
       image.onload = () => {
         const flash = document.createElement('canvas');
@@ -37,7 +38,7 @@ function loadArt() {
         resolve([name, { image, flash }]);
       };
       image.onerror = () => reject(new Error(`Could not load art: ${name}`));
-      image.src = `/art/${name}.png`;
+      image.src = source;
     }))).then((entries) => new Map(entries)).catch((error: unknown) => {
       cachedArt = undefined;
       throw error;
@@ -75,10 +76,14 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
   const time = animate ? clock / 1000 : 0;
   context.clearRect(0, 0, width, height);
   context.imageSmoothingEnabled = false;
-  const stage = art.get('terraces');
+  const region = catalog.regions.find((entry) => entry.id === battle.regionId) || catalog.regions[0];
+  const stage = art.get(`region-${region.id}`);
   if (stage) {
-    const scale = Math.max(width / 1200, height / 600);
-    context.drawImage(stage.image, (width - 1200 * scale) / 2, height - 600 * scale, 1200 * scale, 600 * scale);
+    const scale = Math.max(width / stage.image.width, height / stage.image.height);
+    context.save();
+    context.filter = region.sceneFilter;
+    context.drawImage(stage.image, (width - stage.image.width * scale) / 2, height - stage.image.height * scale, stage.image.width * scale, stage.image.height * scale);
+    context.restore();
   }
 
   const feet = height * 0.807;
@@ -213,6 +218,7 @@ function drawScene(context: CanvasRenderingContext2D, art: Map<string, Art>, wid
 }
 
 export default function BattleScene(props: BattleSceneProps) {
+  const region = catalog.regions.find((entry) => entry.id === props.battle.regionId) || catalog.regions[0];
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const live = useRef({ props, received: performance.now() });
   live.current = { props, received: performance.now() };
@@ -273,7 +279,7 @@ export default function BattleScene(props: BattleSceneProps) {
     ref={canvasRef}
     className="battle-canvas"
     role="img"
-    aria-label={`Белые террасы. Ваш герой сражается: ${props.battle.enemy.name}.`}
-    style={{ display: 'block', width: '100%', height: '100%', background: '#c8e7e0 url(/art/terraces.png) center bottom / cover no-repeat' }}
+    aria-label={`${region.name}. Ваш герой сражается: ${props.battle.enemy.name}.`}
+    style={{ display: 'block', width: '100%', height: '100%', background: `${region.color} url(${region.image}) center bottom / cover no-repeat` }}
   />;
 }

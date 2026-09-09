@@ -1,7 +1,8 @@
 import { allowedAffixes, catalog, families, slots, upgradeCap } from './content';
 import balance from '../model/balance.json' with { type: 'json' };
 import { awardChapter } from './chapter';
-import type { Affix, BattleEvent, BattleRun, Build, Condition, Enemy, Family, GameCommand, GameState, Item, JourneyReport, Rarity, Route, Rule, Slot, Stats, TrainingResult, Wallet } from './types';
+import { canCraftResonant, craftingCost, gearLevelCap, reforgeCost } from './equipment';
+import type { Affix, BattleEvent, BattleRun, Build, Condition, Enemy, Family, GameCommand, GameState, Item, JourneyReport, Rarity, RegionId, Route, Rule, Slot, Stats, TrainingResult, Wallet } from './types';
 
 const HOUR = 3_600_000;
 const skillById = new Map(catalog.skills.map((skill) => [skill.id, skill]));
@@ -255,7 +256,7 @@ function startBattle(state: GameState, at: number): BattleRun {
   const route = routeFor(state.routeId);
   const enemyId = route.enemyIds[(state.routeWins[route.id] ?? 0) % route.enemyIds.length];
   const enemy = catalog.enemies.find((entry) => entry.id === enemyId)!;
-  return { ...simulate(state, state.build, enemy, at, state), production: productionFor(route) };
+  return { ...simulate(state, state.build, enemy, at, state), regionId: route.regionId, production: productionFor(route) };
 }
 
 function productionFor(route: Route): NonNullable<BattleRun['production']> {
@@ -270,7 +271,7 @@ export function migrateGame(state: GameState): boolean {
   state.chapter = { completed: [], legacy: true };
   state.progression = {
     rewardRemainders: {},
-    lootElapsedMs: Object.fromEntries(catalog.routes.map((route) => [route.id, Math.floor((state.lootCounters[route.id] ?? 0) / 12 * route.lootIntervalMs)])),
+    lootElapsedMs: Object.fromEntries(catalog.routes.filter((route) => state.lootCounters[route.id] !== undefined).map((route) => [route.id, Math.floor(state.lootCounters[route.id] / 12 * route.lootIntervalMs)])),
   };
   state.battle.production = productionFor(routeFor(state.routeId));
   return true;
@@ -278,7 +279,15 @@ export function migrateGame(state: GameState): boolean {
 
 function nextId(state: GameState): string { return `item-${state.nextItemId++}`; }
 
-function itemName(slot: Slot, family?: Family): string {
+function itemName(slot: Slot, family?: Family, regionId: RegionId = 'terraces'): string {
+  if (regionId === 'glassgarden') {
+    if (slot === 'weapon') return family === 'glass' ? 'Жезл стеклянной памяти' : family === 'needle' ? 'Игломёт росных чаш' : 'Клинок прозрачной коры';
+    return { focus: 'Резонатор сердцевины', head: 'Венец стеклосада', armor: 'Панцирь прозрачной коры', gloves: 'Перчатки собирателя росы', boots: 'Сапоги звенящего леса', amulet: 'Капля стеклянной памяти', ring: 'Кольцо росных чаш' }[slot];
+  }
+  if (regionId === 'carmine') {
+    if (slot === 'weapon') return family === 'glass' ? 'Жезл карминного разлива' : family === 'needle' ? 'Игломёт багряного шлюза' : 'Клинок алого переплетения';
+    return { focus: 'Резонатор половодья', head: 'Венец багряного берега', armor: 'Панцирь переплетения', gloves: 'Перчатки узлового ткача', boots: 'Сапоги нитяных проток', amulet: 'Сердце карминной нити', ring: 'Кольцо смотрителя шлюза' }[slot];
+  }
   if (slot === 'weapon') return family === 'glass' ? 'Жезл светлого стекла' : family === 'needle' ? 'Игломёт красной нити' : 'Клинок первого звона';
   return { focus: 'Фарфоровый резонатор', head: 'Венец садовника', armor: 'Керамический панцирь', gloves: 'Перчатки шовника', boots: 'Сапоги солнечного тракта', amulet: 'Осколок рассвета', ring: 'Кольцо тихого сада' }[slot];
 }
@@ -306,15 +315,14 @@ function dropItem(state: GameState, route: Route): Item {
   const otherSlots = state.targetSlot ? slots.filter((slot) => slot !== state.targetSlot) : slots;
   const slot = state.targetSlot && random(state) < 0.5 ? state.targetSlot : otherSlots[Math.floor(random(state) * otherSlots.length)];
   const roll = random(state);
-  // Region one does not unlock resonant routes or named recipes yet.
-  const rarity: Rarity = roll >= 0.6 && roll < 0.9 ? 'fine' : 'common';
+  const rarity: Rarity = roll >= 0.6 && roll < 0.9 ? 'fine' : roll >= 0.9 && roll < 0.99 && state.level >= 25 && route.resonant ? 'resonant' : 'common';
   const family = slot === 'weapon' ? families[Math.floor(random(state) * families.length)] : undefined;
-  const level = Math.max(1, route.itemLevel - 3 + Math.floor(random(state) * 4));
+  const level = Math.max(1, Math.min(route.itemLevel, gearLevelCap(state)) - 3 + Math.floor(random(state) * 4));
   const pool = allowedAffixes(slot);
   const affixes: Affix[] = [];
-  const count = rarity === 'common' ? 0 : 1;
+  const count = rarity === 'common' ? 0 : rarity === 'resonant' ? 2 : 1;
   while (affixes.length < count) affixes.push(pool.splice(Math.floor(random(state) * pool.length), 1)[0]);
-  return { id: nextId(state), name: itemName(slot, family), slot, level, rarity, affixes, ...(family ? { family } : {}) };
+  return { id: nextId(state), name: itemName(slot, family, route.regionId), slot, level, rarity, affixes, ...(family ? { family } : {}) };
 }
 
 function battleRewards(state: GameState, route: Route): Wallet & { xp: number } {
@@ -454,6 +462,12 @@ export function applyCommand(state: GameState, command: GameCommand, now: number
       state.pendingRoute = { routeId: command.routeId, mode: command.mode };
       return;
     }
+    case 'mode': {
+      if (!['farm', 'push'].includes(command.mode)) throw new Error('Неизвестный режим маршрута.');
+      state.mode = command.mode;
+      if (state.pendingRoute) state.pendingRoute.mode = command.mode;
+      return;
+    }
     case 'upgrade': {
       requireSlot(command.slot);
       const cap = upgradeCap(state.level);
@@ -469,11 +483,28 @@ export function applyCommand(state: GameState, command: GameCommand, now: number
       if (!allowedAffixes(command.slot).includes(command.affix)) throw new Error('Это свойство недоступно для выбранного слота.');
       if (command.slot === 'weapon' && (!command.family || !families.includes(command.family))) throw new Error('Выберите семейство оружия.');
       if (command.slot !== 'weapon' && command.family !== undefined) throw new Error('Семейство есть только у оружия.');
-      const level = Math.max(...state.unlockedRoutes.map((id) => routeFor(id).itemLevel));
-      pay(state, { coins: 600, thread: Math.max(12, 2 * Math.ceil(level / 10) + 1), catalyst: 0 });
-      state.inventory.push({ id: nextId(state), name: itemName(command.slot, command.family), slot: command.slot, level, rarity: 'fine', affixes: [command.affix], ...(command.family ? { family: command.family } : {}) });
+      const rarity = command.rarity ?? 'fine';
+      if (rarity !== 'fine' && rarity !== 'resonant') throw new Error('Эта редкость недоступна для изготовления.');
+      const affixes = [command.affix];
+      if (rarity === 'resonant') {
+        if (!canCraftResonant(state)) throw new Error('Резонансные рецепты открываются с 25-го уровня в Карминных поймах.');
+        if (!command.secondAffix || command.secondAffix === command.affix || !allowedAffixes(command.slot).includes(command.secondAffix)) throw new Error('Выберите два разных допустимых свойства.');
+        affixes.push(command.secondAffix);
+      } else if (command.secondAffix !== undefined) throw new Error('У тонкого предмета может быть только одно свойство.');
+      const level = gearLevelCap(state);
+      const regionId = catalog.routes.find((route) => route.itemLevel === level && state.unlockedRoutes.includes(route.id))?.regionId;
+      pay(state, craftingCost(level, rarity));
+      state.inventory.push({ id: nextId(state), name: itemName(command.slot, command.family, regionId), slot: command.slot, level, rarity, affixes, ...(command.family ? { family: command.family } : {}) });
       state.totals.items++;
       awardChapter(state, 'craft');
+      return;
+    }
+    case 'reforge': {
+      const item = owned(state, command.itemId);
+      const cost = reforgeCost(item.level, command.level);
+      if (command.level > gearLevelCap(state)) throw new Error('Этот уровень предметов ещё не открыт.');
+      pay(state, cost);
+      item.level = command.level;
       return;
     }
     case 'dismantle': {
@@ -527,7 +558,7 @@ export function train(state: GameState, routeId: string): TrainingResult {
   const runs: BattleRun[] = [];
   for (let i = 0; i < 12; i++) {
     const enemy = catalog.enemies.find((entry) => entry.id === route.enemyIds[i % route.enemyIds.length])!;
-    runs.push(simulate(state, build, enemy, 0, { rng: 0x7a110000 + i }));
+    runs.push({ ...simulate(state, build, enemy, 0, { rng: 0x7a110000 + i }), regionId: route.regionId });
   }
   const totalMs = runs.reduce((sum, run) => sum + run.combatMs + 3000, 0);
   const winningMs = runs.reduce((sum, run) => sum + (run.outcome === 'win' ? run.combatMs + 3000 : 0), 0);

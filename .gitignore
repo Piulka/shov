@@ -8,3 +8,7 @@ data/
 test-results/
 playwright-report/
 .local/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal

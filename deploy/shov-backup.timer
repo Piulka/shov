@@ -1,0 +1,10 @@
+[Unit]
+Description=Create SHOV snapshots every six hours
+
+[Timer]
+OnCalendar=*-*-* 00,06,12,18:00:00
+RandomizedDelaySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

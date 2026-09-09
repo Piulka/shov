@@ -38,6 +38,7 @@ const commandSchema = z.discriminatedUnion('type', [
   z.strictObject({ type: z.literal('transfer'), clanId: identifier, memberId: identifier }),
   z.strictObject({ type: z.literal('message'), clanId: identifier, text: safeText(1, 500, true) }),
   z.strictObject({ type: z.literal('delete_message'), clanId: identifier, messageId: identifier }),
+  z.strictObject({ type: z.literal('report_message'), clanId: identifier, messageId: identifier, reason: z.enum(['spam', 'abuse', 'other']) }),
   z.strictObject({ type: z.literal('raid'), clanId: identifier, weekStart: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER), role: roleSchema, loadout: loadoutSchema }),
 ]);
 const requestIdSchema = z.string().min(8).max(100).regex(/^[A-Za-z0-9_-]+$/);
@@ -200,8 +201,9 @@ export class SocialService {
         WHERE m.clan_id = ? ORDER BY CASE m.role WHEN 'leader' THEN 0 WHEN 'officer' THEN 1 ELSE 2 END, m.joined_at, p.public_id`).all(week, current.id) as unknown as {
         public_id: string; name: string; role: ClanRole; joined_at: number; raid_role: RaidRole | null; best_score: number | null; attempts: number | null;
       }[];
-      const messages = this.db.prepare('SELECT * FROM (SELECT * FROM social_messages WHERE clan_id = ? ORDER BY sequence DESC LIMIT 50) ORDER BY sequence').all(current.id) as unknown as {
-        id: string; author_id: string | null; author_name: string; text: string; kind: 'message' | 'event'; created_at: number;
+      const messages = this.db.prepare(`SELECT m.*, EXISTS(SELECT 1 FROM moderation_reports r WHERE r.reporter_id = ? AND r.message_id = m.id) AS reported
+        FROM (SELECT * FROM social_messages WHERE clan_id = ? ORDER BY sequence DESC LIMIT 50) m ORDER BY sequence`).all(accountId, current.id) as unknown as {
+        id: string; author_id: string | null; author_name: string; text: string; kind: 'message' | 'event'; created_at: number; reported: number;
       }[];
       const achieved = this.db.prepare(`
         WITH ordered AS (
@@ -212,7 +214,7 @@ export class SocialService {
       clan = { ...this.summary(current, scores), myRole: membership.role,
         roster: roster.map(row => ({ id: row.public_id, name: row.name, role: row.role, joinedAt: row.joined_at, raidRole: row.raid_role, bestScore: row.best_score ?? 0, attemptsUsed: row.attempts ?? 0 })),
         messages: messages.map(row => ({ id: row.id, authorId: row.author_id, authorName: row.author_name, text: row.text, kind: row.kind, createdAt: row.created_at,
-          canDelete: row.kind === 'message' && (row.author_id === profile.public_id || membership.role === 'leader' || membership.role === 'officer') })),
+          canDelete: row.kind === 'message' && (row.author_id === profile.public_id || membership.role === 'leader' || membership.role === 'officer'), reported: !!row.reported })),
         raidSeats: (this.db.prepare('SELECT COUNT(*) AS n FROM social_participation WHERE clan_id = ? AND week_start = ?').get(current.id, week) as { n: number }).n,
         roles: roles.map(role => { const score = scores.find(row => row.clan_id === current.id && row.role === role); return { role, score: score?.score ?? 0, contributors: score?.contributors ?? 0 }; }),
         achievements: achieved.flatMap(row => [30_000, 60_000, 90_000, 120_000].filter(threshold => row.score >= threshold).map(threshold => ({ weekStart: row.week_start, threshold }))),
@@ -330,6 +332,19 @@ export class SocialService {
       this.db.prepare("INSERT INTO social_messages(id, clan_id, author_id, author_name, text, kind, created_at) VALUES (?, ?, ?, ?, ?, 'message', ?)")
         .run(randomUUID(), member.clan_id, profile.public_id, profile.name, command.text, now);
       this.db.prepare('UPDATE social_profiles SET last_message_at = ? WHERE account_id = ?').run(now, accountId);
+      return;
+    }
+    if (command.type === 'report_message') {
+      const message = this.db.prepare(`SELECT m.*, p.account_id FROM social_messages m
+        JOIN social_profiles p ON p.public_id = m.author_id WHERE m.id = ? AND m.clan_id = ? AND m.kind = 'message'`)
+        .get(command.messageId, member.clan_id) as { account_id: string; author_name: string; text: string } | undefined;
+      if (!message) throw new SocialError(404, 'Сообщение не найдено.', 'NOT_FOUND');
+      if (message.account_id === accountId) throw new SocialError(400, 'Своё сообщение можно удалить.', 'OWN_MESSAGE');
+      if (this.db.prepare('SELECT 1 FROM moderation_reports WHERE reporter_id = ? AND message_id = ?').get(accountId, command.messageId)) return;
+      const recent = this.db.prepare('SELECT COUNT(*) AS n FROM moderation_reports WHERE reporter_id = ? AND created_at > ?').get(accountId, now - 3_600_000) as { n: number };
+      if (recent.n >= 5) throw new SocialError(429, 'Можно отправить не больше пяти жалоб за час.', 'REPORT_COOLDOWN');
+      this.db.prepare(`INSERT INTO moderation_reports(id, reporter_id, author_id, message_id, clan_id, author_name, message_text, reason, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(randomUUID(), accountId, message.account_id, command.messageId, member.clan_id, message.author_name, message.text, command.reason, now);
       return;
     }
     if (command.type === 'delete_message') {

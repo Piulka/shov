@@ -15,7 +15,7 @@ const apps = new Set<FastifyInstance>();
 const tempDirs: string[] = [];
 
 function app(options: AppOptions = {}): FastifyInstance {
-  const instance = createApp({ databasePath: ':memory:', now: () => epoch, ...options });
+  const instance = createApp({ databasePath: ':memory:', now: () => epoch, appOrigin: 'https://game.example.com', betaAccess: 'open', logLevel: 'silent', ...options });
   apps.add(instance);
   return instance;
 }
