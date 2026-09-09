@@ -5,6 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: "127.0.0.1",
+    watch: { ignored: ["**/.local/**", "**/data/**", "**/*.sqlite*"] },
+    fs: {
+      deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "**/.local/**", "**/data/**", "**/*.sqlite*"],
+    },
     proxy: {
       "/api/admin": `http://127.0.0.1:${process.env.ADMIN_API_PORT || "3002"}`,
       "/api": `http://127.0.0.1:${process.env.API_PORT || "3001"}`,
